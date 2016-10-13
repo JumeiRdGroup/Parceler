@@ -13,6 +13,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Arg {
     String key() default "";
-    boolean require() default true;
+    ParcelType type() default ParcelType.NONE;
+    String require() default "";
     boolean save() default true;
 }

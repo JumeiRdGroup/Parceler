@@ -3,8 +3,13 @@ package com.lzh.compiler.parceler;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Size;
 import android.util.SizeF;
+
+import com.lzh.compiler.parceler.annotation.ParcelType;
+
+import java.util.ArrayList;
 
 
 /**
@@ -14,10 +19,10 @@ import android.util.SizeF;
 public class BundleWrapper {
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void setExtra (Bundle bundle, String key, Object data) {
+    public void setExtra (Bundle bundle, String key, Object data, ParcelType type) {
         if (Utils.isEmpty(key) || data == null) return;
-
-        String clzName = data.getClass().getCanonicalName();
+        Class<?> clz = data.getClass();
+        String clzName = clz.getCanonicalName();
         switch (clzName) {
             // bundle
             case "android.os.Bundle":
@@ -86,13 +91,6 @@ public class BundleWrapper {
             case "java.lang.String[]":
                 bundle.putStringArray(key, (String[]) data);
                 return;
-            // CharSequence
-            case "java.lang.CharSequence":
-                bundle.putCharSequence(key, (CharSequence) data);
-                return;
-            case "java.lang.CharSequence[]":
-                bundle.putCharSequenceArray(key, (CharSequence[]) data);
-                return;
             // Size
             case "android.util.Size":
                 bundle.putSize(key, (Size) data);
@@ -100,16 +98,36 @@ public class BundleWrapper {
             case "android.util.SizeF":
                 bundle.putSizeF(key, (SizeF) data);
                 return;
-            default:
-                break;
+        }
+
+        // handle some special type
+
+
+        if (Utils.isSuperClass(clz,ArrayList.class.getCanonicalName())) {
+            setArrayListExtras(bundle,key,data,type);
+        }
+
+        if (type.equals(ParcelType.NONE) && Utils.isSuperClass(clz,"java.util.ArrayList")) {
+            // pass ArrayList<String>
+            //noinspection unchecked
+            bundle.putStringArrayList(key, (ArrayList<String>) data);
+        } else if (type.equals(ParcelType.CHARSEQUENCE) && Utils.isSuperClass(clz,"java.util.ArrayList")) {
+            //noinspection unchecked
+            bundle.putCharSequenceArrayList(key, (ArrayList<CharSequence>) data);
+        } else if (type.equals(ParcelType.CHARSEQUENCE) && clz.isArray()) {
         }
     }
 
-    boolean isSuperClass (Class child,String sup) {
-        if (child == null) return false;
-        if (child.getCanonicalName().equals(sup)) {
-            return true;
+    private void setArrayListExtras(Bundle bundle, String key, Object data, ParcelType type) {
+        if (type.equals(ParcelType.NONE)) {
+            //noinspection unchecked
+            bundle.putStringArrayList(key, (ArrayList<String>) data);
+        } else if (type.equals(ParcelType.CHARSEQUENCE)) {
+            //noinspection unchecked
+            bundle.putParcelableArrayList(key, (ArrayList<? extends Parcelable>) data);
+        } else if (type.equals(ParcelType.BINDER)) {
         }
-        return isSuperClass(child.getSuperclass(),sup);
     }
+
+
 }

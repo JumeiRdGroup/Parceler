@@ -2,8 +2,8 @@ package com.lzh.compiler.parceler;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 /**
  * Created by admin on 16/10/13.
  */
@@ -24,4 +24,15 @@ public class UtilsTest {
         assertFalse(Utils.isObjectClass("test"));
     }
 
+    @Test
+    public void isSuperClass() throws Exception {
+        assertTrue(Utils.isSuperClass(StringBuffer.class,"java.lang.AbstractStringBuilder"));
+        assertFalse(Utils.isSuperClass(StringBuffer.class,"java.lang.Cloneable"));
+    }
+
+    @Test
+    public void isSuperInterface() throws Exception {
+        assertTrue(Utils.isSuperInterface(String.class,"java.lang.CharSequence"));
+        assertFalse(Utils.isSuperInterface(String.class,"java.lang.Cloneable"));
+    }
 }

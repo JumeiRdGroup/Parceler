@@ -31,4 +31,24 @@ public class Utils {
         return data == null || data.length() == 0;
     }
 
+    public static boolean isSuperClass (Class child,String sup) {
+        if (child == null) return false;
+        if (child.getCanonicalName().equals(sup)) {
+            return true;
+        }
+        return isSuperClass(child.getSuperclass(),sup);
+    }
+
+    public static boolean isSuperInterface (Class child,String sup) {
+        if (child == null) return false;
+
+        Class[] interfaces = child.getInterfaces();
+        for (Class in : interfaces) {
+            if (in.getCanonicalName().equals(sup)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

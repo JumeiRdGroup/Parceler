@@ -1,23 +1,12 @@
 package com.lzh.compiler.parceler;
 
-import com.lzh.compiler.parceler.model.Info;
-
 import org.junit.Test;
 
-import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import static junit.framework.Assert.*;
 
 
 public class BundleWrapperTest {
-    @Test
-    public void isSuperClass () {
-        BundleWrapper wrapper = new BundleWrapper();
-
-        boolean superClass = wrapper.isSuperClass(Info.class, Serializable.class.getCanonicalName());
-//        assertTrue(superClass);
-    }
 
     @Test
     public void AllTypePrint() {
@@ -32,6 +21,8 @@ public class BundleWrapperTest {
         for (Type type : genericInterfaces) {
             System.out.println(type);
         }
+        Class<CharSequence[]> clz = CharSequence[].class;
+        System.out.println(clz);
         Type genericSuperclass = list.getClass().getGenericSuperclass();
         System.out.println(genericSuperclass);
         printClassName(list);
