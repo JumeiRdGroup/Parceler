@@ -47,7 +47,7 @@ public class ReflectInjector implements ParcelInjector<Object> {
             for (Field field : injectFields) {
                 field.setAccessible(true);
                 String key = getKey(field);
-                Object obj = data.get(key);
+                Object obj = getValue(target,field);
                 if (obj != null && key != null) {
                     BundleWrapper.setExtra(data,key,obj,field.getAnnotation(Arg.class).type());
                 }
@@ -71,6 +71,14 @@ public class ReflectInjector implements ParcelInjector<Object> {
         return Utils.isEmpty(arg.key()) ? field.getName() : arg.key();
     }
 
+    Object getValue (Object target,Field field) {
+        field.setAccessible(true);
+        try {
+            return field.get(target);
+        } catch (IllegalAccessException e) {
+            return null;
+        }
+    }
 
     void injectField (Field field,Object src,Object target) {
         field.setAccessible(true);

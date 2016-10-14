@@ -21,6 +21,8 @@ public class BundleWrapper {
         Class<?> clz = data.getClass();
 
         String clzName = clz.getCanonicalName();
+        clzName = wrapBaseType(clzName);
+        System.out.println("Bundle data class name:" + clzName + ",type=" + type);
         switch (clzName) {
             // bundle
             case "android.os.Bundle":
@@ -28,48 +30,49 @@ public class BundleWrapper {
                 return;
             // byte
             case "byte":
-            case "java.lang.Byte":
-                bundle.putByte(key, (Byte) data);
+                bundle.putByte(key, (byte) data);
                 return;
             case "byte[]":
                 bundle.putByteArray(key, (byte[]) data);
                 return;
             // char
-            case "java.lang.Character":
             case "char":
-                bundle.putChar(key, (Character) data);
+                bundle.putChar(key, (char) data);
                 return;
             case "char[]":
                 bundle.putCharArray(key, (char[]) data);
                 return;
             // short
-            case "java.lang.Short":
             case "short":
-                bundle.putShort(key, (Short) data);
+                bundle.putShort(key, (short) data);
                 return;
             case "short[]":
                 bundle.putShortArray(key, (short[]) data);
                 return;
             //boolean
             case "boolean":
-            case "java.lang.Boolean":
-                bundle.putBoolean(key, (Boolean) data);
+                bundle.putBoolean(key, (boolean) data);
                 return;
             case "boolean[]":
                 bundle.putBooleanArray(key, (boolean[]) data);
                 return;
+            //long
+            case "long":
+                bundle.putLong(key, (long) data);
+                return;
+            case "long[]":
+                bundle.putLongArray(key, (long[]) data);
+                return;
             //int
             case "int":
-            case "java.lang.Integer":
-                bundle.putInt(key, (Integer) data);
+                bundle.putInt(key, (int) data);
                 return;
             case "int[]":
                 bundle.putIntArray(key, (int[]) data);
                 return;
             // float
-            case "java.lang.Float":
             case "float":
-                bundle.putFloat(key, (Float) data);
+                bundle.putFloat(key, (float) data);
                 return;
             case "float[]":
                 bundle.putFloatArray(key, (float[]) data);
@@ -77,7 +80,7 @@ public class BundleWrapper {
             // double
             case "double":
             case "java.lang.Double":
-                bundle.putDouble(key, (Double) data);
+                bundle.putDouble(key, (double) data);
                 return;
             case "double[]":
                 bundle.putDoubleArray(key, (double[]) data);
@@ -97,7 +100,6 @@ public class BundleWrapper {
                 bundle.putSizeF(key, (SizeF) data);
                 return;
         }
-
         // handle some special type
         if (type == ParcelType.BINDER) {
             bundle.putBinder(key, (IBinder) data);
@@ -110,14 +112,15 @@ public class BundleWrapper {
             return;
         }
         boolean isArray = clz.isArray();
-        clzName = isArray ? clzName.substring(0,clzName.length() - 3) : clzName;
-        clz = Class.forName(clzName);
+        clzName = isArray ? clzName.substring(0,clzName.length() - 2) : clzName;
+        clz = isArray ? Class.forName(clzName) : clz;
         if (Utils.isSuperInterface(clz,"java.lang.CharSequence")) {
             if (isArray) {
                 bundle.putCharSequenceArray(key, (CharSequence[]) data);
             } else {
                 bundle.putCharSequence(key, (CharSequence) data);
             }
+            return;
         }
 
         throw new RuntimeException(String.format("type of %s is not support",clzName));
@@ -151,6 +154,59 @@ public class BundleWrapper {
             case BINDER:
                 throw new RuntimeException("The parcel type must be NONE or CHARSEQUENCE or PARCELABLE with ArrayList annotated by @Arg");
         }
+    }
+
+    private static String wrapBaseType (String clzName) {
+        switch (clzName) {
+            case "byte":
+            case "java.lang.Byte":
+                return "byte";
+            case "byte[]":
+                return "byte[]";
+            // char
+            case "java.lang.Character":
+            case "char":
+                return "char";
+            case "char[]":
+                return "char[]";
+            // short
+            case "java.lang.Short":
+            case "short":
+                return "short";
+            case "short[]":
+                return "short[]";
+            //boolean
+            case "boolean":
+            case "java.lang.Boolean":
+                return "boolean";
+            case "boolean[]":
+                return "boolean[]";
+            //int
+            case "int":
+            case "java.lang.Integer":
+                return "int";
+            case "int[]":
+                return "int[]";
+            //long
+            case "long":
+            case "java.lang.Long":
+                return "long";
+            case "long[]":
+                return "long[]";
+            // float
+            case "java.lang.Float":
+            case "float":
+                return "float";
+            case "float[]":
+                return "float[]";
+            // double
+            case "double":
+            case "java.lang.Double":
+                return "double";
+            case "double[]":
+                return "double[]";
+        }
+        return clzName;
     }
 
 
