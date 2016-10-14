@@ -6,13 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
- * Created by lzh on 16/10/11.
+ * Created by Administrator on 2016/10/14.
  */
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Arg {
-    String key() default "";
-    String require() default "";
-    boolean save() default true;
+public @interface Serializer {
+    ParcelType value();
 }

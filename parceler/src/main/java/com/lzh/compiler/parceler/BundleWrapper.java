@@ -22,7 +22,7 @@ public class BundleWrapper {
 
         String clzName = clz.getCanonicalName();
         clzName = wrapBaseType(clzName);
-        System.out.println("Bundle data class name:" + clzName + ",type=" + type);
+        System.out.println("Bundle data class name:" + clzName + ",type=" + type + ",key:" + key);
         switch (clzName) {
             // bundle
             case "android.os.Bundle":
@@ -101,16 +101,17 @@ public class BundleWrapper {
                 return;
         }
         // handle some special type
-        if (type == ParcelType.BINDER) {
+        if (Utils.isSuperInterface(clz,IBinder.class.getCanonicalName())) {
             bundle.putBinder(key, (IBinder) data);
             return;
-        } else if (Utils.isSuperClass(clz,"java.util.ArrayList")) {
+        } else if (Utils.isSuperClass(clz,ArrayList.class.getCanonicalName())) {
             setArrayListExtras(bundle,key,data,type);
             return;
         } else if (Utils.isSuperClass(clz, SparseArray.class.getCanonicalName())) {
             setSparseArrayExtras(bundle,key,data,type);
             return;
         }
+
         boolean isArray = clz.isArray();
         clzName = isArray ? clzName.substring(0,clzName.length() - 2) : clzName;
         clz = isArray ? Class.forName(clzName) : clz;
@@ -119,6 +120,13 @@ public class BundleWrapper {
                 bundle.putCharSequenceArray(key, (CharSequence[]) data);
             } else {
                 bundle.putCharSequence(key, (CharSequence) data);
+            }
+            return;
+        } else if (Utils.isSuperInterface(clz,"android.os.Parcelable")) {
+            if (isArray) {
+                bundle.putParcelableArray(key, (Parcelable[]) data);
+            } else {
+                bundle.putParcelable(key, (Parcelable) data);
             }
             return;
         }
@@ -131,28 +139,29 @@ public class BundleWrapper {
             case PARCELABLE:
                 //noinspection unchecked
                 bundle.putSparseParcelableArray(key, (SparseArray<? extends Parcelable>) data);
+                return;
             default:
                 throw new RuntimeException("Parceler requires the parcel type must be PARCELABLE with SparseArray annotated by @Arg");
         }
     }
 
     private static void setArrayListExtras(Bundle bundle, String key, Object data, ParcelType type) {
+        if (type == null) {
+            throw new RuntimeException("The type of ArrayList must be annotated by @Serializer");
+        }
         switch (type) {
-            case NONE:
-                //noinspection unchecked
-                bundle.putStringArrayList(key, (ArrayList<String>) data);
-                return;
             case CHARSEQUENCE:
                 //noinspection unchecked
                 bundle.putCharSequenceArrayList(key, (ArrayList<CharSequence>) data);
-                return;
+                break;
             case PARCELABLE:
                 //noinspection unchecked
                 bundle.putParcelableArrayList(key, (ArrayList<? extends Parcelable>) data);
-                return;
-            case SERIALIZABLE:
-            case BINDER:
-                throw new RuntimeException("The parcel type must be NONE or CHARSEQUENCE or PARCELABLE with ArrayList annotated by @Arg");
+                break;
+            case INTEGER:
+                //noinspection unchecked
+                bundle.putIntegerArrayList(key, (ArrayList<Integer>) data);
+                break;
         }
     }
 

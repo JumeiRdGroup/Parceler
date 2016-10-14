@@ -12,6 +12,7 @@ import android.util.SparseArray;
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.ParcelType;
+import com.lzh.compiler.parceler.annotation.Serializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ public class UserInfo {
 
     @Arg
     Bundle bundle = new Bundle();
-    @Arg(type = ParcelType.BINDER)
+    @Arg
     IBinder binder = null;
     @Arg
     boolean bool = true;
@@ -94,23 +95,26 @@ public class UserInfo {
     @Arg
     ArrayList<String> strList;
 
-    @Arg(type = ParcelType.CHARSEQUENCE)
+    @Arg
     CharSequence charSequence = "CharSequence";
-    @Arg(type = ParcelType.CHARSEQUENCE)
+    @Arg
     CharSequence[] charSequencesArr = new CharSequence[]{"charSequence"};
-    @Arg(type = ParcelType.CHARSEQUENCE)
+    @Arg @Serializer(ParcelType.CHARSEQUENCE)
     ArrayList<CharSequence> charSequencesList = new ArrayList<>();
-
-    @Arg(type = ParcelType.PARCELABLE)
+    @Arg
     Parcelable parcelable = new Info();
-    @Arg(type = ParcelType.PARCELABLE)
+    @Arg
     Parcelable[] parcelables = new Parcelable[]{new Info()};
-    @Arg(type = ParcelType.PARCELABLE)
+    @Arg @Serializer(ParcelType.CHARSEQUENCE)
+    ArrayList<String> stringArrayList = new ArrayList<>();
+    @Arg @Serializer(ParcelType.PARCELABLE)
     ArrayList<Parcelable> parcelableArrayList = new ArrayList<>();
-    @Arg(type = ParcelType.PARCELABLE)
+    @Arg @Serializer(ParcelType.INTEGER)
+    ArrayList<Integer> integerArrayList = new ArrayList<>();
+    @Arg @Serializer(ParcelType.PARCELABLE)
     SparseArray<Parcelable> parcelableSparseArray = new SparseArray<>();
 
-    @Arg(type = ParcelType.SERIALIZABLE)
+    @Arg
     Serializable serializable = new Info();
     @Arg
     Size size = new Size(1,2);

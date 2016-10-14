@@ -13,6 +13,8 @@ import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parcelerdemo.bean.UserInfo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Set;
 
 import static com.lzh.compiler.parcelerdemo.R.id.tv;
@@ -34,13 +36,11 @@ public class MainActivity extends AppCompatActivity {
                 inject ();
             }
         });
-
     }
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private void inject() {
         Bundle bundle = new Bundle();
-
         UserInfo info = new UserInfo();
         Parceler.injectToData(info,bundle);
         StringBuilder buffer = new StringBuilder();
@@ -48,9 +48,21 @@ public class MainActivity extends AppCompatActivity {
         for (String key : keySet) {
             Object value = bundle.get(key);
             assert value != null;
-            buffer.append(key).append("=").append(value).append("=").append(value.getClass().getSimpleName()).append("\r\n");
+            buffer.append("key:" + key)
+                    .append("\r\n")
+                    .append("value:" + value)
+                    .append("\r\n")
+                    .append("type:" + value.getClass().getSimpleName())
+                    .append("\r\n\r\n");
         }
         tv.setText(buffer.toString());
+    }
+
+    String flat (Object object) {
+        if (object instanceof Object[]) {
+            return Arrays.toString((Object[]) object);
+        }
+        return object.toString();
     }
 
 }

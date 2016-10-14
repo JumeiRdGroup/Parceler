@@ -37,4 +37,9 @@ public class Info implements Parcelable,Serializable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
     }
+
+    @Override
+    public String toString() {
+        return "Info{}";
+    }
 }

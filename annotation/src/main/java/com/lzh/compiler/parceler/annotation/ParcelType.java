@@ -6,10 +6,6 @@ package com.lzh.compiler.parceler.annotation;
  */
 public enum ParcelType {
     /**
-     * default value: to indicate the generic type of ArrayList should be {@link String}
-     */
-    NONE,
-    /**
      * To indicate the pass data type is subclass of <i>android.os.Parcelable</i>
      */
     PARCELABLE,
@@ -18,11 +14,8 @@ public enum ParcelType {
      */
     SERIALIZABLE,
     /**
-     * To indicate the pass data type is subclass of <i>android.os.IBinder</i>
-     */
-    BINDER,
-    /**
      * To indicate the pass data type is subclass of {@link CharSequence}
      */
-    CHARSEQUENCE
+    CHARSEQUENCE,
+    INTEGER;
 }

@@ -1,9 +1,10 @@
 package com.lzh.compiler.parceler;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import com.lzh.compiler.parceler.annotation.Arg;
+import com.lzh.compiler.parceler.annotation.ParcelType;
+import com.lzh.compiler.parceler.annotation.Serializer;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -15,12 +16,12 @@ import java.util.Map;
  * A injector to inject data by reflect
  * Created by lzh on 16/10/13.
  */
-public class ReflectInjector implements ParcelInjector<Object> {
+class ReflectInjector implements ParcelInjector<Object> {
 
     private Map<Class,List<Field>> map = new HashMap<>();
     private static ReflectInjector injector = new ReflectInjector();
-
-    public static ReflectInjector getInstance () {
+    private ReflectInjector(){}
+    static ReflectInjector getInstance () {
         return injector;
     }
 
@@ -40,31 +41,27 @@ public class ReflectInjector implements ParcelInjector<Object> {
 
     @Override
     public void injectDataToBundle(Object target, Bundle data) {
-        List<Field> injectFields = findInjectFields (target.getClass());
-        Intent intent = new Intent();
-        intent.putExtras(data);
         try {
+            List<Field> injectFields = findInjectFields (target.getClass());
             for (Field field : injectFields) {
                 field.setAccessible(true);
                 String key = getKey(field);
                 Object obj = getValue(target,field);
                 if (obj != null && key != null) {
-                    BundleWrapper.setExtra(data,key,obj,field.getAnnotation(Arg.class).type());
+                    BundleWrapper.setExtra(data,key,obj,getType(field));
                 }
             }
-        } catch (ClassCastException | ClassNotFoundException e) {
-            e.printStackTrace();
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new RuntimeException("inject ");
         }
     }
 
 
     /**
-     * Get key from field
+     * Get key by field
      *
      * @param field The field who has been annotation by {@link Arg}
-     * @return The key will be return with field name when you has not set with {@link Arg#key()}
+     * @return The key will be returns with field name when you has not set with {@link Arg#key()}
      */
     String getKey (Field field) {
         Arg arg = field.getAnnotation(Arg.class);
@@ -80,12 +77,19 @@ public class ReflectInjector implements ParcelInjector<Object> {
         }
     }
 
+    ParcelType getType (Field field) {
+        Serializer serializer = field.getAnnotation(Serializer.class);
+        return serializer == null ? null : serializer.value();
+    }
+
     void injectField (Field field,Object src,Object target) {
         field.setAccessible(true);
         try {
             field.set(src,target);
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(String.format("Set %s to %s failed",target.getClass().getName(),src.getClass().getName()),e);
+            String clzName = src.getClass().getName();
+            String fieldName = field.getName();
+            throw new RuntimeException(String.format("Set %s to %s.%s failed",target,clzName,fieldName),e);
         }
     }
 

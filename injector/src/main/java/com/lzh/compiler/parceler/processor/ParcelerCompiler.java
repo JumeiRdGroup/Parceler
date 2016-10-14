@@ -25,7 +25,7 @@ public class ParcelerCompiler extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 
-        System.err.println("======apt解析开始");
+        System.err.println("======apt parse start");
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Arg.class);
         TypeElement type = null;
         for (Element ele : elements) {
@@ -43,7 +43,7 @@ public class ParcelerCompiler extends AbstractProcessor {
                 return true;
             }
         }
-        System.err.println("======apt解析结束");
+        System.err.println("======apt parse end");
         return false;
     }
 

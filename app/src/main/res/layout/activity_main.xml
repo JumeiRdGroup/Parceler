@@ -10,9 +10,23 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.lzh.compiler.parcelerdemo.MainActivity">
 
-    <TextView
-        android:id="@+id/tv"
+    <ScrollView
+        android:id="@+id/scroll"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello World!" />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/tv"
+                android:textAllCaps="false"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Hello World!" />
+        </LinearLayout>
+
+    </ScrollView>
+
 </RelativeLayout>
