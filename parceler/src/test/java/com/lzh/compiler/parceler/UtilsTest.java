@@ -28,6 +28,7 @@ public class UtilsTest {
     public void isSuperClass() throws Exception {
         assertTrue(Utils.isSuperClass(StringBuffer.class,"java.lang.AbstractStringBuilder"));
         assertFalse(Utils.isSuperClass(StringBuffer.class,"java.lang.Cloneable"));
+        assertTrue(Utils.isSuperInterface(String.class,"java.lang.CharSequence"));
     }
 
     @Test

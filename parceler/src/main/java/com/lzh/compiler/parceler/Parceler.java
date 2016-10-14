@@ -20,6 +20,8 @@ public class Parceler {
      * @param data The class instance to read data by
      */
     public static void injectToTarget(Object target, Bundle data) {
+        if (target == null || data == null) return;
+
         ParcelInjector injector = getInjectorByTarget(target.getClass());
         injector.injectDataToTarget(target,data);
     }
@@ -30,8 +32,10 @@ public class Parceler {
      * @param data The data instance to inject data from target
      */
     public static void injectToData(Object target,Bundle data) {
+        if (target == null || data == null) return;
+
         ParcelInjector injector = getInjectorByTarget(target.getClass());
-        injector.parceDataToBundle(target,data);
+        injector.injectDataToBundle(target,data);
     }
 
     /**
@@ -56,7 +60,8 @@ public class Parceler {
             Class<?> clz = Class.forName(clzName);
             return (ParcelInjector) clz.newInstance();
         } catch (Exception e) {
-            throw new RuntimeException(String.format("Create injector class failed : %s",clzName),e);
+            return ReflectInjector.getInstance();
+//            throw new RuntimeException(String.format("Create injector class failed : %s",clzName),e);
         }
     }
 
@@ -70,7 +75,7 @@ public class Parceler {
         @Override
         public void injectDataToTarget(Object target, Bundle bundle) {}
         @Override
-        public void parceDataToBundle(Object target, Bundle bundle) {}
+        public void injectDataToBundle(Object target, Bundle bundle) {}
     }
 
 }

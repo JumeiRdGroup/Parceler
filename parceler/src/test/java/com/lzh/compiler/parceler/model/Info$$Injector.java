@@ -15,7 +15,7 @@ public class Info$$Injector implements ParcelInjector<Object> {
     }
 
     @Override
-    public void parceDataToBundle(Object target, Bundle bundle) {
+    public void injectDataToBundle(Object target, Bundle bundle) {
 
     }
 }

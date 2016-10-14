@@ -7,13 +7,22 @@ import com.lzh.compiler.parceler.annotation.Arg;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A injector to inject data by reflect
  * Created by lzh on 16/10/13.
  */
 public class ReflectInjector implements ParcelInjector<Object> {
+
+    private Map<Class,List<Field>> map = new HashMap<>();
+    private static ReflectInjector injector = new ReflectInjector();
+
+    public static ReflectInjector getInstance () {
+        return injector;
+    }
 
     @Override
     public void injectDataToTarget(Object target, Bundle data) {
@@ -30,18 +39,23 @@ public class ReflectInjector implements ParcelInjector<Object> {
     }
 
     @Override
-    public void parceDataToBundle(Object target, Bundle data) {
+    public void injectDataToBundle(Object target, Bundle data) {
         List<Field> injectFields = findInjectFields (target.getClass());
         Intent intent = new Intent();
         intent.putExtras(data);
-        for (Field field : injectFields) {
-            field.setAccessible(true);
-            String key = getKey(field);
-            try {
-                Object obj = field.get(target);
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
+        try {
+            for (Field field : injectFields) {
+                field.setAccessible(true);
+                String key = getKey(field);
+                Object obj = data.get(key);
+                if (obj != null && key != null) {
+                    BundleWrapper.setExtra(data,key,obj,field.getAnnotation(Arg.class).type());
+                }
             }
+        } catch (ClassCastException | ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -57,6 +71,7 @@ public class ReflectInjector implements ParcelInjector<Object> {
         return Utils.isEmpty(arg.key()) ? field.getName() : arg.key();
     }
 
+
     void injectField (Field field,Object src,Object target) {
         field.setAccessible(true);
         try {
@@ -67,6 +82,9 @@ public class ReflectInjector implements ParcelInjector<Object> {
     }
 
     List<Field> findInjectFields(Class target) {
+        if (map.containsKey(target)) {
+            return map.get(target);
+        }
         List<Field> fields = new ArrayList<>();
         String clzName = target.getName();
         if (Utils.isObjectClass(clzName) || Utils.isFilterClass(clzName)) {
@@ -79,6 +97,7 @@ public class ReflectInjector implements ParcelInjector<Object> {
             }
         }
         fields.addAll(findInjectFields(target.getSuperclass()));
+        map.put(target,fields);
         return fields;
     }
 }

@@ -20,5 +20,5 @@ public interface ParcelInjector<T> {
      * @param target The class instance to read data
      * @param data The data instance to inject data from target
      */
-    void parceDataToBundle (T target,Bundle data);
+    void injectDataToBundle(T target, Bundle data);
 }

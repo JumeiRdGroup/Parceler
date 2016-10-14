@@ -15,13 +15,9 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
-/**
- * Created by admin on 16/10/11.
- */
 public class ParcelerCompiler extends AbstractProcessor {
 
     private Map<String,ElementParser> map = new HashMap<>();
@@ -31,16 +27,19 @@ public class ParcelerCompiler extends AbstractProcessor {
 
         System.err.println("======apt解析开始");
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Arg.class);
+        TypeElement type = null;
         for (Element ele : elements) {
             try {
-                TypeElement type = (TypeElement) ele.getEnclosingElement();
-                String clzName = type.toString();
-                if (!checkTypeElementValid(type) && map.containsKey(clzName)) {
+                type = (TypeElement) ele.getEnclosingElement();
+                String clzName = type.getQualifiedName().toString();
+                System.out.println(type.getQualifiedName());
+                if (!Utils.checkClassValid(type) && map.containsKey(clzName)) {
                     continue;
                 }
                 map.put(clzName,ElementParser.parse(type));
             }catch (Throwable e) {
-                error(ele, "Parceler tools generate java files failed: %s,%s", ele, e.getMessage());
+                error(ele, "Parceler compiler generated java files failed: %s,%s", type, e.getMessage());
+                e.printStackTrace();
                 return true;
             }
         }
@@ -48,20 +47,18 @@ public class ParcelerCompiler extends AbstractProcessor {
         return false;
     }
 
+    /**
+     * compiler output method,when compiler occurs exception.should be notice here.
+     *
+     * @param element Element of class who has a exception when compiled
+     * @param message The message should be noticed to user
+     * @param args args to inflate message
+     */
     private void error(Element element, String message, Object... args) {
         if (args.length > 0) {
             message = String.format(message, args);
         }
         processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, message, element);
-    }
-
-    private static boolean checkTypeElementValid (TypeElement type) {
-        Set<Modifier> modifiers = type.getModifiers();
-        System.out.println(modifiers);
-        if (modifiers.contains(Modifier.ABSTRACT)) {
-            return false;
-        }
-        return true;
     }
 
     @Override
@@ -79,10 +76,6 @@ public class ParcelerCompiler extends AbstractProcessor {
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
-        UtilMgr mgr = UtilMgr.getMgr();
-        mgr.setElementUtils(processingEnv.getElementUtils());
-        mgr.setFiler(processingEnv.getFiler());
-        mgr.setMessager(processingEnv.getMessager());
-        mgr.setTypeUtils(processingEnv.getTypeUtils());
+        UtilMgr.getMgr().init(processingEnv);
     }
 }

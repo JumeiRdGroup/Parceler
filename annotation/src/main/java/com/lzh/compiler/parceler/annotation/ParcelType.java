@@ -6,7 +6,7 @@ package com.lzh.compiler.parceler.annotation;
  */
 public enum ParcelType {
     /**
-     * default value:useless
+     * default value: to indicate the generic type of ArrayList should be {@link String}
      */
     NONE,
     /**
