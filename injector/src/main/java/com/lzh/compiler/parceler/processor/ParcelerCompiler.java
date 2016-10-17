@@ -24,7 +24,7 @@ public class ParcelerCompiler extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-
+        map.clear();
         System.err.println("======apt parse start");
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Arg.class);
         TypeElement type = null;
@@ -32,19 +32,29 @@ public class ParcelerCompiler extends AbstractProcessor {
             try {
                 type = (TypeElement) ele.getEnclosingElement();
                 String clzName = type.getQualifiedName().toString();
-                System.out.println(type.getQualifiedName());
-                if (!Utils.checkClassValid(type) && map.containsKey(clzName)) {
+                if (!Utils.checkClassValid(type) || map.containsKey(clzName)) {
                     continue;
                 }
+                System.out.println(type.getQualifiedName());
                 map.put(clzName,ElementParser.parse(type));
-            }catch (Throwable e) {
+            } catch (ParcelException e) {
+                error(e.getEle(),e.getMessage());
+            } catch (Throwable e) {
                 error(ele, "Parceler compiler generated java files failed: %s,%s", type, e.getMessage());
                 e.printStackTrace();
                 return true;
             }
         }
+
         System.err.println("======apt parse end");
         return false;
+    }
+
+    private void warning(Element ele, String message, Object... args) {
+        if (args.length > 0) {
+            message = String.format(message,args);
+        }
+        processingEnv.getMessager().printMessage(Diagnostic.Kind.MANDATORY_WARNING,message,ele);
     }
 
     /**

@@ -9,11 +9,7 @@ public enum ParcelType {
      * To indicate the pass data type is subclass of <i>android.os.Parcelable</i>
      */
     PARCELABLE,
-    /**
-     * To indicate the pass data type is subclass of {@link java.io.Serializable}
-     */
-    SERIALIZABLE,
-    /**
+        /**
      * To indicate the pass data type is subclass of {@link CharSequence}
      */
     CHARSEQUENCE,

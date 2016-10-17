@@ -3,6 +3,8 @@ package com.lzh.compiler.parcelerdemo.bean;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.lzh.compiler.parceler.annotation.Arg;
+
 import java.io.Serializable;
 
 /**

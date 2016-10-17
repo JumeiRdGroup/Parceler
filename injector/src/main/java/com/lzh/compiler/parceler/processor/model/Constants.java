@@ -5,6 +5,8 @@ package com.lzh.compiler.parceler.processor.model;
  */
 
 public class Constants {
+
+    public static final String INJECTOR_SUFFIX = "$$Injector";
     // some class name that not include in java library
     public static final String CLASS_NAME_BUNDLE = "android.os.Bundle";
     public static final String CLASS_NAME_BINDER = "android.os.IBinder";
@@ -22,4 +24,5 @@ public class Constants {
     public static final String INJECTOR_METHOD_TO_DATA = "injectDataToTarget";
 
     public static final String INJECTOR_METHOD_TO_BUNDLE = "injectDataToBundle";
+
 }

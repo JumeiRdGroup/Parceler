@@ -11,6 +11,7 @@ import android.util.SparseArray;
 
 import com.lzh.compiler.parceler.annotation.ParcelType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class BundleWrapper {
@@ -129,6 +130,12 @@ public class BundleWrapper {
                 bundle.putParcelable(key, (Parcelable) data);
             }
             return;
+        } else if (Utils.isSuperInterface(clz, Serializable.class.getName())) {
+            if (isArray) {
+                throw new RuntimeException("");
+            } else {
+                bundle.putSerializable(key, (Serializable) data);
+            }
         }
 
         throw new RuntimeException(String.format("type of %s is not support",clzName));

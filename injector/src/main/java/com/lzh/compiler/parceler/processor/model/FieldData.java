@@ -10,6 +10,9 @@ public class FieldData {
     private String key;
     private String require;
     private boolean save;
+
+    private String methodName;
+
     VariableElement var;
 
     public FieldData(String key, String require, boolean save, VariableElement var) {
@@ -33,5 +36,22 @@ public class FieldData {
 
     public VariableElement getVar() {
         return var;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public FieldData setMethodName(String methodName) {
+        this.methodName = methodName;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "FieldData{" +
+                ", methodName='" + methodName + '\'' +
+                ", var=" + var +
+                '}';
     }
 }

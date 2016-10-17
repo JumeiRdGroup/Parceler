@@ -27,6 +27,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:24.0.0'
     testCompile 'junit:junit:4.12'
 
-//    apt project(':injector')
+    apt project(':injector')
     compile project(':parceler')
 }

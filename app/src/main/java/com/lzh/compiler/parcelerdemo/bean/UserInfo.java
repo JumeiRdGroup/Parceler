@@ -34,24 +34,18 @@ public class UserInfo {
     Boolean UpBool = true;
     @Arg
     boolean[] boolArr = new boolean[]{true};
-//    @Arg
-//    Boolean[] UpBoolArr = new Boolean[] {false};
     @Arg
     byte bt = 1;
     @Arg
     Byte UpBt = 2;
     @Arg
     byte[] byArr = new byte[] {0,1};
-//    @Arg
-//    Byte[] UpBtArr = new Byte[] {1,0};
     @Arg
     char cr = 'a';
     @Arg
     Character UpCr = 'b';
     @Arg
     char[] crArr = new char[] {'a'};
-//    @Arg
-//    Character[] UpCrArr = new Character[] {'b'};
 
     @Arg
     int it = 1;
@@ -59,8 +53,6 @@ public class UserInfo {
     Integer UpInt = 2;
     @Arg
     int[] itArr = new int[] {0,1};
-//    @Arg
-//    Integer[] UpItArr = new Integer[] {1,0};
 
     @Arg
     long lg = 2L;
@@ -68,8 +60,6 @@ public class UserInfo {
     Long UpLg = 3L;
     @Arg
     long[] lgArr = new long[] {2L};
-//    @Arg
-//    Long[] UpLgArr = new Long[] {3L};
 
     @Arg
     float ft = 1.0f;
@@ -77,8 +67,6 @@ public class UserInfo {
     Float UpFt = 2.0f;
     @Arg
     float[] ftArr = new float[] {0f,1f};
-//    @Arg
-//    Float[] UpFtArr = new Float[] {1f,0f};
 
     @Arg
     double db = 1d;
@@ -86,12 +74,11 @@ public class UserInfo {
     Double UpDb = 2d;
     @Arg
     double[] dbArr = new double[] {0d,1d};
-//    @Arg
-//    Double[] UpDbArr = new Double[] {1d,0d};
     @Arg
     String str = "str";
     @Arg
     String[] strArr = new String[]{"arr"};
+    @Serializer(ParcelType.CHARSEQUENCE)
     @Arg
     ArrayList<String> strList;
 
@@ -100,15 +87,15 @@ public class UserInfo {
     @Arg
     CharSequence[] charSequencesArr = new CharSequence[]{"charSequence"};
     @Arg @Serializer(ParcelType.CHARSEQUENCE)
-    ArrayList<CharSequence> charSequencesList = new ArrayList<>();
+    ArrayList<String> charSequencesList = new ArrayList<>();
     @Arg
-    Parcelable parcelable = new Info();
+    Info parcelable = new Info();
     @Arg
-    Parcelable[] parcelables = new Parcelable[]{new Info()};
+    Info[] parcelables = new Info[]{new Info()};
     @Arg @Serializer(ParcelType.CHARSEQUENCE)
     ArrayList<String> stringArrayList = new ArrayList<>();
     @Arg @Serializer(ParcelType.PARCELABLE)
-    ArrayList<Parcelable> parcelableArrayList = new ArrayList<>();
+    ArrayList<Info> parcelableArrayList = new ArrayList<>();
     @Arg @Serializer(ParcelType.INTEGER)
     ArrayList<Integer> integerArrayList = new ArrayList<>();
     @Arg @Serializer(ParcelType.PARCELABLE)

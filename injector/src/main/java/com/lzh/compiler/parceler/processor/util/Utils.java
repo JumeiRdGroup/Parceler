@@ -1,10 +1,17 @@
 package com.lzh.compiler.parceler.processor.util;
 
+import java.util.List;
 import java.util.Set;
 
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.Name;
+import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
+import javax.tools.JavaFileObject;
 
 public class Utils {
 
@@ -43,11 +50,12 @@ public class Utils {
         if (modifiers.contains(Modifier.PRIVATE)) {
             throw new RuntimeException(String.format("field %s must not be modified by private",var.getSimpleName()));
         }
-        return checkFieldTypeValid(var);
+        return true;
     }
 
     public static boolean checkFieldTypeValid (VariableElement var) {
-        String clzName = var.toString();
+        String type = var.asType().toString();
+        System.out.println("type       = " + type);
         return true;
     }
 
@@ -55,4 +63,39 @@ public class Utils {
         return data == null || data.length() == 0;
     }
 
+    public static boolean isSuperInterface (TypeElement type,String superInterface) {
+        if (type == null || "java.lang.Object".equals(type.getQualifiedName().toString())) return false;
+
+        if (superInterface.equals(type.getQualifiedName().toString())) return true;
+
+        List<? extends TypeMirror> interfaces = type.getInterfaces();
+        for (TypeMirror mirror : interfaces) {
+            String interName = mirror.toString();
+            if (superInterface.equals(interName)) {
+                return true;
+            }
+        }
+        TypeMirror superclass = type.getSuperclass();
+        type = (TypeElement) UtilMgr.getMgr().getTypeUtils().asElement(superclass);
+        return isSuperInterface(type,superInterface);
+    }
+
+    public static boolean isSuperClass (TypeElement type,String superClass) {
+        if (type == null || "java.lang.Object".equals(type.getQualifiedName().toString())) return false;
+
+        if (type.getQualifiedName().toString().equals(superClass)) return true;
+
+        return isSuperClass((TypeElement) UtilMgr.getMgr().getTypeUtils().asElement(type.getSuperclass()),superClass);
+    }
+
+    public static String getPackageName(TypeElement type) {
+        if (type == null || type.getSimpleName().toString().length() == 0) {
+            return "";
+        }
+        Element parent = type.getEnclosingElement();
+        if (parent.getKind() == ElementKind.PACKAGE) {
+            return ((PackageElement)parent).getQualifiedName().toString();
+        }
+        return getPackageName((TypeElement) parent);
+    }
 }
