@@ -61,18 +61,26 @@ public class ClassFactory {
                 .addParameter(ParameterSpec.builder(getTypeNameByName(Constants.CLASS_NAME_BUNDLE), "data").build());
 
         for (FieldData fieldData : list) {
-            injectToData.beginControlFlow("if (data.containsKey($S))",fieldData.getKey())
+            TypeName fieldName = TypeName.get(fieldData.getVar().asType());
+            injectToData.beginControlFlow("if (data.get($S) != null)",fieldData.getKey())
                     .addStatement("target.$N = ($T)data.get($S)",fieldData.getVar().getSimpleName(),fieldData.getVar(),fieldData.getKey())
                     .endControlFlow();
 
-            injectToBundle.addStatement("data.$N($S,target.$N)",fieldData.getMethodName(),fieldData.getKey(),fieldData.getVar().getSimpleName());
+            if (isUnboxType(fieldName)) {
+                injectToBundle.addStatement("data.$N($S,target.$N)",fieldData.getMethodName(),fieldData.getKey(),fieldData.getVar().getSimpleName());
+            } else {
+                injectToBundle.beginControlFlow("if (target.$N != null)",fieldData.getVar().getSimpleName())
+                        .addStatement("data.$N($S,target.$N)",fieldData.getMethodName(),fieldData.getKey(),fieldData.getVar().getSimpleName())
+                        .endControlFlow();
+            }
         }
 
         classBuidler.addMethod(injectToData.build());
         classBuidler.addMethod(injectToBundle.build());
-
+        System.out.println("generate class");
         JavaFile build = JavaFile.builder(packName, classBuidler.build()).build();
         build.writeTo(UtilMgr.getMgr().getFiler());
+        System.out.println("generated success");
     }
 
     TypeElement getClassByName (String clzName) {
@@ -81,5 +89,27 @@ public class ClassFactory {
 
     TypeName getTypeNameByName (String clzName) {
         return TypeName.get(getClassByName(clzName).asType());
+    }
+
+    TypeName unBoxTypeName (TypeName name) {
+        if (name.isBoxedPrimitive()) {
+            return name.unbox();
+        }
+        return name;
+    }
+
+    boolean isUnboxType (TypeName name) {
+        switch (name.toString()) {
+            case "boolean":
+            case "byte":
+            case "char":
+            case "short":
+            case "int":
+            case "long":
+            case "float":
+            case "double":
+                return true;
+        }
+        return false;
     }
 }

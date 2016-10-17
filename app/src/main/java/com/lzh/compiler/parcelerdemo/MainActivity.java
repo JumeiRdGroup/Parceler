@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
@@ -21,6 +22,10 @@ import static com.lzh.compiler.parcelerdemo.R.id.tv;
 
 public class MainActivity extends AppCompatActivity {
 
+    @Arg
+    int position;
+    @Arg
+    String name;
     TextView tv;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
@@ -28,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Parceler.injectToTarget(this,getIntent().getExtras());
 
         tv = (TextView) findViewById(R.id.tv);
         tv.setOnClickListener(new View.OnClickListener() {
@@ -42,7 +48,10 @@ public class MainActivity extends AppCompatActivity {
     private void inject() {
         Bundle bundle = new Bundle();
         UserInfo info = new UserInfo();
+        long start = System.currentTimeMillis();
         Parceler.injectToData(info,bundle);
+        long end = System.currentTimeMillis();
+        Toast.makeText(this, "注入成功：耗时：" + (end - start), Toast.LENGTH_SHORT).show();
         StringBuilder buffer = new StringBuilder();
         Set<String> keySet = bundle.keySet();
         for (String key : keySet) {

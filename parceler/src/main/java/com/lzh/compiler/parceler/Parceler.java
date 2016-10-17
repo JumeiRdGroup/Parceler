@@ -59,9 +59,10 @@ public class Parceler {
         try {
             Class<?> clz = Class.forName(clzName);
             return (ParcelInjector) clz.newInstance();
+        } catch (ClassNotFoundException e) {
+            return getInjectorByTarget(src.getSuperclass());
         } catch (Exception e) {
             return ReflectInjector.getInstance();
-//            throw new RuntimeException(String.format("Create injector class failed : %s",clzName),e);
         }
     }
 
