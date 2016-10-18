@@ -10,23 +10,10 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.lzh.compiler.parcelerdemo.MainActivity">
 
-    <ScrollView
-        android:id="@+id/scroll"
+    <Button
+        android:id="@+id/toLogin"
+        android:text="跳转到登录页面"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/tv"
-                android:textAllCaps="false"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="Hello World!" />
-        </LinearLayout>
-
-    </ScrollView>
+        android:layout_height="wrap_content" />
 
 </RelativeLayout>
