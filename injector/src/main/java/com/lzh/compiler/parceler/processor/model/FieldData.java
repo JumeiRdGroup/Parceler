@@ -8,30 +8,18 @@ import javax.lang.model.element.VariableElement;
 
 public class FieldData {
     private String key;
-    private String require;
-    private boolean save;
 
     private String methodName;
 
     VariableElement var;
 
-    public FieldData(String key, String require, boolean save, VariableElement var) {
+    public FieldData(String key, VariableElement var) {
         this.key = key;
-        this.require = require;
-        this.save = save;
         this.var = var;
     }
 
     public String getKey() {
         return key;
-    }
-
-    public String getRequire() {
-        return require;
-    }
-
-    public boolean isSave() {
-        return save;
     }
 
     public VariableElement getVar() {

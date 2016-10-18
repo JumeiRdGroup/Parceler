@@ -12,7 +12,5 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Arg {
-    String key() default "";
-    String require() default "";
-    boolean save() default true;
+    String value() default "";
 }

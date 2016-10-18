@@ -9,17 +9,10 @@ import android.util.Size;
 import android.util.SizeF;
 import android.util.SparseArray;
 
-import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
-import com.lzh.compiler.parceler.annotation.ParcelType;
-import com.lzh.compiler.parceler.annotation.Serializer;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-
-/**
- * Created by admin on 16/10/14.
- */
 
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class UserInfo {
@@ -78,7 +71,6 @@ public class UserInfo {
     String str = "str";
     @Arg
     String[] strArr = new String[]{"arr"};
-    @Serializer(ParcelType.CHARSEQUENCE)
     @Arg
     ArrayList<String> strList;
 
@@ -86,19 +78,19 @@ public class UserInfo {
     CharSequence charSequence = "CharSequence";
     @Arg
     CharSequence[] charSequencesArr = new CharSequence[]{"charSequence"};
-    @Arg @Serializer(ParcelType.CHARSEQUENCE)
+    @Arg
     ArrayList<String> charSequencesList = new ArrayList<>();
     @Arg
     Info parcelable = new Info();
     @Arg
     Info[] parcelables = new Info[]{new Info()};
-    @Arg @Serializer(ParcelType.CHARSEQUENCE)
+    @Arg
     ArrayList<String> stringArrayList = new ArrayList<>();
-    @Arg @Serializer(ParcelType.PARCELABLE)
+    @Arg
     ArrayList<Info> parcelableArrayList = new ArrayList<>();
-    @Arg @Serializer(ParcelType.INTEGER)
+    @Arg
     ArrayList<Integer> integerArrayList = new ArrayList<>();
-    @Arg @Serializer(ParcelType.PARCELABLE)
+    @Arg
     SparseArray<Parcelable> parcelableSparseArray = new SparseArray<>();
 
     @Arg
@@ -110,4 +102,6 @@ public class UserInfo {
 
     public UserInfo () {
     }
+
+
 }

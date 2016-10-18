@@ -11,7 +11,7 @@ public class UserInfoInjector implements ParcelInjector<UserInfo> {
     public void injectDataToTarget(UserInfo target, Bundle data) {
         ArrayList<CharSequence> list = new ArrayList<>();
         list.add(new StringBuffer());
-        data.putCharSequenceArrayList("key",list);
+        data.putCharSequenceArrayList("value",list);
     }
 
     @Override

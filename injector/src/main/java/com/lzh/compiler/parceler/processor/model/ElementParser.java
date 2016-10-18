@@ -1,13 +1,10 @@
 package com.lzh.compiler.parceler.processor.model;
 
 import com.lzh.compiler.parceler.annotation.Arg;
-import com.lzh.compiler.parceler.annotation.ParcelType;
-import com.lzh.compiler.parceler.annotation.Serializer;
 import com.lzh.compiler.parceler.processor.ClassFactory;
 import com.lzh.compiler.parceler.processor.ParcelException;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
-import com.squareup.javapoet.TypeName;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,7 +15,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
-import javax.rmi.CORBA.Util;
 
 public class ElementParser {
     TypeElement type;
@@ -31,27 +27,21 @@ public class ElementParser {
      * Parse and check out all of fields that was annotated by {@link com.lzh.compiler.parceler.annotation.Arg}
      */
     private void parse() throws IOException {
-        List<VariableElement> fields = getAllFields(type);
+        List<VariableElement> fields = getAllFieldsWithArg(type);
         for (VariableElement var : fields) {
-            Arg arg = var.getAnnotation(Arg.class);
-            if (arg == null || !Utils.checkFieldValid(var)) {
-                break;
-            }
-            System.out.println("parse field :" + var.getSimpleName());
+            Utils.checkFieldValid(var);
+            LogUtil.print("parse field :" + var.getSimpleName());
             FieldData fieldData = getFieldDataByVariable(var);
-            System.out.println(fieldData);
+            LogUtil.print(fieldData);
             list.add(fieldData);
         }
-        generateClass();
     }
 
     private FieldData getFieldDataByVariable(VariableElement var) {
         Arg arg = var.getAnnotation(Arg.class);
 
         FieldData fieldData = new FieldData(
-                Utils.isEmpty(arg.key()) ? var.getSimpleName().toString() : arg.key(),
-                arg.require(),
-                arg.save(),
+                Utils.isEmpty(arg.value()) ? var.getSimpleName().toString() : arg.value(),
                 var
         );
         // get method name by var used by bundle
@@ -154,7 +144,7 @@ public class ElementParser {
         } else if (Utils.isSuperClass(typeElement,"android.util.SparseArray")) {
             TypeElement genericType = getGenericTypeFromFieldType(type);
             if (genericType == null) {
-                throw new RuntimeException(String.format("should define generic class on filed %s when use SparseArray",var.getSimpleName()));
+                throw new RuntimeException(String.format("should define generics class on filed %s when use SparseArray",var.getSimpleName()));
             }
 
             if (Utils.isSuperInterface(genericType,"android.os.Parcelable")) {
@@ -229,15 +219,15 @@ public class ElementParser {
     }
 
     /**
-     * get all of fields that be annotated by {@link com.lzh.compiler.parceler.annotation.Arg} in this class and superclass
-     * @param type The element of class
+     * get all of fields that be annotated by {@link com.lzh.compiler.parceler.annotation.Arg} on itself and parent class
+     * @param type The class to check
      * @return all of field elements that be annotated by {@link com.lzh.compiler.parceler.annotation.Arg}
      */
-    private List<VariableElement> getAllFields(TypeElement type) {
+    private List<VariableElement> getAllFieldsWithArg(TypeElement type) {
         List<VariableElement> fields = new ArrayList<>();
         List<? extends Element> enclosedElements = type.getEnclosedElements();
         for (Element element : enclosedElements) {
-            if (element.getKind().isField()) {
+            if (element.getKind().isField() && element.getAnnotation(Arg.class) != null) {
                 fields.add((VariableElement) element);
             }
         }
@@ -246,7 +236,7 @@ public class ElementParser {
         if (supClass == null || supClass.getKind().isInterface()) {
             return fields;
         }
-        fields.addAll(getAllFields((TypeElement) supClass));
+        fields.addAll(getAllFieldsWithArg((TypeElement) supClass));
         return fields;
     }
 

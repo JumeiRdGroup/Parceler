@@ -62,11 +62,12 @@ public class ClassFactory {
 
         for (FieldData fieldData : list) {
             TypeName fieldName = TypeName.get(fieldData.getVar().asType());
+            boolean isUnBoxType = isUnBoxType(fieldName);
             injectToData.beginControlFlow("if (data.get($S) != null)",fieldData.getKey())
                     .addStatement("target.$N = ($T)data.get($S)",fieldData.getVar().getSimpleName(),fieldData.getVar(),fieldData.getKey())
                     .endControlFlow();
 
-            if (isUnboxType(fieldName)) {
+            if (isUnBoxType(fieldName)) {
                 injectToBundle.addStatement("data.$N($S,target.$N)",fieldData.getMethodName(),fieldData.getKey(),fieldData.getVar().getSimpleName());
             } else {
                 injectToBundle.beginControlFlow("if (target.$N != null)",fieldData.getVar().getSimpleName())
@@ -98,7 +99,7 @@ public class ClassFactory {
         return name;
     }
 
-    boolean isUnboxType (TypeName name) {
+    boolean isUnBoxType(TypeName name) {
         switch (name.toString()) {
             case "boolean":
             case "byte":

@@ -1,5 +1,4 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
-
 buildscript {
     repositories {
         jcenter()
@@ -7,6 +6,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:2.1.2'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        classpath 'com.novoda:bintray-release:0.3.4'
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -20,4 +20,15 @@ allprojects {
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+//添加
+ext {
+    userOrg = 'yjfnypeu'
+    groupId = 'org.lzh.compiler.parceler'
+    uploadName = 'Parceler'
+    publishVersion = '0.1'
+    desc = 'a lib to generate class to inject data between Bundle and fields of class'
+    website = 'https://github.com/yjfnypeu/Parceler'
+    licences = ['Apache-2.0']
 }

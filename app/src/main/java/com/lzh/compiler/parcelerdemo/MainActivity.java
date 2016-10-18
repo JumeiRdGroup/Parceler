@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
         for (String key : keySet) {
             Object value = bundle.get(key);
             assert value != null;
-            buffer.append("key:" + key)
+            buffer.append("value:" + key)
                     .append("\r\n")
                     .append("value:" + value)
                     .append("\r\n")

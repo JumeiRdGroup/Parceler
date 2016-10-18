@@ -1,8 +1,20 @@
 apply plugin: 'java'
-
+apply plugin: 'com.novoda.bintray-release'//添加
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
+
+//添加
+publish {
+    artifactId = 'parceler-anno'
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    uploadName = rootProject.uploadName
+    publishVersion = rootProject.publishVersion
+    desc = rootProject.description
+    website = rootProject.website
+    licences = rootProject.licences
+}

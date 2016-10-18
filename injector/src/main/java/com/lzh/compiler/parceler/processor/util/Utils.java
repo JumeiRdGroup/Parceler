@@ -1,16 +1,21 @@
 package com.lzh.compiler.parceler.processor.util;
 
+import com.lzh.compiler.parceler.processor.ParcelException;
+
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.processing.Messager;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic;
 import javax.tools.JavaFileObject;
 
 public class Utils {
@@ -34,7 +39,7 @@ public class Utils {
             return false;
         }
         if (modifiers.contains(Modifier.PRIVATE)) {
-            throw new RuntimeException(String.format("class %s must not be modified by private",type.getQualifiedName()));
+            throw new ParcelException(String.format("class %s must not be modified by private",type.getQualifiedName()),type);
         }
 
         return true;
@@ -48,14 +53,10 @@ public class Utils {
     public static boolean checkFieldValid (VariableElement var) {
         Set<Modifier> modifiers = var.getModifiers();
         if (modifiers.contains(Modifier.PRIVATE)) {
-            throw new RuntimeException(String.format("field %s must not be modified by private",var.getSimpleName()));
+            throw new ParcelException(
+                    String.format(
+                            "field %s should not be modified by private",var.getSimpleName()),var);
         }
-        return true;
-    }
-
-    public static boolean checkFieldTypeValid (VariableElement var) {
-        String type = var.asType().toString();
-        System.out.println("type       = " + type);
         return true;
     }
 
@@ -97,5 +98,10 @@ public class Utils {
             return ((PackageElement)parent).getQualifiedName().toString();
         }
         return getPackageName((TypeElement) parent);
+    }
+
+    public static void printWarning (Element element,String message) {
+        Messager messager = UtilMgr.getMgr().getMessager();
+        messager.printMessage(Diagnostic.Kind.WARNING,message,element);
     }
 }

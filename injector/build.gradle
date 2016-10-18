@@ -1,5 +1,5 @@
 apply plugin: 'java'
-
+apply plugin: 'com.novoda.bintray-release'//添加
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.squareup:javapoet:1.7.0'
@@ -8,3 +8,15 @@ dependencies {
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
+
+//添加
+publish {
+    artifactId = 'parceler-compiler'
+    userOrg = rootProject.userOrg
+    groupId = rootProject.groupId
+    uploadName = rootProject.uploadName
+    publishVersion = rootProject.publishVersion
+    desc = rootProject.description
+    website = rootProject.website
+    licences = rootProject.licences
+}

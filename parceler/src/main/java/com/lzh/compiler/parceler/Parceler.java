@@ -11,7 +11,7 @@ import java.util.Map;
  */
 public class Parceler {
     private static Parceler parceler = new Parceler();
-    private static Map<String,WeakReference<ParcelInjector>> parcelMap = new HashMap<>();
+    private static Map<Class,WeakReference<ParcelInjector>> INJECTORS = new HashMap<>();
     private static final NoneInjector NO_INJECTOR = new Parceler.NoneInjector();
 
     /**
@@ -22,8 +22,13 @@ public class Parceler {
     public static void injectToTarget(Object target, Bundle data) {
         if (target == null || data == null) return;
 
-        ParcelInjector injector = getInjectorByTarget(target.getClass());
-        injector.injectDataToTarget(target,data);
+        ParcelInjector injector = null;
+        try {
+            injector = getInjectorByClass(target.getClass());
+            injector.injectDataToTarget(target,data);
+        } catch (Exception e) {
+            throw new RuntimeException("",e);
+        }
     }
 
     /**
@@ -34,42 +39,47 @@ public class Parceler {
     public static void injectToData(Object target,Bundle data) {
         if (target == null || data == null) return;
 
-        ParcelInjector injector = getInjectorByTarget(target.getClass());
-        injector.injectDataToBundle(target,data);
+        ParcelInjector injector = null;
+        try {
+            injector = getInjectorByClass(target.getClass());
+            injector.injectDataToBundle(target,data);
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("get injector failed:"),e);
+        }
     }
 
     /**
-     *
+     * Get injector instance associated with this class,
      * @param src
      * @return
      */
-    private static ParcelInjector getInjectorByTarget(Class src) {
-        String clzName = src.getName() + Constants.SUFFIX;
+    private static ParcelInjector getInjectorByClass(Class src) throws IllegalAccessException, InstantiationException {
         ParcelInjector injector;
-        if (parcelMap.containsKey(clzName) && (injector = parcelMap.get(clzName).get()) != null) {
+        if (INJECTORS.containsKey(src) && (injector = INJECTORS.get(src).get()) != null) {
             return injector;
         }
+        String clzName = src.getName() + Constants.SUFFIX;
 
         for (String prefix : Constants.FILTER_PREFIX) {
             if (clzName.startsWith(prefix)) {
+                INJECTORS.put(src,new WeakReference<ParcelInjector>(NO_INJECTOR));
                 return NO_INJECTOR;
             }
         }
 
         try {
             Class<?> clz = Class.forName(clzName);
-            return (ParcelInjector) clz.newInstance();
+            injector = (ParcelInjector) clz.newInstance();
+            INJECTORS.put(src,new WeakReference<>(injector));
+            return injector;
         } catch (ClassNotFoundException e) {
-            return getInjectorByTarget(src.getSuperclass());
-        } catch (Exception e) {
-            return ReflectInjector.getInstance();
+            injector = getInjectorByClass(src.getSuperclass());
+            INJECTORS.put(src,new WeakReference<>(injector));
+            return injector;
         }
     }
 
     private Parceler () {}
-    public static Parceler getInstance () {
-        return parceler;
-    }
 
     // define a empty injector to filter some system library class
     private static class NoneInjector implements ParcelInjector<Object> {
