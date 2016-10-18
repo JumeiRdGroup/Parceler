@@ -1,5 +1,6 @@
 package com.lzh.compiler.parceler;
 
+@SuppressWarnings("WeakerAccess")
 public class Utils {
 
     /**
@@ -27,18 +28,22 @@ public class Utils {
         return Object.class.getName().equals(clzName);
     }
 
-    public static boolean isEmpty (CharSequence data) {
-        return data == null || data.length() == 0;
-    }
-
+    /**
+     * Check out if it is a super class of child.
+     * @param child child class type
+     * @param sup the super class name.
+     * @return true if it is super class or itself
+     */
     public static boolean isSuperClass (Class child,String sup) {
-        if (child == null) return false;
-        if (child.getCanonicalName().equals(sup)) {
-            return true;
-        }
-        return isSuperClass(child.getSuperclass(),sup);
+        return child != null && (child.getCanonicalName().equals(sup) || isSuperClass(child.getSuperclass(), sup));
     }
 
+    /**
+     * Check out if it is a super interface of child
+     * @param child child class type
+     * @param sup the super interface class name
+     * @return true if it is super interface or itself
+     */
     public static boolean isSuperInterface (Class child,String sup) {
         if (child == null) return false;
         if (child.getCanonicalName().equals(sup)) return true;

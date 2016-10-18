@@ -3,8 +3,10 @@ package com.lzh.compiler.parceler;
 import android.os.Bundle;
 
 /**
- *
- * Created by lzh on 16/10/11.
+ * DO NOT USE:
+ * <p>
+ *     The interface is used by generate class
+ * </p>
  */
 public interface ParcelInjector<T> {
 

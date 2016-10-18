@@ -6,11 +6,7 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by lzh on 16/10/11.
- */
-public class Parceler {
-    private static Parceler parceler = new Parceler();
+public final class Parceler {
     private static Map<Class,WeakReference<ParcelInjector>> INJECTORS = new HashMap<>();
     private static final NoneInjector NO_INJECTOR = new Parceler.NoneInjector();
 
@@ -22,12 +18,13 @@ public class Parceler {
     public static void injectToTarget(Object target, Bundle data) {
         if (target == null || data == null) return;
 
-        ParcelInjector injector = null;
+        ParcelInjector injector;
         try {
             injector = getInjectorByClass(target.getClass());
+            //noinspection unchecked
             injector.injectDataToTarget(target,data);
         } catch (Exception e) {
-            throw new RuntimeException("",e);
+            throw new RuntimeException(String.format("inject failed : %s",e.getMessage()),e);
         }
     }
 
@@ -39,42 +36,45 @@ public class Parceler {
     public static void injectToData(Object target,Bundle data) {
         if (target == null || data == null) return;
 
-        ParcelInjector injector = null;
+        ParcelInjector injector;
         try {
             injector = getInjectorByClass(target.getClass());
+            //noinspection unchecked
             injector.injectDataToBundle(target,data);
         } catch (Exception e) {
-            throw new RuntimeException(String.format("get injector failed:"),e);
+            throw new RuntimeException(String.format("inject failed : %s",e.getMessage()),e);
         }
     }
 
     /**
-     * Get injector instance associated with this class,
-     * @param src
-     * @return
+     * Get injector instance associated with class
+     * @param clz class type to find injector instance
+     * @return The injector instance create by reflect with class name : <code>clz.getName() + Constants.SUFFIX</code>,
+     * will not be null.if there are no suitable injector,should returns {@link NoneInjector}
+     *
      */
-    private static ParcelInjector getInjectorByClass(Class src) throws IllegalAccessException, InstantiationException {
+    private static ParcelInjector getInjectorByClass(Class clz) throws IllegalAccessException, InstantiationException {
         ParcelInjector injector;
-        if (INJECTORS.containsKey(src) && (injector = INJECTORS.get(src).get()) != null) {
+        if (INJECTORS.containsKey(clz) && (injector = INJECTORS.get(clz).get()) != null) {
             return injector;
         }
-        String clzName = src.getName() + Constants.SUFFIX;
+        String clzName = clz.getName() + Constants.SUFFIX;
 
         for (String prefix : Constants.FILTER_PREFIX) {
             if (clzName.startsWith(prefix)) {
-                INJECTORS.put(src,new WeakReference<ParcelInjector>(NO_INJECTOR));
+                INJECTORS.put(clz,new WeakReference<ParcelInjector>(NO_INJECTOR));
                 return NO_INJECTOR;
             }
         }
 
         try {
-            Class<?> clz = Class.forName(clzName);
-            injector = (ParcelInjector) clz.newInstance();
-            INJECTORS.put(src,new WeakReference<>(injector));
+            Class<?> injectorClz = Class.forName(clzName);
+            injector = (ParcelInjector) injectorClz.newInstance();
+            INJECTORS.put(clz,new WeakReference<>(injector));
             return injector;
         } catch (ClassNotFoundException e) {
-            injector = getInjectorByClass(src.getSuperclass());
-            INJECTORS.put(src,new WeakReference<>(injector));
+            injector = getInjectorByClass(clz.getSuperclass());
+            INJECTORS.put(clz,new WeakReference<>(injector));
             return injector;
         }
     }

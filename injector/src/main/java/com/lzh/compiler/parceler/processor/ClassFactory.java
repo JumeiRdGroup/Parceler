@@ -51,7 +51,8 @@ public class ClassFactory {
                 .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
                 .addParameter(ParameterSpec.builder(TypeName.get(type.asType()), "target").build())
-                .addParameter(ParameterSpec.builder(getTypeNameByName(Constants.CLASS_NAME_BUNDLE), "data").build());
+                .addParameter(ParameterSpec.builder(getTypeNameByName(Constants.CLASS_NAME_BUNDLE), "data").build())
+                .addStatement("Object obj = null");
 
         MethodSpec.Builder injectToBundle = MethodSpec.methodBuilder(Constants.INJECTOR_METHOD_TO_BUNDLE)
                 .addAnnotation(Override.class)
@@ -62,16 +63,20 @@ public class ClassFactory {
 
         for (FieldData fieldData : list) {
             TypeName fieldName = TypeName.get(fieldData.getVar().asType());
-            boolean isUnBoxType = isUnBoxType(fieldName);
-            injectToData.beginControlFlow("if (data.get($S) != null)",fieldData.getKey())
-                    .addStatement("target.$N = ($T)data.get($S)",fieldData.getVar().getSimpleName(),fieldData.getVar(),fieldData.getKey())
-                    .endControlFlow();
 
             if (isUnBoxType(fieldName)) {
                 injectToBundle.addStatement("data.$N($S,target.$N)",fieldData.getMethodName(),fieldData.getKey(),fieldData.getVar().getSimpleName());
+
+                injectToData.beginControlFlow("if (data.get($S) != null)",fieldData.getKey())
+                        .addStatement("target.$N = ($T)data.get($S)",fieldData.getVar().getSimpleName(),fieldData.getVar(),fieldData.getKey())
+                        .endControlFlow();
             } else {
                 injectToBundle.beginControlFlow("if (target.$N != null)",fieldData.getVar().getSimpleName())
                         .addStatement("data.$N($S,target.$N)",fieldData.getMethodName(),fieldData.getKey(),fieldData.getVar().getSimpleName())
+                        .endControlFlow();
+
+                injectToData.beginControlFlow("if ((obj = data.get($S)) != null && (obj instanceof $N))",fieldData.getKey(),fieldData.getCastName())
+                        .addStatement("target.$N = ($T)data.get($S)",fieldData.getVar().getSimpleName(),fieldData.getVar(),fieldData.getKey())
                         .endControlFlow();
             }
         }

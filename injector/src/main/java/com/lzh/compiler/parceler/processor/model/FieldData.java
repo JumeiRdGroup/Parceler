@@ -2,15 +2,11 @@ package com.lzh.compiler.parceler.processor.model;
 
 import javax.lang.model.element.VariableElement;
 
-/**
- * Created by admin on 16/10/11.
- */
-
 public class FieldData {
     private String key;
 
     private String methodName;
-
+    private String castName;
     VariableElement var;
 
     public FieldData(String key, VariableElement var) {
@@ -33,6 +29,14 @@ public class FieldData {
     public FieldData setMethodName(String methodName) {
         this.methodName = methodName;
         return this;
+    }
+
+    public String getCastName() {
+        return castName;
+    }
+
+    public void setCastName(String castName) {
+        this.castName = castName;
     }
 
     @Override

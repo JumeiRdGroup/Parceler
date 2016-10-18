@@ -45,16 +45,18 @@ public class ElementParser {
                 var
         );
         // get method name by var used by bundle
-        String methodName = getMethodName(var);
+        String methodName = getMethodName(var,fieldData);
         if (Utils.isEmpty(methodName)) {
             throw new ParcelException(String.format("The type %s on field %s is not supported!",var.asType().toString(),var.getSimpleName()),var);
         }
         fieldData.setMethodName(methodName);
+
         return fieldData;
     }
 
-    private String getMethodName(VariableElement var) {
+    private String getMethodName(VariableElement var,FieldData fieldData) {
         String type = var.asType().toString();
+        fieldData.setCastName(type);
         type = wrapBaseType(type); // change encasement to base,like java.lang.Integer to int
         String methodName = null;
         switch (type) {
@@ -141,6 +143,7 @@ public class ElementParser {
             } else if ("java.lang.String".equals(genericType.toString())) {
                 methodName = "putStringArrayList";
             }
+            fieldData.setCastName(ArrayList.class.getName());
         } else if (Utils.isSuperClass(typeElement,"android.util.SparseArray")) {
             TypeElement genericType = getGenericTypeFromFieldType(type);
             if (genericType == null) {
@@ -150,6 +153,7 @@ public class ElementParser {
             if (Utils.isSuperInterface(genericType,"android.os.Parcelable")) {
                 methodName = "putSparseParcelableArray";
             }
+            fieldData.setCastName("android.util.SparseArray");
         }
 
         if (!Utils.isEmpty(methodName)) return methodName;
