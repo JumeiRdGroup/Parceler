@@ -2,13 +2,10 @@ package com.lzh.compiler.parceler.processor;
 
 import javax.lang.model.element.Element;
 
-/**
- * Created by admin on 16/10/17.
- */
-
 public class ParcelException extends RuntimeException {
-    Element ele;
+    private Element ele;
 
+    @SuppressWarnings("WeakerAccess")
     public ParcelException(String message, Throwable cause, Element ele) {
         super(message, cause);
         this.ele = ele;
@@ -19,7 +16,7 @@ public class ParcelException extends RuntimeException {
         this.ele = ele;
     }
 
-
+    @SuppressWarnings("WeakerAccess")
     public Element getEle() {
         return ele;
     }

@@ -63,10 +63,21 @@ public class Utils {
         return true;
     }
 
+    /**
+     * Check out if it is a empty data
+     * @param data String
+     * @return true if is empty
+     */
     public static boolean isEmpty(CharSequence data) {
         return data == null || data.length() == 0;
     }
 
+    /**
+     * Check out if the class {@code type} is a subclass of interface {@code superInterface}
+     * @param type the class to check
+     * @param superInterface the interface name
+     * @return true if is subclass
+     */
     public static boolean isSuperInterface (TypeElement type,String superInterface) {
         if (type == null || "java.lang.Object".equals(type.getQualifiedName().toString())) return false;
 
@@ -84,6 +95,12 @@ public class Utils {
         return isSuperInterface(type,superInterface);
     }
 
+    /**
+     * Check out if the class {@code type} is a subclass of {@code superClass}
+     * @param type the class to check
+     * @param superClass the super class name
+     * @return true if is subclass
+     */
     public static boolean isSuperClass (TypeElement type,String superClass) {
         if (type == null || "java.lang.Object".equals(type.getQualifiedName().toString())) return false;
 
@@ -92,6 +109,11 @@ public class Utils {
         return isSuperClass((TypeElement) UtilMgr.getMgr().getTypeUtils().asElement(type.getSuperclass()),superClass);
     }
 
+    /**
+     * get package name from class {@code type}
+     * @param type The element of class
+     * @return package name
+     */
     public static String getPackageName(TypeElement type) {
         if (type == null || type.getSimpleName().toString().length() == 0) {
             return "";
@@ -103,11 +125,11 @@ public class Utils {
         return getPackageName((TypeElement) parent);
     }
 
-    public static void printWarning (Element element,String message) {
-        Messager messager = UtilMgr.getMgr().getMessager();
-        messager.printMessage(Diagnostic.Kind.WARNING,message,element);
-    }
-
+    /**
+     * Check out if the field {@code var} has been annotated by {@code android.support.annotation.NonNull}
+     * @param var field
+     * @return true if is has annotated by NonNull
+     */
     public static boolean hasNonNullAnnotation(VariableElement var) {
         List<? extends AnnotationMirror> annotationMirrors = var.getAnnotationMirrors();
         for (AnnotationMirror mirror : annotationMirrors) {
@@ -127,6 +149,11 @@ public class Utils {
         return TypeName.get(getClassByName(clzName).asType());
     }
 
+    /**
+     * Check out if is base type.such as int,boolean but not Integer,Boolean
+     * @param tn type
+     * @return true if it is a unBox type
+     */
     public static boolean isUnboxType(TypeName tn) {
         switch (tn.toString()) {
             case "boolean":

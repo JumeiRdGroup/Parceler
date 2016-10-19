@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
+import com.lzh.compiler.parcelerdemo.bean.UserInfo;
 
 import butterknife.OnClick;
 
@@ -25,6 +26,8 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
     }
 
     @OnClick(R.id.toLogin)

@@ -3,9 +3,7 @@ package com.lzh.compiler.parceler.processor;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.Dispatcher;
 import com.lzh.compiler.parceler.processor.factory.ActivityFactory;
-import com.lzh.compiler.parceler.processor.factory.BroadcastReceiverFactory;
 import com.lzh.compiler.parceler.processor.factory.DispatcherFactory;
-import com.lzh.compiler.parceler.processor.factory.ServiceFactory;
 import com.lzh.compiler.parceler.processor.model.Constants;
 import com.lzh.compiler.parceler.processor.model.ElementParser;
 import com.lzh.compiler.parceler.processor.model.FieldData;
@@ -13,8 +11,6 @@ import com.lzh.compiler.parceler.processor.model.LogUtil;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -26,7 +22,6 @@ import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
-import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.TypeElement;
 import javax.tools.Diagnostic;
 
@@ -35,8 +30,6 @@ public class ParcelerCompiler extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         LogUtil.debug = false;
-        Map<String,ElementParser> map = new HashMap<>();
-//        if (parseArgElement(roundEnv, map)) return true;
         try {
             Map<TypeElement, ElementParser> parserMap = parseArgElement(roundEnv);
             parseDispatcherElement (roundEnv,parserMap);
@@ -49,6 +42,10 @@ public class ParcelerCompiler extends AbstractProcessor {
         return false;
     }
 
+    /**
+     * Parse elements with {@link Dispatcher}
+     * @throws ParcelException
+     */
     private void parseDispatcherElement(RoundEnvironment roundEnv, Map<TypeElement, ElementParser> parserMap) throws ParcelException{
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Dispatcher.class);
         DispatcherFactory factory;
@@ -72,6 +69,10 @@ public class ParcelerCompiler extends AbstractProcessor {
         }
     }
 
+    /**
+     * Parse elements with {@link Arg}
+     * @throws ParcelException
+     */
     private Map<TypeElement,ElementParser> parseArgElement(RoundEnvironment roundEnv) throws ParcelException{
         Map<TypeElement,ElementParser> parserMap = new HashMap<>();
         Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(Arg.class);
@@ -80,8 +81,7 @@ public class ParcelerCompiler extends AbstractProcessor {
             // parse and get data from elements
             for (Element ele : elements) {
                 type = (TypeElement) ele.getEnclosingElement();
-                String clzName = type.getQualifiedName().toString();
-                if (!Utils.checkClassValid(type) || parserMap.containsKey(clzName)) {
+                if (!Utils.checkClassValid(type) || parserMap.containsKey(type)) {
                     continue;
                 }
                 parserMap.put(type,ElementParser.parse(type));

@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class Parceler {
+    /**
+     * A map to cache injectors
+     */
     private static Map<Class,WeakReference<ParcelInjector>> INJECTORS = new HashMap<>();
     private static final NoneInjector NO_INJECTOR = new Parceler.NoneInjector();
 
