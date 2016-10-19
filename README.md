@@ -103,7 +103,11 @@ public class LoginActivity extends BaseActivity {
     }
 }
 ```
-then you can easily use a simple code like this <code>new LoginActivityDispatcher(password).setUsername(username).requestCode(100).start(activity);</code> to navigate to this activity and even can pass the data if needed.
+then you can easily use a simple code like the code below to navigate to this activity and even can pass the data if needed.
+
+```
+new LoginActivityDispatcher(password).setUsername(username).requestCode(100).start(activity);
+```
 
 And also to get intent to used for <i>PendingIntent</code>
 ```
