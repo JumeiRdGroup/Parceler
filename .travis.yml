@@ -1,14 +1,14 @@
 language: android
-jdk: jdk8
+jdk: jdk7
 sudo: false
 
 android:
   components:
     - platform-tools
     - tools
-    - build-tools-24.0.0
+    - build-tools-23.0.3
     - android-22
-    - android-24
+    - android-23
     - sys-img-armeabi-v7a-android-22
     - extra-android-m2repository
 
