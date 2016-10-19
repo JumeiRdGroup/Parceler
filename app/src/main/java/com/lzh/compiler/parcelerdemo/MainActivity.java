@@ -1,13 +1,11 @@
 package com.lzh.compiler.parcelerdemo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
-import com.lzh.compiler.parceler.Parceler;
+
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
-import com.lzh.compiler.parcelerdemo.bean.UserInfo;
 
 import butterknife.OnClick;
 
