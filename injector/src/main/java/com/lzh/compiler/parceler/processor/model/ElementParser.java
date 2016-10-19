@@ -1,8 +1,13 @@
 package com.lzh.compiler.parceler.processor.model;
 
 import com.lzh.compiler.parceler.annotation.Arg;
-import com.lzh.compiler.parceler.processor.ClassFactory;
+import com.lzh.compiler.parceler.annotation.Dispatcher;
 import com.lzh.compiler.parceler.processor.ParcelException;
+import com.lzh.compiler.parceler.processor.factory.ActivityFactory;
+import com.lzh.compiler.parceler.processor.factory.BroadcastReceiverFactory;
+import com.lzh.compiler.parceler.processor.factory.ClassFactory;
+import com.lzh.compiler.parceler.processor.factory.DispatcherFactory;
+import com.lzh.compiler.parceler.processor.factory.ServiceFactory;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
 
@@ -30,20 +35,19 @@ public class ElementParser {
         List<VariableElement> fields = getAllFieldsWithArg(type);
         for (VariableElement var : fields) {
             Utils.checkFieldValid(var);
-            LogUtil.print("parse field :" + var.getSimpleName());
             FieldData fieldData = getFieldDataByVariable(var);
-            LogUtil.print(fieldData);
             list.add(fieldData);
         }
     }
 
+
     private FieldData getFieldDataByVariable(VariableElement var) {
         Arg arg = var.getAnnotation(Arg.class);
-
         FieldData fieldData = new FieldData(
                 Utils.isEmpty(arg.value()) ? var.getSimpleName().toString() : arg.value(),
                 var
         );
+        fieldData.setNonNull(Utils.hasNonNullAnnotation(var));
         // get method name by var used by bundle
         String methodName = getMethodName(var,fieldData);
         if (Utils.isEmpty(methodName)) {
@@ -163,7 +167,6 @@ public class ElementParser {
 
         type = isArray ? type.substring(0,type.length() - 2) : type;
         typeElement = UtilMgr.getMgr().getElementUtils().getTypeElement(type);
-        System.out.println("type = " + type);
         if (Utils.isSuperInterface(typeElement,"android.os.IBinder")) {
             if (isArray) {
                 throw new RuntimeException("android.os.IBinder[] is not support!");
@@ -251,9 +254,11 @@ public class ElementParser {
     }
 
     public void generateClass () throws IOException {
-        ClassFactory factory = new ClassFactory(list,type);
-        factory.generateCode();
+        ClassFactory clzFactory = new ClassFactory(list,type);
+        clzFactory.generateCode();
     }
 
-
+    public List<FieldData> getList() {
+        return list;
+    }
 }

@@ -1,4 +1,4 @@
-package com.lzh.compiler.parceler.processor;
+package com.lzh.compiler.parceler.processor.factory;
 
 import com.lzh.compiler.parceler.processor.model.Constants;
 import com.lzh.compiler.parceler.processor.model.FieldData;
@@ -64,6 +64,12 @@ public class ClassFactory {
         for (FieldData fieldData : list) {
             TypeName fieldName = TypeName.get(fieldData.getVar().asType());
 
+            if (fieldData.isNonNull() && !isUnBoxType(fieldName)) {
+                injectToData.beginControlFlow("if (data.get($S) == null)",fieldData.getKey())
+                        .addStatement("throw new $T(\"Field $N in $N has requires not null\")",IllegalArgumentException.class,fieldData.getVar().getSimpleName(),type.getSimpleName())
+                        .endControlFlow();
+            }
+
             if (isUnBoxType(fieldName)) {
                 injectToBundle.addStatement("data.$N($S,target.$N)",fieldData.getMethodName(),fieldData.getKey(),fieldData.getVar().getSimpleName());
 
@@ -79,14 +85,13 @@ public class ClassFactory {
                         .addStatement("target.$N = ($T)data.get($S)",fieldData.getVar().getSimpleName(),fieldData.getVar(),fieldData.getKey())
                         .endControlFlow();
             }
+
         }
 
         classBuidler.addMethod(injectToData.build());
         classBuidler.addMethod(injectToBundle.build());
-        System.out.println("generate class");
         JavaFile build = JavaFile.builder(packName, classBuidler.build()).build();
         build.writeTo(UtilMgr.getMgr().getFiler());
-        System.out.println("generated success");
     }
 
     TypeElement getClassByName (String clzName) {

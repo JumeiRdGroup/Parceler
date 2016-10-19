@@ -1,11 +1,14 @@
 package com.lzh.compiler.parceler.processor.util;
 
 import com.lzh.compiler.parceler.processor.ParcelException;
+import com.lzh.compiler.parceler.processor.model.Constants;
+import com.squareup.javapoet.TypeName;
 
 import java.util.List;
 import java.util.Set;
 
 import javax.annotation.processing.Messager;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
@@ -103,5 +106,39 @@ public class Utils {
     public static void printWarning (Element element,String message) {
         Messager messager = UtilMgr.getMgr().getMessager();
         messager.printMessage(Diagnostic.Kind.WARNING,message,element);
+    }
+
+    public static boolean hasNonNullAnnotation(VariableElement var) {
+        List<? extends AnnotationMirror> annotationMirrors = var.getAnnotationMirrors();
+        for (AnnotationMirror mirror : annotationMirrors) {
+            if (Constants.CLASS_NAME_NONNULL.equals(mirror.getAnnotationType().toString())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static TypeElement getClassByName (String clzName) {
+        return UtilMgr.getMgr().getElementUtils().getTypeElement(clzName);
+    }
+
+    public static TypeName getTypeNameByName (String clzName) {
+
+        return TypeName.get(getClassByName(clzName).asType());
+    }
+
+    public static boolean isUnboxType(TypeName tn) {
+        switch (tn.toString()) {
+            case "boolean":
+            case "byte":
+            case "char":
+            case "short":
+            case "int":
+            case "long":
+            case "float":
+            case "double":
+                return true;
+        }
+        return false;
     }
 }

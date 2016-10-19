@@ -1,22 +1,24 @@
 package com.lzh.compiler.parcelerdemo;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.widget.TextView;
 
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
+import com.lzh.compiler.parceler.annotation.Dispatcher;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-
+@Dispatcher
 public class LoginActivity extends BaseActivity {
 
-    @Arg
+    @Arg("hello")
     String username;
+    @NonNull
     @Arg
     String password;
 

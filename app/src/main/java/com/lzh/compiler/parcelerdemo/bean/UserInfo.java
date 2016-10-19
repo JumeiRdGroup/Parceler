@@ -1,12 +1,8 @@
 package com.lzh.compiler.parcelerdemo.bean;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
-import android.support.annotation.RequiresApi;
-import android.util.Size;
-import android.util.SizeF;
 import android.util.SparseArray;
 
 import com.lzh.compiler.parceler.annotation.Arg;
@@ -14,7 +10,9 @@ import com.lzh.compiler.parceler.annotation.Arg;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+//import android.support.annotation.RequiresApi;
+
+//@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class UserInfo {
 
     @Arg
@@ -95,10 +93,10 @@ public class UserInfo {
 
     @Arg
     Serializable serializable = new Info();
-    @Arg
-    Size size = new Size(1,2);
-    @Arg
-    SizeF sizeF = new SizeF(3,1);
+//    @Arg
+//    Size size = new Size(1,2);
+//    @Arg
+//    SizeF sizeF = new SizeF(3,1);
 
     public UserInfo () {
     }

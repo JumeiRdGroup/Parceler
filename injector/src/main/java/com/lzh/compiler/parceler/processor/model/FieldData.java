@@ -4,7 +4,7 @@ import javax.lang.model.element.VariableElement;
 
 public class FieldData {
     private String key;
-
+    private boolean nonNull;
     private String methodName;
     private String castName;
     VariableElement var;
@@ -39,11 +39,11 @@ public class FieldData {
         this.castName = castName;
     }
 
-    @Override
-    public String toString() {
-        return "FieldData{" +
-                ", methodName='" + methodName + '\'' +
-                ", var=" + var +
-                '}';
+    public boolean isNonNull() {
+        return nonNull;
+    }
+
+    public void setNonNull(boolean nonNull) {
+        this.nonNull = nonNull;
     }
 }
