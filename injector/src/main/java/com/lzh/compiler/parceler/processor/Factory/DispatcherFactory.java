@@ -2,11 +2,9 @@ package com.lzh.compiler.parceler.processor.factory;
 
 import com.lzh.compiler.parceler.processor.model.Constants;
 import com.lzh.compiler.parceler.processor.model.FieldData;
-import com.lzh.compiler.parceler.processor.model.LogUtil;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;

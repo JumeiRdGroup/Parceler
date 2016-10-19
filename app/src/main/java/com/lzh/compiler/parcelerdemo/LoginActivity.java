@@ -3,6 +3,7 @@ package com.lzh.compiler.parcelerdemo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
+import android.view.View;
 import android.widget.TextView;
 
 import com.lzh.compiler.parceler.Parceler;
@@ -29,6 +30,8 @@ public class LoginActivity extends BaseActivity {
     @Bind(R.id.info)
     TextView info;
 
+    Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +50,21 @@ public class LoginActivity extends BaseActivity {
         password = editable.toString();
     }
 
-    @OnClick(R.id.injectBundle)
-    void onInjectClick () {
-        Bundle bundle = new Bundle();
-        Parceler.injectToData(this,bundle);
-        info.setText(bundle.toString());
+    @OnClick({R.id.injectBundle,R.id.injectData})
+    void onInjectClick (View v) {
+        switch (v.getId()) {
+            case R.id.injectBundle:
+                bundle = new Bundle();
+                Parceler.injectToData(this,bundle);
+                info.setText(bundle.toString());
+                break;
+            case R.id.injectData:
+                Parceler.injectToTarget(this,bundle);
+                userTv.setText(username);
+                psdTv.setText(password);
+                break;
+        }
+
     }
+
 }
