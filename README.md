@@ -1,6 +1,6 @@
 # Parceler ![svg](https://travis-ci.org/yjfnypeu/Parceler.svg?branch=master)    [ ![Download](https://api.bintray.com/packages/yjfnypeu/maven/Parceler/images/download.svg) ](https://bintray.com/yjfnypeu/maven/Parceler/_latestVersion)   <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.2"><img src="https://img.shields.io/badge/Methods and size-core: 42 | deps: 1 | 7 KB-e91e63.svg"/></a>
 
-A simple library to inject data between field of class and Bundle
+A simple library can easily put and get data from Bundle automatically
 
 ####Dependencies
 
@@ -12,7 +12,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath 'com.novoda:bintray-release:0.3.4'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
 
@@ -28,11 +28,10 @@ dependencies {
 [中文使用文档](./USAGE-CH.md)
 
 ####Usage
-Parceler used annotation compiler to generate class just like you write on handle.so DO NOT WORRY ABOUT PERFORMANCE
+<b>Parceler</b> is a compile-time injection framework, it will use the annotation compiler to generate the POJO classes for you, so there is no need to worry about the <i>PERFORMANCE</i>
 
-The parceler provided two ways to make the bundle operations more convenient on Android.<br>
-At first:Parceler provided annotation <code>Arg</code> to indicate while filed should be associate with bundle.
-the <code>Arg</code> can be used for any fields of class who could be put in bundle.for eg:<br>
+The parceler provide two ways to make the bundle operations more convenient on Android.<br>
+First, <b>Parceler</b> provide a annotation <b>Arg</b> to indicate which field could be associate with <b>Bundle</b>, see example below:
 
 ```
 public class UserInfo {
@@ -55,9 +54,7 @@ public class UserInfo {
 }
 ```
 
-There are also more other annotation called <code>Dispatcher</code> to used.to used by Activity,it will generate class that
-with suffix of <i>Dispatcher</i> in your build folder.for eg of LoginActivity
-
+There is another annotation <b>Dispatcher</b> which can work with the Parceler framework, with this annotation, Parceler framework will generate a router class for activity which has this annotation on it,
 ```
 // Config injector to base class.so you can use it on it subclass directly
 public class BaseActivity extends Activity{
@@ -88,6 +85,7 @@ public class BaseActivity extends Activity{
 }
 ```
 ```
+@Dispatcher
 public class LoginActivity extends BaseActivity {
     @Arg
     String username;
@@ -105,12 +103,7 @@ public class LoginActivity extends BaseActivity {
     }
 }
 ```
-
-And then,as to launcher <code>LoginActivity</code>,you can use <code>LoginActivityDispatcher</code> to do it:
-
-```
-new LoginActivityDispatcher(password).setUsername(username).requestCode(100).start(activity);
-```
+then you can easily use a simple code like this <code>new LoginActivityDispatcher(password).setUsername(username).requestCode(100).start(activity);</code> to navigate to this activity and even can pass the data if needed.
 
 And also to get intent to used for <i>PendingIntent</code>
 ```
