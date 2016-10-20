@@ -28,48 +28,46 @@ dependencies {
 [中文使用文档](./USAGE-CH.md)
 
 ###Usage
-<b>Parceler</b> is a compile-time injection framework, it will use the annotation compiler to generate the POJO classes for you, so there is no need to worry about the <i>PERFORMANCE</i>
+**Parceler** is a compile-time injection framework, by using **apt** to generate the classes,
+there are nearly no issue of runtime <i>PERFORMANCE</i>.
 
-The parceler provide two ways to make the bundle operations more convenient on Android.<br>
+**Parceler** provides two ways to make the bundle operations more convenient on Android.<br>
 First, <b>Parceler</b> provide a annotation <b>Arg</b> to indicate which field could be associate with <b>Bundle</b>, see example below:
 
-```
+```Java
 public class UserInfo {
     @Arg("renameKey")// rename the key to put in bundle
     String username;// var type should be able to put in bundle.
-    @NonNull // add NonNull to indicate that this field should not be null when you injects from
-    bundle to field
+
+    // add NonNull to indicate that this field should not be null when you injects from
+    // bundle to field
+    @NonNull
     @Arg
     String password;
     public UserInfo (Bundle data) {
         // inject data from bundle to fields
-        Parceler.injectToTarget(this,data);
+        Parceler.injectToTarget(this, data);
     }
 
     public Bundle getBundle () {
         // inject data from UserInfo to bundle
         Bundle data = new Bundle();
-        Parceler.injectToData(this,data);
+        Parceler.injectToData(this, data);
         return data;
     }
 }
 ```
 
-There is another annotation <b>Dispatcher</b> which can work with the Parceler framework, with this annotation, Parceler framework will generate a router class for activity which has this annotation on it,
-```
+There is another annotation **Dispatcher** which can work with the Parceler framework, with this
+annotation on an `Activity` class, Parceler framework will generate a router class for it.
+```Java
 // Config injector to base class.so you can use it on it subclass directly
-public class BaseActivity extends Activity{
+public abstract class BaseActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Parceler.injectToTarget(this,getIntent() == null ? null : getIntent().getExtras());
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        ButterKnife.bind(this);
     }
 
     @Override
@@ -85,7 +83,7 @@ public class BaseActivity extends Activity{
     }
 }
 ```
-```
+```Java
 @Dispatcher
 public class LoginActivity extends BaseActivity {
     @Arg
@@ -93,7 +91,7 @@ public class LoginActivity extends BaseActivity {
     @NonNull
     @Arg
     String password;
-    ...
+    //...
     TextView userTv;
     TextView psdTv;
 
@@ -110,7 +108,8 @@ then you can easily use a simple code like the code below to navigate to this ac
 new LoginActivityDispatcher(password).setUsername(username).requestCode(100).start(activity);
 ```
 
-And also to get intent to used for <i>PendingIntent</code>
+If you want to handle `Intent` object(e.g. to add flags, or start activity for result, or combine
+ usage for `PendingIntent`), there is a handy method called **`getIntent()`**:
 ```
 // password has been annotated by NonNull,so it should be set with constructor
 Intent intent = new LoginActivityDispatcher(password).setUsername(username).getIntent(activity);
