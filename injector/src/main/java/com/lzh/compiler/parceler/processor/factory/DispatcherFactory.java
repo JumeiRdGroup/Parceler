@@ -88,7 +88,7 @@ public abstract class DispatcherFactory {
     }
 
     private MethodSpec createConstructorMethod() {
-        MethodSpec.Builder builder = MethodSpec.constructorBuilder();
+        MethodSpec.Builder builder = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC);
         for (FieldData fieldData : nonNullList) {
             String fieldName = fieldData.getVar().getSimpleName().toString();
             ParameterSpec.Builder param = ParameterSpec.builder(TypeName.get(fieldData.getVar().asType()), fieldData.getVar().getSimpleName().toString())

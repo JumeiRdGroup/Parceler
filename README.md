@@ -1,6 +1,6 @@
 # Parceler ![svg](https://travis-ci.org/yjfnypeu/Parceler.svg?branch=master)    [ ![Download](https://api.bintray.com/packages/yjfnypeu/maven/Parceler/images/download.svg) ](https://bintray.com/yjfnypeu/maven/Parceler/_latestVersion)   <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.2"><img src="https://img.shields.io/badge/Methods and size-core: 42 | deps: 1 | 7 KB-e91e63.svg"/></a>
 
-A simple library can easily put and get data from Bundle automatically
+A simple library for easily put and get data from Bundle automatically.
 
 ###Dependencies
 
@@ -37,7 +37,8 @@ First, <b>Parceler</b> provide a annotation <b>Arg</b> to indicate which field c
 public class UserInfo {
     @Arg("renameKey")// rename the key to put in bundle
     String username;// var type should be able to put in bundle.
-    @NonNull // add NonNull to indicate that this filed should not be null when you injects from bundle to field
+    @NonNull // add NonNull to indicate that this field should not be null when you injects from
+    bundle to field
     @Arg
     String password;
     public UserInfo (Bundle data) {
