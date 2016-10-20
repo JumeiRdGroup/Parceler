@@ -2,7 +2,7 @@
 
 A simple library can easily put and get data from Bundle automatically
 
-####Dependencies
+###Dependencies
 
 ```
 1.add it to build.gradle of root project
@@ -27,7 +27,7 @@ dependencies {
 
 [中文使用文档](./USAGE-CH.md)
 
-####Usage
+###Usage
 <b>Parceler</b> is a compile-time injection framework, it will use the annotation compiler to generate the POJO classes for you, so there is no need to worry about the <i>PERFORMANCE</i>
 
 The parceler provide two ways to make the bundle operations more convenient on Android.<br>
@@ -114,6 +114,10 @@ And also to get intent to used for <i>PendingIntent</code>
 // password has been annotated by NonNull,so it should be set with constructor
 Intent intent = new LoginActivityDispatcher(password).setUsername(username).getIntent(activity);
 ```
+
+###Contacts
+Email:470368500@qq.com<br>
+QQ Group:108895031
 
 
 ## License
