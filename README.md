@@ -20,8 +20,8 @@ buildscript {
 apply plugin: 'com.neenbedankt.android-apt'
 dependencies {
     ...
-    apt 'org.lzh.compiler.parceler:parceler-compiler:0.2'
-    compile 'org.lzh.compiler.parceler:parceler-api:0.2'
+    apt 'org.lzh.compiler.parceler:parceler-compiler:0.3'
+    compile 'org.lzh.compiler.parceler:parceler-api:0.3'
 }
 ```
 
