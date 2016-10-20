@@ -4,22 +4,20 @@ A simple library for easily put and get data from Bundle automatically.
 
 ###Dependencies
 
-```
-1.add it to build.gradle of root project
+```Groovy
+//1.add it to build.gradle of root project
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        ...
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
 
-2.add it to build.gradle of app project
+//2.add it to build.gradle of app project
 apply plugin: 'com.neenbedankt.android-apt'
 dependencies {
-    ...
     apt 'org.lzh.compiler.parceler:parceler-compiler:0.3'
     compile 'org.lzh.compiler.parceler:parceler-api:0.3'
 }
