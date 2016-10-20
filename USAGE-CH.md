@@ -5,7 +5,7 @@ Parceler提供两种方式让对<code>Bundle</code>的操作更加方便。
 
 第一个。可以通过对任意类的成员变量设置<code>Arg</code>注解。框架会生成对应的注入代码让你可以通过一行代码实现数据注入
 
-```
+```Java
 public class UserInfo {
     @Arg("renameKey")// 可以对key值进行重新指定
     String username;// 字段类型需要符合Bundle要求。即数据类型需要是能放入到Bundle中类型
@@ -26,23 +26,17 @@ public class UserInfo {
 }
 ```
 
-其次。框架提供另一个注解：<code>Dispatcher</code>.目前此注解只能使用于Activity类之上。
+其次,框架提供另一个注解：<code>Dispatcher</code>.目前此注解只能使用于Activity类之上。
 当对Activity使用了此注解后。会生成带Dispatcher后缀的java文件。可以通过此java文件很方便的提供跳转操作。以LoginActivity为例：
 
-```
+```Java
 // 将注入器配置到基类中。一次配置,所有子类共同使用
-public class BaseActivity extends Activity{
+public abstract class BaseActivity extends Activity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Parceler.injectToTarget(this,getIntent() == null ? null : getIntent().getExtras());
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(layoutResID);
-        ButterKnife.bind(this);
     }
 
     @Override
@@ -59,14 +53,14 @@ public class BaseActivity extends Activity{
 }
 ```
 
-```
+```Java
 public class LoginActivity extends BaseActivity {
     @Arg
     String username;
     @NonNull
     @Arg
     String password;
-    ...
+    //...
     TextView userTv;
     TextView psdTv;
 
@@ -78,12 +72,12 @@ public class LoginActivity extends BaseActivity {
 }
 ```
 
-需要跳转到LoginActivity时。使用生成的LoginActivityDispatcher类：
+需要跳转到LoginActivity时, 使用生成的LoginActivityDispatcher类：
 
 ```
 new LoginActivityDispatcher(password).setUsername(username).requestCode(100).start(activity);
 ```
-也可以直接获取Intent。当你需要使用<i>PendingIntent</i>时：
+如果你需要直接操作Intent, 也可以:
 ```
 Intent intent = new LoginActivityDispatcher(password).setUsername(username).getIntent(activity);
 ```
