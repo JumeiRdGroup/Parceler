@@ -1,4 +1,4 @@
-# Parceler ![svg](https://travis-ci.org/yjfnypeu/Parceler.svg?branch=master)    [ ![Download](https://api.bintray.com/packages/yjfnypeu/maven/Parceler/images/download.svg) ](https://bintray.com/yjfnypeu/maven/Parceler/_latestVersion)   <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.2"><img src="https://img.shields.io/badge/Methods and size-core: 42 | deps: 1 | 7 KB-e91e63.svg"/></a>
+# Parceler [ ![Download](https://api.bintray.com/packages/yjfnypeu/maven/Parceler/images/download.svg) ](https://bintray.com/yjfnypeu/maven/Parceler/_latestVersion)   <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.2"><img src="https://img.shields.io/badge/Methods and size-core: 42 | deps: 1 | 7 KB-e91e63.svg"/></a>
 
 A simple library for easily put and get data from Bundle automatically.
 
