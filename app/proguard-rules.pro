@@ -15,9 +15,9 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn **
 #Parceler混淆规则
 -keep class com.lzh.compiler.parceler.**
--dontwarn com.lzh.compiler.parceler.processor.**
 -keep class * implements com.lzh.compiler.parceler.ParcelInjector
 
 -keepclasseswithmembernames class * {
@@ -26,7 +26,6 @@
 
 #添加ButterKnife混淆规则
 -keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
 -keep class **$$ViewBinder { *; }
 
 -keepclasseswithmembernames class * { @butterknife.* <methods>; }
