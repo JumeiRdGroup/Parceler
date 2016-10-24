@@ -116,6 +116,13 @@ And also to get intent to used for <i>PendingIntent</code>
 Intent intent = new LoginActivityDispatcher(password).setUsername(username).getIntent(activity);
 ```
 
+###Proguard
+```Proguard
+-keep class com.lzh.compiler.parceler.*
+-dontwarn com.lzh.compiler.parceler.processor.*
+-keep class * implements com.lzh.compiler.parceler.ParcelInjector
+```
+
 ###Contacts
 Email:470368500@qq.com<br>
 QQ Group:108895031
