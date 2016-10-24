@@ -4,9 +4,6 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-sourceCompatibility = "1.7"
-targetCompatibility = "1.7"
-
 //添加
 publish {
     artifactId = 'parceler-anno'
