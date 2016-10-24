@@ -115,9 +115,13 @@ Intent intent = new LoginActivityDispatcher(password).setUsername(username).getI
 
 ###Proguard
 ```Proguard
--keep class com.lzh.compiler.parceler.*
--dontwarn com.lzh.compiler.parceler.processor.*
+-keep class com.lzh.compiler.parceler.**
+-dontwarn com.lzh.compiler.parceler.processor.**
 -keep class * implements com.lzh.compiler.parceler.ParcelInjector
+
+-keepclasseswithmembernames class * {
+    @com.lzh.compiler.parceler.annotation.Arg <fields>;
+}
 ```
 
 ###Contacts

@@ -15,11 +15,20 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
-
--keep class com.lzh.compiler.parceler.*
--dontwarn com.lzh.compiler.parceler.processor.*
+#Parceler混淆规则
+-keep class com.lzh.compiler.parceler.**
+-dontwarn com.lzh.compiler.parceler.processor.**
 -keep class * implements com.lzh.compiler.parceler.ParcelInjector
 
+-keepclasseswithmembernames class * {
+    @com.lzh.compiler.parceler.annotation.Arg <fields>;
+}
+
+#添加ButterKnife混淆规则
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
 -keep class **$$ViewBinder { *; }
+
+-keepclasseswithmembernames class * { @butterknife.* <methods>; }
+-keepclasseswithmembernames class * { @butterknife.* <fields>; }
+
