@@ -6,11 +6,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- *
- * Created by lzh on 16/10/11.
+ * Annotated with a field to indicate this field can be injected between <b>bundle</b> and a entity
  */
 @Target({ElementType.FIELD})
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 public @interface Arg {
+    /**
+     * rename key of field.if not see,field name should be used
+     * @return key of field
+     */
     String value() default "";
 }

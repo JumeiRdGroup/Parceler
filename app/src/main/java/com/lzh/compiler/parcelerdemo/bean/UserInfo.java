@@ -9,10 +9,8 @@ import com.lzh.compiler.parceler.annotation.Arg;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
-//import android.support.annotation.RequiresApi;
-
-//@RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class UserInfo {
 
     @Arg
@@ -73,9 +71,9 @@ public class UserInfo {
     ArrayList<String> strList;
 
     @Arg
-    CharSequence charSequence = "CharSequence";
+    StringBuilder charSequence = null;
     @Arg
-    CharSequence[] charSequencesArr = new CharSequence[]{"charSequence"};
+    StringBuilder[] charSequencesArr = new StringBuilder[]{new StringBuilder("charSequence")};
     @Arg
     ArrayList<String> charSequencesList = new ArrayList<>();
     @Arg
@@ -93,13 +91,15 @@ public class UserInfo {
 
     @Arg
     Serializable serializable = new Info();
-//    @Arg
-//    Size size = new Size(1,2);
-//    @Arg
-//    SizeF sizeF = new SizeF(3,1);
 
     public UserInfo () {
     }
 
+    public boolean getBool() {
+        return bool;
+    }
 
+    public void setBool(boolean bool) {
+        this.bool = bool;
+    }
 }

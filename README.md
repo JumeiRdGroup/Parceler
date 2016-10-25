@@ -42,6 +42,8 @@ public class UserInfo {
     @NonNull
     @Arg
     String password;
+    @Arg //You can also add it to a private variables,in this case,you must provide a pair of get/set methods instead
+    private String address;
     public UserInfo (Bundle data) {
         // inject data from bundle to fields
         Parceler.injectToTarget(this, data);
@@ -53,8 +55,17 @@ public class UserInfo {
         Parceler.injectToData(this, data);
         return data;
     }
+    
+    public void setAddress (String address) {
+        this.address = address;
+    }
+    
+    public String getAddress () {
+        return address;
+    }
 }
 ```
+
 
 There is another annotation **Dispatcher** which can work with the Parceler framework, with this
 annotation on an `Activity` class, Parceler framework will generate a router class for it.

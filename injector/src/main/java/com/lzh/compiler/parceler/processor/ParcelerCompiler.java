@@ -7,7 +7,6 @@ import com.lzh.compiler.parceler.processor.factory.DispatcherFactory;
 import com.lzh.compiler.parceler.processor.model.Constants;
 import com.lzh.compiler.parceler.processor.model.ElementParser;
 import com.lzh.compiler.parceler.processor.model.FieldData;
-import com.lzh.compiler.parceler.processor.model.LogUtil;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
 
@@ -29,13 +28,11 @@ public class ParcelerCompiler extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        LogUtil.debug = false;
         try {
             Map<TypeElement, ElementParser> parserMap = parseArgElement(roundEnv);
             parseDispatcherElement (roundEnv,parserMap);
         } catch (ParcelException e) {
-            LogUtil.debug = true;
-            LogUtil.printException(e);
+            e.printStackTrace();
             error(e.getEle(),e.getMessage());
             return true;
         }

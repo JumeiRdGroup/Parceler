@@ -3,7 +3,7 @@ package com.lzh.compiler.parceler;
 import android.os.Bundle;
 
 /**
- * DO NOT USE:
+ * DO NOT USE DIRECTLY:
  * <p>
  *     The interface is used by generate class
  * </p>

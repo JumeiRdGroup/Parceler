@@ -2,7 +2,7 @@ package com.lzh.compiler.parceler;
 
 /**
  * A constants set
- * Created by zhihaol on 16/10/13.
+ * Created by lzh on 16/10/13.
  */
 class Constants {
 

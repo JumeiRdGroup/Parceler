@@ -12,6 +12,8 @@ public class UserInfo {
     @NonNull // 指定password字段不能为null。即数据源Bundle中必须含有此字段
     @Arg
     String password;
+    @Arg // 你也可以对私有变量添加注解,在这种情况下。你必须提供一对get/set方法。
+    private String address;
     public UserInfo (Bundle data) {
         // 将bundle中数据注入到字段username.password中
         Parceler.injectToTarget(this,data);
@@ -22,6 +24,14 @@ public class UserInfo {
         Bundle data = new Bundle();
         Parceler.injectToData(this,data);
         return data;
+    }
+    
+    public void setAddress (String address) {
+        this.address = address;
+    }
+    
+    public String getAddress () {
+        return address;
     }
 }
 ```

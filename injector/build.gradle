@@ -2,9 +2,13 @@ apply plugin: 'java'
 apply plugin: 'com.novoda.bintray-release'//添加
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    testCompile 'junit:junit:4.12'
     compile 'com.squareup:javapoet:1.7.0'
     compile project(':annotation')
 }
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
 
 //添加
 publish {

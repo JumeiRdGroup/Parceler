@@ -3,6 +3,9 @@ apply plugin: 'com.novoda.bintray-release'//添加
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
+targetCompatibility = '1.7'
+sourceCompatibility = '1.7'
+
 
 //添加
 publish {

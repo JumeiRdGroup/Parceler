@@ -7,6 +7,7 @@ public class FieldData {
     private boolean nonNull;
     private String methodName;
     private String castName;
+    private boolean isPrivate;
     VariableElement var;
 
     public FieldData(String key, VariableElement var) {
@@ -45,5 +46,13 @@ public class FieldData {
 
     public void setNonNull(boolean nonNull) {
         this.nonNull = nonNull;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+
+    public void setPrivate(boolean aPrivate) {
+        isPrivate = aPrivate;
     }
 }

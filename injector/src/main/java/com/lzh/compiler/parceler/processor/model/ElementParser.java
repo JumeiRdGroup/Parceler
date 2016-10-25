@@ -1,13 +1,8 @@
 package com.lzh.compiler.parceler.processor.model;
 
 import com.lzh.compiler.parceler.annotation.Arg;
-import com.lzh.compiler.parceler.annotation.Dispatcher;
 import com.lzh.compiler.parceler.processor.ParcelException;
-import com.lzh.compiler.parceler.processor.factory.ActivityFactory;
-import com.lzh.compiler.parceler.processor.factory.BroadcastReceiverFactory;
 import com.lzh.compiler.parceler.processor.factory.ClassFactory;
-import com.lzh.compiler.parceler.processor.factory.DispatcherFactory;
-import com.lzh.compiler.parceler.processor.factory.ServiceFactory;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
 
@@ -17,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.element.Element;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
@@ -34,7 +30,6 @@ public class ElementParser {
     private void parse() throws IOException {
         List<VariableElement> fields = getAllFieldsWithArg(type);
         for (VariableElement var : fields) {
-            Utils.checkFieldValid(var);
             FieldData fieldData = getFieldDataByVariable(var);
             list.add(fieldData);
         }
@@ -51,9 +46,15 @@ public class ElementParser {
         // get method name by var used by bundle
         String methodName = getMethodName(var,fieldData);
         if (Utils.isEmpty(methodName)) {
-            throw new ParcelException(String.format("The type %s on field %s is not supported!",var.asType().toString(),var.getSimpleName()),var);
+            throw new ParcelException(String.format("The type %s is not supported!",var.getSimpleName()),var);
         }
         fieldData.setMethodName(methodName);
+
+        if (var.getModifiers().contains(Modifier.PRIVATE)) {
+            fieldData.setPrivate(true);
+            Utils.checkHasGetSetMethod(var);
+        }
+
 
         return fieldData;
     }

@@ -6,11 +6,22 @@ import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Entry class of <i>Parceler</i>
+ * <p>
+ *     to inject data from bundle to a entity class,use {@link Parceler#injectToTarget(Object, Bundle)}<br>
+ *     to inject data from entity to a bundle class,use {@link Parceler#injectToData(Object, Bundle)} instead
+ * </p>
+ * @author lzh
+ */
 public final class Parceler {
     /**
      * A map to cache injectors
      */
     private static Map<Class,WeakReference<ParcelInjector>> INJECTORS = new HashMap<>();
+    /**
+     * A empty injector
+     */
     private static final NoneInjector NO_INJECTOR = new Parceler.NoneInjector();
 
     /**
