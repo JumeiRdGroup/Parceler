@@ -18,8 +18,8 @@ buildscript {
 //2.add it to build.gradle of app project
 apply plugin: 'com.neenbedankt.android-apt'
 dependencies {
-    apt 'org.lzh.compiler.parceler:parceler-compiler:0.4'
-    compile 'org.lzh.compiler.parceler:parceler-api:0.4'
+    apt 'org.lzh.compiler.parceler:parceler-compiler:0.5'
+    compile 'org.lzh.compiler.parceler:parceler-api:0.5'
 }
 ```
 
@@ -46,13 +46,13 @@ public class UserInfo {
     private String address;
     public UserInfo (Bundle data) {
         // inject data from bundle to fields
-        Parceler.injectToTarget(this, data);
+        Parceler.injectToEntity(this, data);
     }
 
     public Bundle getBundle () {
         // inject data from UserInfo to bundle
         Bundle data = new Bundle();
-        Parceler.injectToData(this, data);
+        Parceler.injectToBundle(this, data);
         return data;
     }
     
@@ -76,19 +76,19 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Parceler.injectToTarget(this,getIntent() == null ? null : getIntent().getExtras());
+        Parceler.injectToEntity(this,getIntent());
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Parceler.injectToData(this,outState);
+        Parceler.injectToBundle(this,outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Parceler.injectToTarget(this,savedInstanceState);
+        Parceler.injectToEntity(this,savedInstanceState);
     }
 }
 ```

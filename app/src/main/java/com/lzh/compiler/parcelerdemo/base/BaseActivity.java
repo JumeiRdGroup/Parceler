@@ -12,7 +12,7 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Parceler.injectToTarget(this,getIntent() == null ? null : getIntent().getExtras());
+        Parceler.injectToEntity(this,getIntent());
     }
 
     @Override
@@ -24,12 +24,12 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Parceler.injectToData(this,outState);
+        Parceler.injectToBundle(this,outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Parceler.injectToTarget(this,savedInstanceState);
+        Parceler.injectToEntity(this,savedInstanceState);
     }
 }

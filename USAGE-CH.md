@@ -16,13 +16,13 @@ public class UserInfo {
     private String address;
     public UserInfo (Bundle data) {
         // 将bundle中数据注入到字段username.password中
-        Parceler.injectToTarget(this,data);
+        Parceler.injectToEntity(this,data);
     }
 
     public Bundle getBundle () {
         // 将UserInfo类中的数据。注入到Bundle中去。
         Bundle data = new Bundle();
-        Parceler.injectToData(this,data);
+        Parceler.injectToBundle(this,data);
         return data;
     }
     
@@ -46,19 +46,19 @@ public abstract class BaseActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Parceler.injectToTarget(this,getIntent() == null ? null : getIntent().getExtras());
+        Parceler.injectToEntity(this,getIntent());
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Parceler.injectToData(this,outState);
+        Parceler.injectToBundle(this,outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Parceler.injectToTarget(this,savedInstanceState);
+        Parceler.injectToEntity(this,savedInstanceState);
     }
 }
 ```

@@ -31,8 +31,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.0'
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:7.0.1'
-    apt project(':injector')
-    compile project(':parceler')
-//    apt 'org.lzh.compiler.parceler:parceler-compiler:0.3'
-//    compile 'org.lzh.compiler.parceler:parceler-api:0.3'
+//    apt project(':injector')
+//    compile project(':parceler')
+    apt 'org.lzh.compiler.parceler:parceler-compiler:0.5'
+    compile 'org.lzh.compiler.parceler:parceler-api:0.5'
 }

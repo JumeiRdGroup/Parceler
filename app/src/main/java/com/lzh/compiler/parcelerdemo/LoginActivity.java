@@ -54,12 +54,11 @@ public class LoginActivity extends BaseActivity {
     void onInjectClick (View v) {
         switch (v.getId()) {
             case R.id.injectBundle:
-                bundle = new Bundle();
-                Parceler.injectToData(this,bundle);
+                bundle = Parceler.injectToBundle(this,new Bundle());
                 info.setText(bundle.toString());
                 break;
             case R.id.injectData:
-                Parceler.injectToTarget(this,bundle);
+                Parceler.injectToEntity(this,bundle);
                 userTv.setText(username);
                 psdTv.setText(password);
                 break;

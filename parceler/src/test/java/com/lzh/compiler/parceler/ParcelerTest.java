@@ -12,6 +12,6 @@ import org.junit.Test;
 public class ParcelerTest {
     @Test
     public void inject() throws Exception {
-        Parceler.injectToTarget(new Info(),null);
+        Parceler.injectToEntity(new Info(),new Bundle());
     }
 }

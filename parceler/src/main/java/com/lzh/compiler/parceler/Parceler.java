@@ -1,5 +1,6 @@
 package com.lzh.compiler.parceler;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import java.lang.ref.WeakReference;
@@ -9,8 +10,8 @@ import java.util.Map;
 /**
  * Entry class of <i>Parceler</i>
  * <p>
- *     to inject data from bundle to a entity class,use {@link Parceler#injectToTarget(Object, Bundle)}<br>
- *     to inject data from entity to a bundle class,use {@link Parceler#injectToData(Object, Bundle)} instead
+ *     to inject data from bundle to a entity class,use {@link Parceler#injectToEntity(Object, Bundle)}<br>
+ *     to inject data from entity to a bundle class,use {@link Parceler#injectToBundle(Object, Bundle)} instead
  * </p>
  * @author lzh
  */
@@ -25,12 +26,25 @@ public final class Parceler {
     private static final NoneInjector NO_INJECTOR = new Parceler.NoneInjector();
 
     /**
-     * inject some data from data to target.
+     * Inject data from bundle in intent to entity class
+     * @param target The class instance to be injected
+     * @param intent Data container
+     * @param <T> target type
+     * @return target itself
+     */
+    public static <T> T injectToEntity(T target, Intent intent) {
+        return injectToEntity(target,intent == null ? null : intent.getExtras());
+    }
+
+    /**
+     * inject data from bundle to entity.
      * @param target The class instance to inject data from date
      * @param data The class instance to read data by
+     * @param <T> target type
+     * @return target itself
      */
-    public static void injectToTarget(Object target, Bundle data) {
-        if (target == null || data == null) return;
+    public static <T> T injectToEntity(T target, Bundle data) {
+        if (target == null || data == null) return target;
 
         ParcelInjector injector;
         try {
@@ -40,15 +54,17 @@ public final class Parceler {
         } catch (Exception e) {
             throw new RuntimeException(String.format("inject failed : %s",e.getMessage()),e);
         }
+        return target;
     }
 
     /**
-     * inject some data from target to data
+     * inject some data from entity to bundle
      * @param target The class instance to read data
      * @param data The data instance to inject data from target
+     * @return data itself
      */
-    public static void injectToData(Object target,Bundle data) {
-        if (target == null || data == null) return;
+    public static Bundle injectToBundle(Object target, Bundle data) {
+        if (target == null || data == null) return data;
 
         ParcelInjector injector;
         try {
@@ -58,6 +74,7 @@ public final class Parceler {
         } catch (Exception e) {
             throw new RuntimeException(String.format("inject failed : %s",e.getMessage()),e);
         }
+        return data;
     }
 
     /**

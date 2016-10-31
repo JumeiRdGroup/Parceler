@@ -19,10 +19,6 @@ import java.util.List;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 
-/**
- * Created by admin on 16/10/19.
- */
-
 public abstract class DispatcherFactory {
     protected TypeName dispatcher;
     protected TypeElement type;
@@ -51,13 +47,14 @@ public abstract class DispatcherFactory {
         String clzName = getGenerateClzName(type,packageName);
         dispatcher = ClassName.get(packageName,clzName);
 
-        TypeSpec.Builder typeBuilder = createDefaultTypeSpec(packageName, clzName);
+        TypeSpec.Builder typeBuilder = createDefaultTypeSpec(clzName);
+        typeBuilder.addJavadoc("A dispatcher associate with {@link $N}",type.getSimpleName());
         generate(typeBuilder);
         JavaFile javaFile = JavaFile.builder(packageName, typeBuilder.build()).build();
         javaFile.writeTo(UtilMgr.getMgr().getFiler());
     }
 
-    private TypeSpec.Builder createDefaultTypeSpec(String packageName, String clzName) {
+    private TypeSpec.Builder createDefaultTypeSpec(String clzName) {
         TypeSpec.Builder typeBuilder = TypeSpec.classBuilder(clzName).addModifiers(Modifier.PUBLIC);
         typeBuilder.addField(FieldSpec.builder(Utils.getTypeNameByName(Constants.CLASS_NAME_BUNDLE),"bundle",Modifier.PRIVATE)
                 .initializer("new Bundle()")
@@ -109,7 +106,7 @@ public abstract class DispatcherFactory {
         return builder.build();
     }
 
-    public String getGenerateClzName (TypeElement type,String packageName) {
+    String getGenerateClzName (TypeElement type,String packageName) {
         String clzName = type.getQualifiedName().toString();
         return Utils.isEmpty(packageName) ? clzName + Constants.DISPATCHER_SUFFIX :
                 clzName.substring(packageName.length() + 1) + Constants.DISPATCHER_SUFFIX;
@@ -117,7 +114,7 @@ public abstract class DispatcherFactory {
 
     protected abstract void generate(TypeSpec.Builder typeBuilder);
 
-    public String combineSetMethod (String fieldName) {
+    String combineSetMethod (String fieldName) {
         return String.format("set%s%s",fieldName.substring(0,1).toUpperCase(),fieldName.substring(1));
     }
 }
