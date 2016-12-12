@@ -108,8 +108,9 @@ public abstract class DispatcherFactory {
 
     String getGenerateClzName (TypeElement type,String packageName) {
         String clzName = type.getQualifiedName().toString();
-        return Utils.isEmpty(packageName) ? clzName + Constants.DISPATCHER_SUFFIX :
+        clzName = Utils.isEmpty(packageName) ? clzName + Constants.DISPATCHER_SUFFIX :
                 clzName.substring(packageName.length() + 1) + Constants.DISPATCHER_SUFFIX;
+        return clzName.replace(".","$");
     }
 
     protected abstract void generate(TypeSpec.Builder typeBuilder);

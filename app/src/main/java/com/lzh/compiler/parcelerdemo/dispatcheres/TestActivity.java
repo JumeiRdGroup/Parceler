@@ -15,4 +15,18 @@ public class TestActivity extends Activity {
     String username;
     @Arg
     String password;
+
+    @Dispatcher
+    class TestInnerClass {
+        @Arg
+        String username;
+        @Arg
+        String password;
+
+        @Dispatcher
+        class TestInnerInnerClass {
+            @Arg
+            String username;
+        }
+    }
 }
