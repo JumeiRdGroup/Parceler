@@ -1,8 +1,11 @@
-# Parceler [ ![Download](https://api.bintray.com/packages/yjfnypeu/maven/Parceler/images/download.svg) ](https://bintray.com/yjfnypeu/maven/Parceler/_latestVersion)   <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.4"><img src="https://img.shields.io/badge/Methods count-core: 42 | deps: 1-e91e63.svg"/></a>
+# Parceler    <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.6"><img src="https://img.shields.io/badge/Methods count-core: 44 | deps: 1-e91e63.svg"/></a>
+
 
 A simple library for easily put and get data from Bundle automatically.
 
 ###Dependencies
+
+LastestVersion=[ ![Download](https://api.bintray.com/packages/yjfnypeu/maven/Parceler/images/download.svg) ](https://bintray.com/yjfnypeu/maven/Parceler/_latestVersion)
 
 ```Groovy
 //1.add it to build.gradle of root project
@@ -18,8 +21,8 @@ buildscript {
 //2.add it to build.gradle of app project
 apply plugin: 'com.neenbedankt.android-apt'
 dependencies {
-    apt 'org.lzh.compiler.parceler:parceler-compiler:0.5'
-    compile 'org.lzh.compiler.parceler:parceler-api:0.5'
+    apt "org.lzh.compiler.parceler:parceler-compiler:$LastestVersion"
+    compile "org.lzh.compiler.parceler:parceler-api:$LastestVersion"
 }
 ```
 
@@ -65,7 +68,6 @@ public class UserInfo {
     }
 }
 ```
-
 
 There is another annotation **Dispatcher** which can work with the Parceler framework, with this
 annotation on an `Activity` class, Parceler framework will generate a router class for it.
@@ -123,6 +125,16 @@ If you want to handle `Intent` object(e.g. to add flags, or start activity for r
 // password has been annotated by NonNull,so it should be set with constructor
 Intent intent = new LoginActivityDispatcher(password).setUsername(username).getIntent(activity);
 ```
+
+###ChangeLogs
+
+ - 0.6
+
+ ```
+ Support min version to 8
+ Support use @Dispatcher on all classes.include innerclass
+ Some optimizes
+ ```
 
 ###Proguard
 ```Proguard
