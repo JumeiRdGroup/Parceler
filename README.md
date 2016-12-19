@@ -1,4 +1,4 @@
-# Parceler    <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.6"><img src="https://img.shields.io/badge/Methods count-core: 44 | deps: 1-e91e63.svg"/></a>
+# Parceler  ![svg](https://travis-ci.org/yjfnypeu/Parceler.svg?branch=master)  <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.6"><img src="https://img.shields.io/badge/Methods count-core: 44 | deps: 1-e91e63.svg"/></a>
 
 
 A simple library for easily put and get data from Bundle automatically.
