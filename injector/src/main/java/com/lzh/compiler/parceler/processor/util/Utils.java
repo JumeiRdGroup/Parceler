@@ -12,6 +12,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
@@ -169,7 +170,8 @@ public class Utils {
     public static boolean hasNonNullAnnotation(VariableElement var) {
         List<? extends AnnotationMirror> annotationMirrors = var.getAnnotationMirrors();
         for (AnnotationMirror mirror : annotationMirrors) {
-            if (Constants.CLASS_NAME_NONNULL.equals(mirror.getAnnotationType().toString())) {
+            Element annoElement = UtilMgr.getMgr().getTypeUtils().asElement(mirror.getAnnotationType());
+            if (annoElement != null && "NonNull".equals(annoElement.getSimpleName().toString())) {
                 return true;
             }
         }

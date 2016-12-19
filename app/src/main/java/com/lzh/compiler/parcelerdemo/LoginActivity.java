@@ -1,7 +1,6 @@
 package com.lzh.compiler.parcelerdemo;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.view.View;
 import android.widget.TextView;
@@ -9,6 +8,7 @@ import android.widget.TextView;
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.Dispatcher;
+import com.lzh.compiler.parceler.annotation.NonNull;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
 
 import butterknife.Bind;

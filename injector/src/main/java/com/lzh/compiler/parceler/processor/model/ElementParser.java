@@ -164,7 +164,13 @@ public class ElementParser {
         if (!Utils.isEmpty(methodName)) return methodName;
 
         boolean isArray = false;
-        if (type.endsWith("[]")) isArray = true;
+        if (type.contains("<")) {
+            type = type.split("<")[0];
+            fieldData.setCastName(type);
+        }
+        if (type.endsWith("[]")) {
+            isArray = true;
+        }
 
         type = isArray ? type.substring(0,type.length() - 2) : type;
         typeElement = UtilMgr.getMgr().getElementUtils().getTypeElement(type);

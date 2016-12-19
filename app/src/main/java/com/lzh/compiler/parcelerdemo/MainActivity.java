@@ -1,11 +1,13 @@
 package com.lzh.compiler.parcelerdemo;
 
+import android.os.Binder;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
 
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
+import com.lzh.compiler.parcelerdemo.bean.SerialViewModel;
 
 import butterknife.OnClick;
 
@@ -19,6 +21,10 @@ public class MainActivity extends BaseActivity {
     @NonNull
     @Arg
     String username = "147258369";
+
+    @Arg
+    SerialViewModel<Binder> model;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
