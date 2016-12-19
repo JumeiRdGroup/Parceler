@@ -26,15 +26,15 @@ android {
     }
 }
 
-def PARCELER_VERSION=0.6
+def PARCELER_VERSION=0.7
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 //    compile 'com.android.support:appcompat-v7:23.0.0'
     testCompile 'junit:junit:4.12'
     compile 'com.jakewharton:butterknife:7.0.1'
-    apt project(':injector')
-    compile project(':parceler')
-//    apt "org.lzh.compiler.parceler:parceler-compiler:$PARCELER_VERSION"
-//    compile "org.lzh.compiler.parceler:parceler-api:$PARCELER_VERSION"
+//    apt project(':injector')
+//    compile project(':parceler')
+    apt "org.lzh.compiler.parceler:parceler-compiler:$PARCELER_VERSION"
+    compile "org.lzh.compiler.parceler:parceler-api:$PARCELER_VERSION"
 }
