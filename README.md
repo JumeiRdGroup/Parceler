@@ -128,6 +128,12 @@ Intent intent = new LoginActivityDispatcher(password).setUsername(username).getI
 
 ###ChangeLogs
 
+ - 0.7
+ ```
+ Support annotation NonNull for field.You can use any annotations with name 'NonNull' to indicated that should not be null
+ Support field annotated by @Arg who has generic types
+ ```
+
  - 0.6
 
  ```
