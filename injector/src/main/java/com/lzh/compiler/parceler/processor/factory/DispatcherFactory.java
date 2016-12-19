@@ -88,8 +88,8 @@ public abstract class DispatcherFactory {
         MethodSpec.Builder builder = MethodSpec.constructorBuilder().addModifiers(Modifier.PUBLIC);
         for (FieldData fieldData : nonNullList) {
             String fieldName = fieldData.getVar().getSimpleName().toString();
-            ParameterSpec.Builder param = ParameterSpec.builder(TypeName.get(fieldData.getVar().asType()), fieldData.getVar().getSimpleName().toString())
-                    .addAnnotation(ClassName.get("android.support.annotation", "NonNull"));
+            ParameterSpec.Builder param = ParameterSpec.builder(TypeName.get(fieldData.getVar().asType()),
+                    fieldData.getVar().getSimpleName().toString());
             builder.addParameter(param.build());
             boolean unboxType = Utils.isUnboxType(TypeName.get(fieldData.getVar().asType()));
             if (unboxType) {

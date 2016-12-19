@@ -1,8 +1,8 @@
 package com.lzh.compiler.parcelerdemo.bean;
 
-import android.support.annotation.NonNull;
 
 import com.lzh.compiler.parceler.annotation.Arg;
+import com.lzh.compiler.parceler.annotation.NonNull;
 
 public class Book {
     @NonNull
