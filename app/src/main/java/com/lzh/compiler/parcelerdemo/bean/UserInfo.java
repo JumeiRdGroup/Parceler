@@ -14,76 +14,76 @@ import java.util.logging.Handler;
 public class UserInfo {
 
     @Arg
-    Bundle bundle = new Bundle();
+    public Bundle bundle = new Bundle();
     @Arg
-    IBinder binder = null;
+    public IBinder binder = null;
     @Arg
-    boolean bool = true;
+    public boolean bool = true;
     @Arg
-    Boolean UpBool = true;
+    public Boolean UpBool = true;
     @Arg
-    boolean[] boolArr = new boolean[]{true};
+    public boolean[] boolArr = new boolean[]{true};
     @Arg
-    byte bt = 1;
+    public byte bt = 1;
     @Arg
-    Byte UpBt = 2;
+    public Byte UpBt = 2;
     @Arg
-    byte[] byArr = new byte[] {0,1};
+    public byte[] byArr = new byte[]{0, 1};
     @Arg
-    char cr = 'a';
+    public char cr = 'a';
     @Arg
-    Character UpCr = 'b';
+    public Character UpCr = 'b';
     @Arg
-    char[] crArr = new char[] {'a'};
+    public char[] crArr = new char[]{'a'};
 
     @Arg
-    int it = 1;
+    public int it = 1;
     @Arg
-    Integer UpInt = 2;
+    public Integer UpInt = 2;
     @Arg
-    int[] itArr = new int[] {0,1};
+    public int[] itArr = new int[]{0, 1};
 
     @Arg
-    long lg = 2L;
+    public long lg = 2L;
     @Arg
-    Long UpLg = 3L;
+    public Long UpLg = 3L;
     @Arg
-    long[] lgArr = new long[] {2L};
+    public long[] lgArr = new long[]{2L};
 
     @Arg
-    float ft = 1.0f;
+    public float ft = 1.0f;
     @Arg
-    Float UpFt = 2.0f;
+    public Float UpFt = 2.0f;
     @Arg
-    float[] ftArr = new float[] {0f,1f};
+    public float[] ftArr = new float[]{0f, 1f};
 
     @Arg
-    double db = 1d;
+    public double db = 1d;
     @Arg
-    Double UpDb = 2d;
+    public Double UpDb = 2d;
     @Arg
-    double[] dbArr = new double[] {0d,1d};
+    public double[] dbArr = new double[]{0d, 1d};
     @Arg
-    String str = "str";
+    public String str = "str";
     @Arg
-    String[] strArr = new String[]{"arr"};
+    public String[] strArr = new String[]{"arr"};
     @Arg
-    ArrayList<String> strList;
+    public ArrayList<String> strList = new ArrayList<>();
 
     @Arg
-    StringBuilder charSequence = null;
+    public StringBuilder charSequence = new StringBuilder("charSequence");
     @Arg
-    StringBuilder[] charSequencesArr = new StringBuilder[]{new StringBuilder("charSequence")};
+    public StringBuilder[] charSequencesArr = new StringBuilder[]{new StringBuilder("charSequence")};// CharSequence[]
     @Arg
-    ArrayList<String> charSequencesList = new ArrayList<>();
+    public ArrayList<String> charSequencesList = new ArrayList<>();
     @Arg
-    Info parcelable = new Info();
+    public Info parcelable = new Info();
     @Arg
-    Info[] parcelables = new Info[]{new Info()};
+    public Info[] parcelables = new Info[]{new Info()};// Parcelable[]
     @Arg
-    ArrayList<String> stringArrayList = new ArrayList<>();
+    public ArrayList<String> stringArrayList = new ArrayList<>();
     @Arg
-    ArrayList<Info> parcelableArrayList = new ArrayList<>();
+    public ArrayList<Info> parcelableArrayList = new ArrayList<>();
     @Arg
     ArrayList<Integer> integerArrayList = new ArrayList<>();
     @Arg
@@ -92,14 +92,4 @@ public class UserInfo {
     @Arg
     Serializable serializable = new Info();
 
-    public UserInfo () {
-    }
-
-    public boolean getBool() {
-        return bool;
-    }
-
-    public void setBool(boolean bool) {
-        this.bool = bool;
-    }
 }

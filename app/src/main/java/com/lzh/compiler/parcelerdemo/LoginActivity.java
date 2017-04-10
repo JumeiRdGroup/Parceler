@@ -10,6 +10,7 @@ import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.Dispatcher;
 import com.lzh.compiler.parceler.annotation.NonNull;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
+import com.lzh.compiler.parcelerdemo.bean.UserInfo;
 
 import butterknife.Bind;
 import butterknife.OnClick;
@@ -19,7 +20,6 @@ public class LoginActivity extends BaseActivity {
 
     @Arg("hello")
     String username;
-    @NonNull
     @Arg
     String password;
 
@@ -36,7 +36,7 @@ public class LoginActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        UserInfo info = Parceler.toEntity(new UserInfo(), getIntent());
         userTv.setText(username);
         psdTv.setText(password);
     }
