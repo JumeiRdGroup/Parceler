@@ -29,6 +29,7 @@ public class Constants {
 
     public static final String CLASS_NAME_ACTIVITY = "android.app.Activity";
     public static final String CLASS_NAME_CONTEXT = "android.content.Context";
+    public static final String CLASS_NAME_DIALOG = "android.app.Dialog";
     public static final String CLASS_NAME_FRAGMENT = "android.app.Fragment";
     public static final String CLASS_NAME_V4_FRAGMENT = "android.support.v4.app.Fragment";
     public static final String CLASS_NAME_SERVICE = "android.app.Service";

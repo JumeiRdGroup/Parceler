@@ -10,8 +10,8 @@ import java.util.Map;
 /**
  * Entry class of <i>Parceler</i>
  * <p>
- *     to inject data from bundle to a entity class,use {@link Parceler#injectToEntity(Object, Bundle)}<br>
- *     to inject data from entity to a bundle class,use {@link Parceler#injectToBundle(Object, Bundle)} instead
+ *     to inject data from bundle to a entity class,use {@link Parceler#toEntity(Object, Bundle)}<br>
+ *     to inject data from entity to a bundle class,use {@link Parceler#toBundle(Object, Bundle)} instead
  * </p>
  * @author lzh
  */
@@ -32,8 +32,8 @@ public final class Parceler {
      * @param <T> target type
      * @return target itself
      */
-    public static <T> T injectToEntity(T target, Intent intent) {
-        return injectToEntity(target,intent == null ? null : intent.getExtras());
+    public static <T> T toEntity(T target, Intent intent) {
+        return toEntity(target,intent == null ? null : intent.getExtras());
     }
 
     /**
@@ -43,7 +43,7 @@ public final class Parceler {
      * @param <T> target type
      * @return target itself
      */
-    public static <T> T injectToEntity(T target, Bundle data) {
+    public static <T> T toEntity(T target, Bundle data) {
         if (target == null || data == null) return target;
 
         ParcelInjector injector;
@@ -63,7 +63,7 @@ public final class Parceler {
      * @param data The data instance to inject data from target
      * @return data itself
      */
-    public static Bundle injectToBundle(Object target, Bundle data) {
+    public static Bundle toBundle(Object target, Bundle data) {
         if (target == null || data == null) return data;
 
         ParcelInjector injector;
