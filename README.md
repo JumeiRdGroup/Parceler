@@ -38,13 +38,13 @@ public class UserInfo {
     private String address;
     public UserInfo (Bundle data) {
         // inject data from bundle to fields
-        Parceler.injectToEntity(this, data);
+        Parceler.toEntity(this, data);
     }
 
     public Bundle getBundle () {
         // inject data from UserInfo to bundle
         Bundle data = new Bundle();
-        Parceler.injectToBundle(this, data);
+        Parceler.toBundle(this, data);
         return data;
     }
     
@@ -67,19 +67,19 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Parceler.injectToEntity(this,getIntent());
+        Parceler.toEntity(this,getIntent());
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        Parceler.injectToBundle(this,outState);
+        Parceler.toBundle(this,outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Parceler.injectToEntity(this,savedInstanceState);
+        Parceler.toEntity(this,savedInstanceState);
     }
 }
 ```
