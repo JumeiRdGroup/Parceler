@@ -22,6 +22,7 @@ public class Constants {
     };
 
     public static final String INJECTOR_INTERFACE = "com.lzh.compiler.parceler.ParcelInjector";
+    public static final String UTILS = "com.lzh.compiler.parceler.Utils";
 
     public static final String INJECTOR_METHOD_TO_DATA = "injectDataToTarget";
 

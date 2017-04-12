@@ -9,6 +9,8 @@ import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.NonNull;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
+import com.lzh.compiler.parcelerdemo.bean.Book;
+import com.lzh.compiler.parcelerdemo.bean.Info;
 import com.lzh.compiler.parcelerdemo.bean.SerialViewModel;
 import com.lzh.compiler.parcelerdemo.bean.UserInfo;
 
@@ -36,10 +38,9 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.toLogin)
     void onLoginClick () {
         Bundle bundle = Parceler.toBundle(new UserInfo(), new Bundle());
-        Parceler.toEntity(new UserInfo(),bundle);
-//        Intent intent = new Intent(this,LoginActivity.class);
-//        intent.putExtras(bundle);
-//        startActivity(intent);
+        Intent intent = new Intent(this,LoginActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
 

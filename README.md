@@ -8,21 +8,10 @@ A simple library for easily put and get data from Bundle automatically.
 LastestVersion=[ ![Download](https://api.bintray.com/packages/yjfnypeu/maven/Parceler/images/download.svg) ](https://bintray.com/yjfnypeu/maven/Parceler/_latestVersion)
 
 ```Groovy
-//1.add it to build.gradle of root project
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
-    }
-}
-
-//2.add it to build.gradle of app project
-apply plugin: 'com.neenbedankt.android-apt'
+//1.add it to build.gradle in Android module
 dependencies {
-    apt "org.lzh.compiler.parceler:parceler-compiler:$LastestVersion"
-    compile "org.lzh.compiler.parceler:parceler-api:$LastestVersion"
+    annotationProcessor "org.lzh.compiler.parceler:parceler-compiler:LastestVersion"
+    compile "org.lzh.compiler.parceler:parceler-api:LastestVersion"
 }
 ```
 

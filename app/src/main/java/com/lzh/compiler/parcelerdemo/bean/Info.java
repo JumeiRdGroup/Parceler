@@ -16,7 +16,7 @@ public class Info implements Parcelable,Serializable {
     public Info() {
     }
 
-    protected Info(Parcel in) {
+    public Info(Parcel in) {
     }
 
     public static final Creator<Info> CREATOR = new Creator<Info>() {
