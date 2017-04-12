@@ -7,10 +7,6 @@ import android.os.IBinder;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.Dispatcher;
 
-/**
- * Created by haoge on 2016/11/25.
- */
-
 @Dispatcher
 public class TestService extends Service {
     @Arg

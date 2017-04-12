@@ -29,11 +29,15 @@ public class Constants {
     public static final String INJECTOR_METHOD_TO_BUNDLE = "injectDataToBundle";
 
     public static final String CLASS_NAME_ACTIVITY = "android.app.Activity";
+    public static final String CLASS_NAME_V4_ACTIVITY = "android.support.v4.app.FragmentActivity";
     public static final String CLASS_NAME_CONTEXT = "android.content.Context";
     public static final String CLASS_NAME_DIALOG = "android.app.Dialog";
+    public static final String CLASS_NAME_DIALOG_FRAGMENT = "android.app.DialogFragment";
+    public static final String CLASS_NAME_V4_DIALOG_FRAGMENT = "android.support.v4.app.DialogFragment";
     public static final String CLASS_NAME_FRAGMENT = "android.app.Fragment";
     public static final String CLASS_NAME_V4_FRAGMENT = "android.support.v4.app.Fragment";
     public static final String CLASS_NAME_SERVICE = "android.app.Service";
+    public static final String CLASS_NAME_PARCELER = "com.lzh.compiler.parceler.Parceler";
     public static final String CLASS_NAME_RECEIVER = "android.content.BroadcastReceiver";
 
     public static final String DISPATCHER_SUFFIX = "Dispatcher";

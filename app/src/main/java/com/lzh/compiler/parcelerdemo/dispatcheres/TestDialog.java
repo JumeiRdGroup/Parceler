@@ -4,19 +4,16 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Bundle;
 
+import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.Dispatcher;
 
-/**
- * Created by haoge on 2016/12/12.
- */
 @Dispatcher
 public class TestDialog extends AlertDialog {
+
+    @Arg
+    String username;
+
     protected TestDialog(Context context) {
         super(context);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
     }
 }

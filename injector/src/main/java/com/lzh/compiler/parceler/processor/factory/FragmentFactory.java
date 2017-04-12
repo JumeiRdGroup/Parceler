@@ -6,17 +6,11 @@ import com.squareup.javapoet.TypeSpec;
 
 import javax.lang.model.element.Modifier;
 
-/**
- * Created by haoge on 2016/12/12.
- */
-
 public class FragmentFactory extends DispatcherFactory {
-
-    private final String METHOD_CREATE = "create";
 
     @Override
     protected void generate(TypeSpec.Builder typeBuilder) {
-        typeBuilder.addMethod(MethodSpec.methodBuilder(METHOD_CREATE)
+        typeBuilder.addMethod(MethodSpec.methodBuilder("create")
                 .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.get(type.asType()))
                 .addStatement("$T instance = new $T()",type,type)

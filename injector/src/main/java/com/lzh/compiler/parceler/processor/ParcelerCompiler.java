@@ -5,6 +5,7 @@ import com.lzh.compiler.parceler.annotation.Dispatcher;
 import com.lzh.compiler.parceler.processor.factory.ActivityFactory;
 import com.lzh.compiler.parceler.processor.factory.CommenFactory;
 import com.lzh.compiler.parceler.processor.factory.DialogFactory;
+import com.lzh.compiler.parceler.processor.factory.DialogFragmentFactory;
 import com.lzh.compiler.parceler.processor.factory.DispatcherFactory;
 import com.lzh.compiler.parceler.processor.factory.FragmentFactory;
 import com.lzh.compiler.parceler.processor.factory.ReceiverFactory;
@@ -60,6 +61,9 @@ public class ParcelerCompiler extends AbstractProcessor {
                 }
                 if (Utils.isSuperClass(type, Constants.CLASS_NAME_ACTIVITY)) {
                     factory = new ActivityFactory();
+                } else if (Utils.isSuperClass(type, Constants.CLASS_NAME_DIALOG_FRAGMENT)
+                        || Utils.isSuperClass(type, Constants.CLASS_NAME_V4_DIALOG_FRAGMENT)) {
+                    factory = new DialogFragmentFactory();
                 } else if (Utils.isSuperClass(type, Constants.CLASS_NAME_FRAGMENT)
                         || Utils.isSuperClass(type, Constants.CLASS_NAME_V4_FRAGMENT)) {
                     factory = new FragmentFactory();
