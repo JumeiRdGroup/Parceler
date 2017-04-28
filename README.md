@@ -58,64 +58,13 @@ public class UserInfo {
 }
 ```
 
-There is another annotation **Dispatcher** which can work with the Parceler framework, with this
-annotation on an `Activity` class, Parceler framework will generate a router class for it.
-```Java
-// Config injector to base class.so you can use it on it subclass directly
-public abstract class BaseActivity extends Activity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Parceler.toEntity(this,getIntent());
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Parceler.toBundle(this,outState);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Parceler.toEntity(this,savedInstanceState);
-    }
-}
-```
-```Java
-@Dispatcher
-public class LoginActivity extends BaseActivity {
-    @Arg
-    String username;
-    @NonNull
-    @Arg
-    String password;
-    //...
-    TextView userTv;
-    TextView psdTv;
-
-    public void onCreate (Bundle saveInstanceState) {
-        super.onCreate();
-        userTv.setText(username);
-        psdTv.setText(password);
-    }
-}
-```
-then you can easily use a simple code like the code below to navigate to this activity and even can pass the data if needed.
-
-```
-new LoginActivityDispatcher(password).setUsername(username).requestCode(100).start(activity);
-```
-
-If you want to handle `Intent` object(e.g. to add flags, or start activity for result, or combine
- usage for `PendingIntent`), there is a handy method called **`getIntent()`**:
-```
-// password has been annotated by NonNull,so it should be set with constructor
-Intent intent = new LoginActivityDispatcher(password).setUsername(username).getIntent(activity);
-```
-
 ### ChangeLogs
+
+ - 0.9
+ ```
+ Remove Dispatcher annotations.
+ Refactor injector logic. Separate the different injector with inheritance structure
+ ```
 
  - 0.7
  ```
