@@ -35,7 +35,7 @@ public class ClassFactory {
         clzName = Utils.isEmpty(packName) ? clzName + Constants.INJECTOR_SUFFIX
                 : clzName.substring(packName.length() + 1).replace(".","$") + Constants.INJECTOR_SUFFIX;
 
-        TypeName superTypeName = ParameterizedTypeName.get(Constants.CLASS_INJECTOR,TypeName.get(type.asType()));
+        TypeName superTypeName = ParameterizedTypeName.get(Constants.CLASS_INJECTOR, ClassName.get(type));
         TypeSpec.Builder classBuidler = TypeSpec.classBuilder(clzName)
                 .addModifiers(Modifier.PUBLIC)
                 .addSuperinterface(superTypeName);
@@ -44,7 +44,7 @@ public class ClassFactory {
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
-                .addParameter(ParameterSpec.builder(TypeName.get(type.asType()), "target").build())
+                .addParameter(ParameterSpec.builder(ClassName.get(type), "target").build())
                 .addParameter(ParameterSpec.builder(Constants.CLASS_BUNDLE, "data").build())
                 .addStatement("Object obj = null");
 
@@ -52,16 +52,17 @@ public class ClassFactory {
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
-                .addParameter(ParameterSpec.builder(TypeName.get(type.asType()), "target").build())
+                .addParameter(ParameterSpec.builder(ClassName.get(type), "target").build())
                 .addParameter(ParameterSpec.builder(Constants.CLASS_BUNDLE, "data").build());
+
+        toEntity.addStatement("$T.getParentInjectorByClass($T.class).toEntity(target, data)", Constants.CLASS_PARCELER, ClassName.get(type));
+        toBundle.addStatement("$T.getParentInjectorByClass($T.class).toBundle(target, data)", Constants.CLASS_PARCELER, ClassName.get(type));
 
         for (FieldData fieldData : list) {
             completeInjectToTarget(toEntity,fieldData);
             completeInjectToBundle(toBundle,fieldData);
         }
 
-        toEntity.addStatement("$T.getParentInjectorByClass($T.class).toEntity(target, data)", Constants.CLASS_PARCELER, TypeName.get(type.asType()));
-        toBundle.addStatement("$T.getParentInjectorByClass($T.class).toBundle(target, data)", Constants.CLASS_PARCELER, TypeName.get(type.asType()));
 
         classBuidler.addMethod(toEntity.build());
         classBuidler.addMethod(toBundle.build());

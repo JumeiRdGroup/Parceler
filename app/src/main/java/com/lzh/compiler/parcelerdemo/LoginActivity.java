@@ -1,5 +1,6 @@
 package com.lzh.compiler.parcelerdemo;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -14,7 +15,7 @@ import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity<Uri> {
 
     @Arg("hello")
     String username;

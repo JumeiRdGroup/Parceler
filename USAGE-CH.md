@@ -36,8 +36,7 @@ public class UserInfo {
 }
 ```
 
-其次,框架提供另一个注解：<code>Dispatcher</code>.目前此注解只能使用于Activity类之上。
-当对Activity使用了此注解后。会生成带Dispatcher后缀的java文件。可以通过此java文件很方便的提供跳转操作。以LoginActivity为例：
+一般常用在Activity中。可以对其进行如下配置。更便于使用
 
 ```Java
 // 将注入器配置到基类中。一次配置,所有子类共同使用
@@ -64,6 +63,7 @@ public abstract class BaseActivity extends Activity{
 ```
 
 ```Java
+// 子类中直接添加注解直接使用。
 public class LoginActivity extends BaseActivity {
     @Arg
     String username;
@@ -80,14 +80,4 @@ public class LoginActivity extends BaseActivity {
         psdTv.setText(password);
     }
 }
-```
-
-需要跳转到LoginActivity时, 使用生成的LoginActivityDispatcher类：
-
-```
-new LoginActivityDispatcher(password).setUsername(username).requestCode(100).start(activity);
-```
-如果你需要直接操作Intent, 也可以:
-```
-Intent intent = new LoginActivityDispatcher(password).setUsername(username).getIntent(activity);
 ```
