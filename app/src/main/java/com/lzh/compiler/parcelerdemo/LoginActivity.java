@@ -1,26 +1,19 @@
 package com.lzh.compiler.parcelerdemo;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.text.Editable;
 import android.view.View;
 import android.widget.TextView;
 
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
-import com.lzh.compiler.parceler.annotation.Dispatcher;
-import com.lzh.compiler.parceler.annotation.NonNull;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
-import com.lzh.compiler.parcelerdemo.bean.Info;
 import com.lzh.compiler.parcelerdemo.bean.UserInfo;
-
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 import butterknife.Bind;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
-@Dispatcher
+
 public class LoginActivity extends BaseActivity {
 
     @Arg("hello")

@@ -16,13 +16,7 @@ import java.io.IOException;
 import java.util.List;
 
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
 import javax.lang.model.element.TypeElement;
-import javax.lang.model.type.TypeMirror;
-
-/**
- * Created by admin on 16/10/14.
- */
 
 public class ClassFactory {
 
@@ -41,32 +35,34 @@ public class ClassFactory {
         clzName = Utils.isEmpty(packName) ? clzName + Constants.INJECTOR_SUFFIX
                 : clzName.substring(packName.length() + 1).replace(".","$") + Constants.INJECTOR_SUFFIX;
 
-        TypeElement injector = getClassByName(Constants.INJECTOR_INTERFACE);
-        ClassName className = ClassName.get(injector);
-        TypeName typeName = ParameterizedTypeName.get(className,TypeName.get(type.asType()));
+        TypeName superTypeName = ParameterizedTypeName.get(Constants.CLASS_INJECTOR,TypeName.get(type.asType()));
         TypeSpec.Builder classBuidler = TypeSpec.classBuilder(clzName)
                 .addModifiers(Modifier.PUBLIC)
-                .addSuperinterface(typeName);
+                .addSuperinterface(superTypeName);
 
-        MethodSpec.Builder toEntity = MethodSpec.methodBuilder(Constants.INJECTOR_METHOD_TO_DATA)
+        MethodSpec.Builder toEntity = MethodSpec.methodBuilder(Constants.METHOD_TO_ENTITY)
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
                 .addParameter(ParameterSpec.builder(TypeName.get(type.asType()), "target").build())
-                .addParameter(ParameterSpec.builder(getTypeNameByName(Constants.CLASS_NAME_BUNDLE), "data").build())
+                .addParameter(ParameterSpec.builder(Constants.CLASS_BUNDLE, "data").build())
                 .addStatement("Object obj = null");
 
-        MethodSpec.Builder toBundle = MethodSpec.methodBuilder(Constants.INJECTOR_METHOD_TO_BUNDLE)
+        MethodSpec.Builder toBundle = MethodSpec.methodBuilder(Constants.METHOD_TO_BUNDLE)
                 .addAnnotation(Override.class)
                 .addModifiers(Modifier.PUBLIC)
                 .returns(TypeName.VOID)
                 .addParameter(ParameterSpec.builder(TypeName.get(type.asType()), "target").build())
-                .addParameter(ParameterSpec.builder(getTypeNameByName(Constants.CLASS_NAME_BUNDLE), "data").build());
+                .addParameter(ParameterSpec.builder(Constants.CLASS_BUNDLE, "data").build());
 
         for (FieldData fieldData : list) {
             completeInjectToTarget(toEntity,fieldData);
             completeInjectToBundle(toBundle,fieldData);
         }
+
+        toEntity.addStatement("$T.getParentInjectorByClass($T.class).toEntity(target, data)", Constants.CLASS_PARCELER, TypeName.get(type.asType()));
+        toBundle.addStatement("$T.getParentInjectorByClass($T.class).toBundle(target, data)", Constants.CLASS_PARCELER, TypeName.get(type.asType()));
+
         classBuidler.addMethod(toEntity.build());
         classBuidler.addMethod(toBundle.build());
         JavaFile.Builder builder = JavaFile.builder(packName, classBuidler.build());
@@ -102,11 +98,10 @@ public class ClassFactory {
     private void completeInjectToTarget(MethodSpec.Builder injectToData, FieldData fieldData) {
         TypeName fieldType = TypeName.get(fieldData.getVar().asType());
         String fieldName = fieldData.getVar().getSimpleName().toString();
-        ClassName utils = ClassName.get("com.lzh.compiler.parceler", "Utils");
         if (isUnBoxType(fieldType)) {
             injectToData.beginControlFlow("if ((obj = data.get($S)) != null)",fieldData.getKey());
         } else {
-            injectToData.beginControlFlow("if ((obj = data.get($S)) != null && (obj = $T.wrapCast(obj, $N.class)) != null)",fieldData.getKey(),utils,fieldData.getCastName());
+            injectToData.beginControlFlow("if ((obj = data.get($S)) != null && (obj = $T.wrapCast(obj, $N.class)) != null)",fieldData.getKey(),Constants.CLASS_UTILS,fieldData.getCastName());
         }
 
         if (fieldData.isPrivate()) {

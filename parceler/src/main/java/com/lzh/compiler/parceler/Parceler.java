@@ -50,8 +50,8 @@ public final class Parceler {
         try {
             injector = getInjectorByClass(target.getClass());
             //noinspection unchecked
-            injector.injectDataToTarget(target,data);
-        } catch (Exception e) {
+            injector.toEntity(target,data);
+        } catch (Throwable e) {
             throw new RuntimeException(String.format("inject failed : %s",e.getMessage()),e);
         }
         return target;
@@ -70,11 +70,19 @@ public final class Parceler {
         try {
             injector = getInjectorByClass(target.getClass());
             //noinspection unchecked
-            injector.injectDataToBundle(target,data);
-        } catch (Exception e) {
+            injector.toBundle(target,data);
+        } catch (Throwable e) {
             throw new RuntimeException(String.format("inject failed : %s",e.getMessage()),e);
         }
         return data;
+    }
+
+    public static ParcelInjector getParentInjectorByClass (Class clz) {
+        try {
+            return getInjectorByClass(clz.getSuperclass());
+        } catch (Throwable e) {
+            return NO_INJECTOR;
+        }
     }
 
     /**
@@ -115,9 +123,9 @@ public final class Parceler {
     // define a empty injector to filter some system library class
     private static class NoneInjector implements ParcelInjector<Object> {
         @Override
-        public void injectDataToTarget(Object target, Bundle bundle) {}
+        public void toEntity(Object target, Bundle bundle) {}
         @Override
-        public void injectDataToBundle(Object target, Bundle bundle) {}
+        public void toBundle(Object target, Bundle bundle) {}
     }
 
 }

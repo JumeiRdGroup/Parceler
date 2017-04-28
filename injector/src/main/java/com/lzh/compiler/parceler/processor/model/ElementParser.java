@@ -35,7 +35,6 @@ public class ElementParser {
         }
     }
 
-
     private FieldData getFieldDataByVariable(VariableElement var) {
         Arg arg = var.getAnnotation(Arg.class);
         FieldData fieldData = new FieldData(
@@ -54,7 +53,6 @@ public class ElementParser {
             fieldData.setPrivate(true);
             Utils.checkHasGetSetMethod(var);
         }
-
 
         return fieldData;
     }
@@ -233,7 +231,7 @@ public class ElementParser {
     }
 
     /**
-     * get all of fields that be annotated by {@link com.lzh.compiler.parceler.annotation.Arg} on itself and parent class
+     * get all of fields that be annotated by {@link com.lzh.compiler.parceler.annotation.Arg} on itself
      * @param type The class to check
      * @return all of field elements that be annotated by {@link com.lzh.compiler.parceler.annotation.Arg}
      */
@@ -245,12 +243,6 @@ public class ElementParser {
                 fields.add((VariableElement) element);
             }
         }
-        TypeMirror superclass = type.getSuperclass();
-        Element supClass = UtilMgr.getMgr().getTypeUtils().asElement(superclass);
-        if (supClass == null || supClass.getKind().isInterface()) {
-            return fields;
-        }
-        fields.addAll(getAllFieldsWithArg((TypeElement) supClass));
         return fields;
     }
 

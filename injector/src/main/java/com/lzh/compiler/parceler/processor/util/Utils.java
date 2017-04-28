@@ -23,7 +23,6 @@ public class Utils {
     /**
      * check out if the class are an effective class;
      * <p>
-     *     <i>should not be modified by abstract,if set,should be jump</i><br>
      *     <i>should not be modified by private,if set,should lead to crash</i><br>
      * </p>
      * @param type A element of class
@@ -31,9 +30,6 @@ public class Utils {
      */
     public static boolean checkClassValid(TypeElement type) {
         Set<Modifier> modifiers = type.getModifiers();
-        if (modifiers.contains(Modifier.ABSTRACT)) {
-            return false;
-        }
         if (modifiers.contains(Modifier.PRIVATE)) {
             throw new ParcelException(String.format("class %s must not be modified by private",type.getQualifiedName()),type);
         }
