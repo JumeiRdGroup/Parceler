@@ -39,15 +39,15 @@ public class ElementParser {
         Arg arg = var.getAnnotation(Arg.class);
         FieldData fieldData = new FieldData(
                 Utils.isEmpty(arg.value()) ? var.getSimpleName().toString() : arg.value(),
-                var
+                var, arg.parseJson()
         );
         fieldData.setNonNull(Utils.hasNonNullAnnotation(var));
         // get method name by var used by bundle
-        String methodName = getMethodName(var,fieldData);
-        if (Utils.isEmpty(methodName)) {
-            throw new ParcelException(String.format("The type %s is not supported!",var.getSimpleName()),var);
-        }
-        fieldData.setMethodName(methodName);
+//        String methodName = getMethodName(var,fieldData);
+//        if (Utils.isEmpty(methodName)) {
+//            throw new ParcelException(String.format("The type %s is not supported!",var.getSimpleName()),var);
+//        }
+//        fieldData.setMethodName(methodName);
 
         if (var.getModifiers().contains(Modifier.PRIVATE)) {
             fieldData.setPrivate(true);
@@ -60,6 +60,9 @@ public class ElementParser {
     private String getMethodName(VariableElement var,FieldData fieldData) {
         String type = var.asType().toString();
         fieldData.setCastName(type);
+        if (fieldData.isJsonSupport()) {
+            return "putString";
+        }
         type = wrapBaseType(type); // change encasement to base,like java.lang.Integer to int
         String methodName = null;
         switch (type) {
@@ -246,6 +249,12 @@ public class ElementParser {
         return fields;
     }
 
+    /**
+     * Create an {@link ElementParser} and do parsing.
+     * @param ele the class element to be parsed.
+     * @return The new parser instance.
+     * @throws IOException if it occurs an error.
+     */
     public static ElementParser parse (TypeElement ele) throws IOException {
         ElementParser parser = new ElementParser(ele);
         parser.parse();

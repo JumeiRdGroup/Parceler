@@ -21,7 +21,7 @@ import javax.lang.model.type.TypeMirror;
 public class Utils {
 
     /**
-     * check out if the class are an effective class;
+     * check out if the class were an effective class;
      * <p>
      *     <i>should not be modified by private,if set,should lead to crash</i><br>
      * </p>

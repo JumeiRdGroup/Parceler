@@ -1,25 +1,22 @@
 package com.lzh.compiler.parcelerdemo;
 
-import android.content.Intent;
 import android.os.Binder;
 import android.os.Bundle;
 
-
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
-import com.lzh.compiler.parceler.annotation.NonNull;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
-import com.lzh.compiler.parcelerdemo.bean.Book;
-import com.lzh.compiler.parcelerdemo.bean.Info;
 import com.lzh.compiler.parcelerdemo.bean.SerialViewModel;
 import com.lzh.compiler.parcelerdemo.bean.UserInfo;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
     @Arg
     String password = "112113114";
-
     /**
      * 用户名
      */
@@ -29,6 +26,9 @@ public class MainActivity extends BaseActivity {
     @Arg
     SerialViewModel<Binder> model;
 
+    @Arg
+    Map<String, Map<String, String>> map = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,10 +37,9 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.toLogin)
     void onLoginClick () {
-        Bundle bundle = Parceler.toBundle(new UserInfo(), new Bundle());
-        Intent intent = new Intent(this,LoginActivity.class);
-        intent.putExtras(bundle);
-        startActivity(intent);
+        UserInfo bean = new UserInfo();
+        Bundle bundle = Parceler.toBundle(bean, new Bundle());
+        Parceler.toEntity(bean, bundle);
     }
 }
 

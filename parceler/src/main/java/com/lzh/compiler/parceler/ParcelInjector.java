@@ -3,24 +3,25 @@ package com.lzh.compiler.parceler;
 import android.os.Bundle;
 
 /**
- * DO NOT USE DIRECTLY:
+ * <b>DO NOT IMPLEMENTS DIRECTLY:</b>
+ *
  * <p>
- *     The interface is used by generate class
+ *     This interface to defined two ways of injector.
  * </p>
  */
 public interface ParcelInjector<T> {
 
     /**
-     * inject some data from data to target.
-     * @param target The class instance to inject data from date
-     * @param data The class instance to read data
+     * Inject from bundle to entity.
+     * @param entity The entity instance.
+     * @param bundle The bundle instance.
      */
-    void toEntity(T target,Bundle data);
+    void toEntity(T entity,Bundle bundle);
 
     /**
-     * inject some data from target to data
-     * @param target The class instance to read data
-     * @param data The data instance to inject data from target
+     * Inject from entity to entity.
+     * @param entity The entity instance.
+     * @param bundle The bundle instance.
      */
-    void toBundle(T target, Bundle data);
+    void toBundle(T entity, Bundle bundle);
 }

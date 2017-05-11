@@ -8,11 +8,28 @@ import android.util.SparseArray;
 import com.lzh.compiler.parceler.annotation.Arg;
 
 import java.io.Serializable;
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.logging.Handler;
 
 public class UserInfo {
 
+
+    public static void testType () {
+        Class<UserInfo> entityClz = UserInfo.class;
+        Field[] fields = entityClz.getDeclaredFields();
+        for (Field field : fields) {
+            Type genericType = field.getGenericType();
+            System.out.println("===========");
+            System.out.println("field = " + field);
+            System.out.println("genericType = " + genericType);
+            System.out.println("type = " + genericType.getClass().getCanonicalName());
+        }
+    }
+
+    @Arg(parseJson = true)
+    UserInfo info;
     @Arg
     public Bundle bundle = new Bundle();
     @Arg

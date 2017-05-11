@@ -16,16 +16,12 @@ public abstract class BaseActivity<R> extends Activity {
     R response;
     @Arg
     Uri uri;
-    @Bind(1)
-    View view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Parceler.toEntity(this,getIntent());
     }
-
-
 
     @Override
     public void setContentView(int layoutResID) {

@@ -34,7 +34,7 @@ public class ParcelerCompiler extends AbstractProcessor {
 
     /**
      * Parse elements with {@link Arg}
-     * @throws ParcelException
+     * @throws ParcelException throws to notify user it occurs an exception.
      */
     private Map<TypeElement,ElementParser> parseArgElement(RoundEnvironment roundEnv) throws ParcelException{
         Map<TypeElement,ElementParser> parserMap = new HashMap<>();
@@ -44,9 +44,10 @@ public class ParcelerCompiler extends AbstractProcessor {
             // parse and get data from elements
             for (Element ele : elements) {
                 type = (TypeElement) ele.getEnclosingElement();
-                if (!Utils.checkClassValid(type) || parserMap.containsKey(type)) {
+                if (parserMap.containsKey(type) || !Utils.checkClassValid(type)) {
                     continue;
                 }
+                // parse and put into parser map.
                 parserMap.put(type,ElementParser.parse(type));
             }
             // generate injector class

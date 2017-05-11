@@ -12,7 +12,7 @@ public class Book implements Parcelable{
     @Arg
     String username;
     @Arg
-    private float price;
+    float price;
 
     public Book(String username, float price) {
         this.username = username;

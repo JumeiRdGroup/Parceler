@@ -9,10 +9,11 @@ import java.util.Map;
 
 /**
  * Entry class of <i>Parceler</i>
- * <p>
- *     to inject data from bundle to a entity class,use {@link Parceler#toEntity(Object, Bundle)}<br>
- *     to inject data from entity to a bundle class,use {@link Parceler#toBundle(Object, Bundle)} instead
- * </p>
+ *
+ * <ul>
+ *     <li>to inject data from bundle to a entity, use {@link Parceler#toEntity(Object, Bundle)} or {@link Parceler#toEntity(Object, Intent)}</li><br>
+ *     <li>to inject data from entity to a bundle, use {@link Parceler#toBundle(Object, Bundle)} instead</li>
+ * </ul>
  * @author lzh
  */
 public final class Parceler {
@@ -21,7 +22,7 @@ public final class Parceler {
      */
     private static Map<Class,WeakReference<ParcelInjector>> INJECTORS = new HashMap<>();
     /**
-     * A empty injector
+     * An empty injector
      */
     private static final NoneInjector NO_INJECTOR = new Parceler.NoneInjector();
 

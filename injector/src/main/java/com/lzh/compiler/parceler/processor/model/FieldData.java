@@ -6,13 +6,28 @@ public class FieldData {
     private String key;
     private boolean nonNull;
     private String methodName;
+    /**
+     *
+     */
     private String castName;
+    /**
+     * Whether the argument is modified by private.
+     * if is true. this class should provided a couple of getter/setter methods
+     */
     private boolean isPrivate;
+    /**
+     * The argument element
+     */
     VariableElement var;
+    /**
+     * Whether to support json parsed
+     */
+    private boolean jsonSupport;
 
-    public FieldData(String key, VariableElement var) {
+    public FieldData(String key, VariableElement var, boolean jsonSupport) {
         this.key = key;
         this.var = var;
+        this.jsonSupport = jsonSupport;
     }
 
     public String getKey() {
@@ -54,5 +69,26 @@ public class FieldData {
 
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+    public boolean isJsonSupport() {
+        return jsonSupport;
+    }
+
+    public void setJsonSupport(boolean jsonSupport) {
+        this.jsonSupport = jsonSupport;
+    }
+
+    @Override
+    public String toString() {
+        return "FieldData{" +
+                "key='" + key + '\'' +
+                ", nonNull=" + nonNull +
+                ", methodName='" + methodName + '\'' +
+                ", castName='" + castName + '\'' +
+                ", isPrivate=" + isPrivate +
+                ", var=" + var +
+                ", jsonSupport=" + jsonSupport +
+                '}';
     }
 }
