@@ -6,5 +6,4 @@ package com.lzh.compiler.parceler.model;
 
 public class AllType {
 
-    
 }

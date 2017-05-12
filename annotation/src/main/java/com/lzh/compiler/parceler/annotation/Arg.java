@@ -16,12 +16,4 @@ public @interface Arg {
      * @return key of field
      */
     String value() default "";
-
-    /**
-     * <p>The switcher indicated that the argument could automatically parsed the json data.
-     *
-     * <p>if you're turn on it. make sure you had add compile with FastJson or Gson.
-     * @return true for indicate this argument could be parsed with fastJson or GSON.
-     */
-    boolean parseJson() default false;
 }

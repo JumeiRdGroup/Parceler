@@ -82,14 +82,25 @@ public class ClassFactory {
 
     private void completeInjectToBundle(MethodSpec.Builder injectToBundle, FieldData fieldData) {
         String fieldName = fieldData.getVar().getSimpleName().toString();
-        injectToBundle.addStatement("$T.toBundle(bundle, $S, entity.$N)", Constants.CLASS_UTILS, fieldData.getKey(), fieldName);
+        if (fieldData.getConverter() != null) {
+            injectToBundle.addStatement("$T.toBundle(bundle, $S, entity.$N, $S, $T.class, $T.class)",
+                    Constants.CLASS_UTILS, fieldData.getKey(), fieldName, fieldData.getVar().getSimpleName(), ClassName.get(type), fieldData.getConverter());
+        } else {
+            injectToBundle.addStatement("$T.toBundle(bundle, $S, entity.$N, $S, $T.class)",
+                    Constants.CLASS_UTILS, fieldData.getKey(), fieldName, fieldData.getVar().getSimpleName(), ClassName.get(type));
+        }
     }
 
     private void completeInjectToTarget(MethodSpec.Builder injectToData, FieldData fieldData) {
-        injectToData.beginControlFlow("if ((obj = bundle.get($S)) != null)", fieldData.getKey())
-                .addStatement("entity.$N = $T.wrapCast(obj, $S, $T.class)",
-                        fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS, fieldData.getVar().getSimpleName(), ClassName.get(type))
-                .endControlFlow();
+        injectToData.beginControlFlow("if ((obj = bundle.get($S)) != null)", fieldData.getKey());
+        if (fieldData.getConverter() != null) {
+            injectToData.addStatement("entity.$N = $T.wrapCast(obj, $S, $T.class, $T.class)",
+                    fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS, fieldData.getVar().getSimpleName(), ClassName.get(type), fieldData.getConverter());
+        } else {
+            injectToData.addStatement("entity.$N = $T.wrapCast(obj, $S, $T.class)",
+                    fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS, fieldData.getVar().getSimpleName(), ClassName.get(type));
+        }
+        injectToData.endControlFlow();
     }
 
 }

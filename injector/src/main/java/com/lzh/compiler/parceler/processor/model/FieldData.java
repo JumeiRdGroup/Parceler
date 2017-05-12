@@ -1,5 +1,8 @@
 package com.lzh.compiler.parceler.processor.model;
 
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.TypeName;
+
 import javax.lang.model.element.VariableElement;
 
 public class FieldData {
@@ -19,15 +22,17 @@ public class FieldData {
      * The argument element
      */
     VariableElement var;
-    /**
-     * Whether to support json parsed
-     */
-    private boolean jsonSupport;
 
-    public FieldData(String key, VariableElement var, boolean jsonSupport) {
+    TypeName converter;
+
+    public FieldData(String key, VariableElement var, TypeName converter) {
         this.key = key;
         this.var = var;
-        this.jsonSupport = jsonSupport;
+        this.converter = converter;
+    }
+
+    public TypeName getConverter() {
+        return converter;
     }
 
     public String getKey() {
@@ -71,13 +76,6 @@ public class FieldData {
         isPrivate = aPrivate;
     }
 
-    public boolean isJsonSupport() {
-        return jsonSupport;
-    }
-
-    public void setJsonSupport(boolean jsonSupport) {
-        this.jsonSupport = jsonSupport;
-    }
 
     @Override
     public String toString() {
@@ -88,7 +86,6 @@ public class FieldData {
                 ", castName='" + castName + '\'' +
                 ", isPrivate=" + isPrivate +
                 ", var=" + var +
-                ", jsonSupport=" + jsonSupport +
                 '}';
     }
 }

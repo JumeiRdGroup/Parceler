@@ -1,10 +1,14 @@
 package com.lzh.compiler.parceler.processor.model;
 
 import com.lzh.compiler.parceler.annotation.Arg;
+import com.lzh.compiler.parceler.annotation.BundleConverter;
+import com.lzh.compiler.parceler.annotation.Converter;
 import com.lzh.compiler.parceler.processor.ParcelException;
 import com.lzh.compiler.parceler.processor.factory.ClassFactory;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.TypeName;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -15,6 +19,7 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.MirroredTypeException;
 import javax.lang.model.type.TypeMirror;
 
 public class ElementParser {
@@ -37,9 +42,10 @@ public class ElementParser {
 
     private FieldData getFieldDataByVariable(VariableElement var) {
         Arg arg = var.getAnnotation(Arg.class);
+
         FieldData fieldData = new FieldData(
                 Utils.isEmpty(arg.value()) ? var.getSimpleName().toString() : arg.value(),
-                var, arg.parseJson()
+                var, getConverter(var)
         );
         fieldData.setNonNull(Utils.hasNonNullAnnotation(var));
         // get method name by var used by bundle
@@ -49,20 +55,29 @@ public class ElementParser {
 //        }
 //        fieldData.setMethodName(methodName);
 
-        if (var.getModifiers().contains(Modifier.PRIVATE)) {
-            fieldData.setPrivate(true);
-            Utils.checkHasGetSetMethod(var);
-        }
+//        if (var.getModifiers().contains(Modifier.PRIVATE)) {
+//            fieldData.setPrivate(true);
+//            Utils.checkHasGetSetMethod(var);
+//        }
 
         return fieldData;
+    }
+
+    private TypeName getConverter(VariableElement var) {
+        Converter converter = var.getAnnotation(Converter.class);
+        if (converter != null) {
+            try {
+                return ClassName.get(converter.value());
+            } catch (MirroredTypeException mirroredType) {
+                return ClassName.get(mirroredType.getTypeMirror());
+            }
+        }
+        return null;
     }
 
     private String getMethodName(VariableElement var,FieldData fieldData) {
         String type = var.asType().toString();
         fieldData.setCastName(type);
-        if (fieldData.isJsonSupport()) {
-            return "putString";
-        }
         type = wrapBaseType(type); // change encasement to base,like java.lang.Integer to int
         String methodName = null;
         switch (type) {

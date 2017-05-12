@@ -4,22 +4,22 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
-import android.util.Log;
 import android.util.Size;
 import android.util.SizeF;
+import android.util.SparseArray;
 
 import java.io.Serializable;
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 
-public final class CommonConverter implements Converter<Object>{
+public final class BundleHandle {
+    private static BundleHandle handle = new BundleHandle();
+    private BundleHandle () {}
+    static BundleHandle get() {
+        return handle;
+    }
 
-    private static final String TAG = CommonConverter.class.getSimpleName();
-
-    @Override
-    public boolean toBundle(Bundle data, String key, Object obj) {
-        boolean handle = true;
+    void toBundle(Bundle data, String key, Object obj) {
         Class<?> type = obj.getClass();
         if (type.isAssignableFrom(int.class)
                 || obj.getClass().isAssignableFrom(Integer.class)) {
@@ -65,64 +65,76 @@ public final class CommonConverter implements Converter<Object>{
         } else if (type.isAssignableFrom(IBinder.class)
                 && Build.VERSION.SDK_INT >= 18) {
             data.putBinder(key, (IBinder) obj);
-        } else if (type.isAssignableFrom(CharSequence.class)) {
+        } else if (obj instanceof CharSequence) {
             data.putCharSequence(key, (CharSequence) obj);
-        } else if (type.isAssignableFrom(CharSequence[].class)) {
+        } else if (obj instanceof CharSequence[]) {
             data.putCharSequenceArray(key, (CharSequence[]) obj);
-        } else if (type.isAssignableFrom(Parcelable.class)) {
+        } else if (obj instanceof Parcelable) {
             data.putParcelable(key, (Parcelable) obj);
-        } else if (type.isAssignableFrom(Parcelable[].class)) {
+        } else if (obj instanceof Parcelable[]) {
             data.putParcelableArray(key, (Parcelable[]) obj);
-        } else if (type.isAssignableFrom(Serializable.class)) {
+        } else if (obj instanceof Serializable) {
             data.putSerializable(key, (Serializable) obj);
         } else if (Build.VERSION.SDK_INT > 21
-                && type.isAssignableFrom(Size.class)) {
+                && obj instanceof Size) {
             data.putSize(key, (Size) obj);
         } else if (Build.VERSION.SDK_INT > 21
-                && type.isAssignableFrom(SizeF.class)) {
+                && obj instanceof SizeF) {
             data.putSizeF(key, (SizeF) obj);
-        } else if (type.isAssignableFrom(ArrayList.class)) {
-            handle = toBundleFromArrayList(data, key, (ArrayList)obj);
         } else {
-            handle = false;
+            toBundleFromGenericType(data, key, obj);
         }
 
-        return handle;
     }
 
-    private boolean toBundleFromArrayList(Bundle data, String key, ArrayList obj) {
-        return false;
-    }
+    @SuppressWarnings({"unchecked", "ConstantConditions"})
+    private void toBundleFromGenericType(Bundle data, String key, Object obj) {
 
-    @Override
-    public Object convert(Object src, Type clz) {
-        if (clz instanceof Class) {
-            return convertByClass(src, (Class) clz);
-        } else if (clz instanceof ParameterizedType) {
-            return convertByParameterizedType(src, (ParameterizedType) clz);
+        try {
+            data.putIntegerArrayList(key, (ArrayList<Integer>) obj);
+            return;
+        } catch (ClassCastException cast) {
+            // ignore
         }
-        return null;
-    }
 
-    private Object convertByParameterizedType(Object src, ParameterizedType clz) {
-        Class<?> type = src.getClass();
-        boolean isSame = true;
-        while (true) {
-            Class rawType = (Class) clz.getRawType();
-            if (!type.isAssignableFrom(rawType)) {
-                isSame = false;
-                break;
-            }
-
+        try {
+            data.putStringArrayList(key, (ArrayList<String>) obj);
+            return;
+        } catch (ClassCastException cast) {
+            // ignore
         }
-        return null;
+
+        try {
+            data.putCharSequenceArrayList(key, (ArrayList<CharSequence>) obj);
+            return;
+        } catch (ClassCastException cast) {
+            // ignore
+        }
+
+        try {
+            data.putParcelableArrayList(key, (ArrayList<? extends Parcelable>) obj);
+            return;
+        } catch (ClassCastException cast) {
+            // ignore
+        }
+
+        try {
+            data.putSparseParcelableArray(key, (SparseArray<? extends Parcelable>) obj);
+            return;
+        } catch (ClassCastException cast) {
+            // ignore
+        }
+
+        throw new RuntimeException("Could not put data to bundle");
     }
 
-    private Object convertByClass(Object src, Class clz) {
-        Class<?> rawType = src.getClass();
-        if (rawType.isAssignableFrom(clz)) {
-            return src;
+    <T> T cast(Object data, Type type) {
+        try {
+            //noinspection unchecked
+            return (T) data;
+        } catch (ClassCastException cast) {
+            throw new RuntimeException(String.format("Cast data from %s to %s failed.", data.getClass(), type));
         }
-        return null;
     }
+
 }
