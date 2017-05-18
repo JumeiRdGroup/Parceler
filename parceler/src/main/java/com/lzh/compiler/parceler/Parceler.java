@@ -119,6 +119,10 @@ public final class Parceler {
         }
     }
 
+    public static BundleFactory buildBundle(Bundle src) {
+        return new BundleFactory(src);
+    }
+
     private Parceler () {}
 
     // define a empty injector to filter some system library class

@@ -1,12 +1,11 @@
 package com.lzh.compiler.parceler.processor.util;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.JUnit4;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by admin on 16/10/25.
- */
 public class UtilsTest {
     @Test
     public void combineSetMethodName() throws Exception {

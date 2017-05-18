@@ -1,11 +1,12 @@
 package com.lzh.compiler.parceler;
 
-import com.alibaba.fastjson.JSON;
+import com.google.gson.Gson;
 import com.lzh.compiler.parceler.annotation.BundleConverter;
 
 import java.lang.reflect.Type;
 
-public final class FastJsonConverter implements BundleConverter<String, Object> {
+public class GsonConverter implements BundleConverter<String, Object>{
+    Gson gson = new Gson();
 
     @Override
     public Object convertToEntity(Object data, Type type) {
@@ -18,19 +19,20 @@ public final class FastJsonConverter implements BundleConverter<String, Object> 
             throw new RuntimeException(String.format("Unsupported type %s to parse with fastjson", data.getClass()));
         }
 
-        return JSON.parseObject(json, type);
+        return gson.fromJson(json, type);
     }
 
     @Override
     public String convertToBundle(Object data) {
-        return JSON.toJSONString(data);
+        return gson.toJson(data);
     }
 
     static {
         try {
-            Class.forName(JSON.class.getCanonicalName());
+            Class.forName(Gson.class.getCanonicalName());
         } catch (Throwable t) {
             throw new RuntimeException(String.format("Load fastjson failed: %s", t.getMessage()), t);
         }
     }
+
 }

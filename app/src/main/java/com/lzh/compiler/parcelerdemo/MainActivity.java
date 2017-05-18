@@ -3,11 +3,9 @@ package com.lzh.compiler.parcelerdemo;
 import android.os.Binder;
 import android.os.Bundle;
 
-import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
 import com.lzh.compiler.parcelerdemo.bean.SerialViewModel;
-import com.lzh.compiler.parcelerdemo.bean.UserInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -37,9 +35,14 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.toLogin)
     void onLoginClick () {
-        UserInfo bean = new UserInfo();
-        Bundle bundle = Parceler.toBundle(bean, new Bundle());
-        Parceler.toEntity(bean, bundle);
+//        Parceler.buildBundle(new Bundle())
+//                .ignoreException(false)
+//                .put("", "", new GenericType<String, FastJsonConverter>() {});
+
+//        UserInfo bean = new UserInfo();
+//        Bundle bundle = Parceler.toBundle(bean, new Bundle());
+//        Parceler.toEntity(bean, bundle);
     }
+
 }
 

@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.novoda.bintray-release'//添加
 android {
-    compileSdkVersion 23
+    compileSdkVersion 21
     buildToolsVersion '25.0.0'
 
     defaultConfig {
         minSdkVersion 8
-        targetSdkVersion 23
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
 
@@ -25,10 +25,12 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
     compile project(':annotation')
     provided 'com.alibaba:fastjson:1.2.31'
     provided 'com.google.code.gson:gson:2.8.0'
+
+    //ADD THESE LINES:
+    testCompile 'junit:junit:4.12'
 }
 
 //添加

@@ -8,6 +8,8 @@ import android.util.Size;
 import android.util.SizeF;
 import android.util.SparseArray;
 
+import com.lzh.compiler.parceler.annotation.BundleConverter;
+
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -19,70 +21,83 @@ public final class BundleHandle {
         return handle;
     }
 
-    void toBundle(Bundle data, String key, Object obj) {
-        Class<?> type = obj.getClass();
+    void toBundle(Bundle bundle, String key, Object data, BundleConverter converter) {
+        try {
+            toBundleInternal(bundle, key, data);
+        } catch (Throwable t) {
+            if (converter != null) {
+                data = converter.convertToBundle(data);
+                toBundle(bundle, key, data, null);
+            } else {
+                throw t;
+            }
+        }
+    }
+
+    private void toBundleInternal(Bundle bundle, String key, Object data) {
+        Class<?> type = data.getClass();
         if (type.isAssignableFrom(int.class)
-                || obj.getClass().isAssignableFrom(Integer.class)) {
-            data.putInt(key, (Integer) obj);
+                || data.getClass().isAssignableFrom(Integer.class)) {
+            bundle.putInt(key, (Integer) data);
         } else if (type.isAssignableFrom(boolean.class)
                 || type.isAssignableFrom(Boolean.class)) {
-            data.putBoolean(key, (Boolean) obj);
+            bundle.putBoolean(key, (Boolean) data);
         } else if (type.isAssignableFrom(byte.class)
                 || type.isAssignableFrom(Byte.class)) {
-            data.putByte(key, (Byte) obj);
+            bundle.putByte(key, (Byte) data);
         } else if (type.isAssignableFrom(char.class)
                 || type.isAssignableFrom(Character.class)) {
-            data.putChar(key, (Character) obj);
+            bundle.putChar(key, (Character) data);
         } else if (type.isAssignableFrom(long.class)
                 || type.isAssignableFrom(Long.class)) {
-            data.putLong(key, (Long) obj);
+            bundle.putLong(key, (Long) data);
         } else if (type.isAssignableFrom(float.class)
                 || type.isAssignableFrom(Float.class)) {
-            data.putFloat(key, (Float) obj);
+            bundle.putFloat(key, (Float) data);
         } else if (type.isAssignableFrom(double.class)
                 || type.isAssignableFrom(Double.class)) {
-            data.putDouble(key, (Double) obj);
+            bundle.putDouble(key, (Double) data);
         } else if (type.isAssignableFrom(byte[].class)) {
-            data.putByteArray(key, (byte[]) obj);
+            bundle.putByteArray(key, (byte[]) data);
         } else if (type.isAssignableFrom(char[].class)) {
-            data.putCharArray(key, (char[]) obj);
+            bundle.putCharArray(key, (char[]) data);
         } else if (type.isAssignableFrom(int[].class)) {
-            data.putIntArray(key, (int[]) obj);
+            bundle.putIntArray(key, (int[]) data);
         } else if (type.isAssignableFrom(long[].class)) {
-            data.putLongArray(key, (long[]) obj);
+            bundle.putLongArray(key, (long[]) data);
         } else if (type.isAssignableFrom(float[].class)) {
-            data.putFloatArray(key, (float[]) obj);
+            bundle.putFloatArray(key, (float[]) data);
         } else if (type.isAssignableFrom(double[].class)) {
-            data.putDoubleArray(key, (double[]) obj);
+            bundle.putDoubleArray(key, (double[]) data);
         } else if (type.isAssignableFrom(boolean[].class)) {
-            data.putBooleanArray(key, (boolean[]) obj);
+            bundle.putBooleanArray(key, (boolean[]) data);
         } else if (type.isAssignableFrom(String.class)) {
-            data.putString(key, (String) obj);
+            bundle.putString(key, (String) data);
         } else if (type.isAssignableFrom(String[].class)) {
-            data.putStringArray(key, (String[]) obj);
+            bundle.putStringArray(key, (String[]) data);
         } else if (type.isAssignableFrom(Bundle.class)) {
-            data.putBundle(key, (Bundle) obj);
+            bundle.putBundle(key, (Bundle) data);
         } else if (type.isAssignableFrom(IBinder.class)
                 && Build.VERSION.SDK_INT >= 18) {
-            data.putBinder(key, (IBinder) obj);
-        } else if (obj instanceof CharSequence) {
-            data.putCharSequence(key, (CharSequence) obj);
-        } else if (obj instanceof CharSequence[]) {
-            data.putCharSequenceArray(key, (CharSequence[]) obj);
-        } else if (obj instanceof Parcelable) {
-            data.putParcelable(key, (Parcelable) obj);
-        } else if (obj instanceof Parcelable[]) {
-            data.putParcelableArray(key, (Parcelable[]) obj);
-        } else if (obj instanceof Serializable) {
-            data.putSerializable(key, (Serializable) obj);
+            bundle.putBinder(key, (IBinder) data);
+        } else if (data instanceof CharSequence) {
+            bundle.putCharSequence(key, (CharSequence) data);
+        } else if (data instanceof CharSequence[]) {
+            bundle.putCharSequenceArray(key, (CharSequence[]) data);
+        } else if (data instanceof Parcelable) {
+            bundle.putParcelable(key, (Parcelable) data);
+        } else if (data instanceof Parcelable[]) {
+            bundle.putParcelableArray(key, (Parcelable[]) data);
+        } else if (data instanceof Serializable) {
+            bundle.putSerializable(key, (Serializable) data);
         } else if (Build.VERSION.SDK_INT > 21
-                && obj instanceof Size) {
-            data.putSize(key, (Size) obj);
+                && data instanceof Size) {
+            bundle.putSize(key, (Size) data);
         } else if (Build.VERSION.SDK_INT > 21
-                && obj instanceof SizeF) {
-            data.putSizeF(key, (SizeF) obj);
+                && data instanceof SizeF) {
+            bundle.putSizeF(key, (SizeF) data);
         } else {
-            toBundleFromGenericType(data, key, obj);
+            toBundleFromGenericType(bundle, key, data);
         }
 
     }
@@ -133,7 +148,7 @@ public final class BundleHandle {
             //noinspection unchecked
             return (T) data;
         } catch (ClassCastException cast) {
-            throw new RuntimeException(String.format("Cast data from %s to %s failed.", data.getClass(), type));
+            throw new IllegalArgumentException(String.format("Cast data from %s to %s failed.", data.getClass(), type));
         }
     }
 

@@ -47,6 +47,7 @@ public class ElementParser {
                 Utils.isEmpty(arg.value()) ? var.getSimpleName().toString() : arg.value(),
                 var, getConverter(var)
         );
+
         fieldData.setNonNull(Utils.hasNonNullAnnotation(var));
         // get method name by var used by bundle
 //        String methodName = getMethodName(var,fieldData);

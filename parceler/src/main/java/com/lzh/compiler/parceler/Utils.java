@@ -94,14 +94,14 @@ public class Utils {
             return null;
         }
 
-        Type type = findType(fieldName, entity);
+        Type type = ParcelerManager.findType(fieldName, entity);
         T result;
         try {
             // cast firstly if it can be casted.
             result = BundleHandle.get().cast(data, type);
         } catch (Throwable t) {
             if (convertersClass != null) {
-                data = transformConverter(convertersClass).convertToEntity(data, type);
+                data = ParcelerManager.transformConverter(convertersClass).convertToEntity(data, type);
                 return wrapCast(data, fieldName, entity, null);
             } else {
                 throw t;
@@ -126,41 +126,9 @@ public class Utils {
             return;
         }
 
-        try {
-            BundleHandle.get().toBundle(bundle, key, data);
-        } catch (Throwable t) {
-            if (convertersClass != null) {
-                data = transformConverter(convertersClass).convertToBundle(data, findType(fieldName, entity));
-                toBundle(bundle, key, data, fieldName, entity, null);
-            } else {
-                throw new RuntimeException(String.format("Put data of type %s into bundle failed: You can considered to used an Converter to convert to a concurrent data type to be putted", findType(fieldName, entity)));
-            }
-        }
-    }
+        BundleConverter converter = ParcelerManager.transformConverter(convertersClass);
+        Type type = ParcelerManager.findType(fieldName, entity);
 
-    static BundleConverter transformConverter(Class<? extends BundleConverter> converterClass) {
-        BundleConverter converter = CONVERTER_CONTAINERS.get(converterClass);
-        if (converter == null) {
-            try {
-                converter = converterClass.newInstance();
-                CONVERTER_CONTAINERS.put(converterClass, converter);
-            } catch (Throwable e) {
-                throw new RuntimeException(String.format("The subclass of BundleConverter %s should provided an empty construct method.", converterClass), e);
-            }
-        }
-        return converter;
-    }
-
-    static Type findType(String fieldName, Class entity) {
-        Map<String, Type> fieldsMap = TYPES.get(entity);
-        if (fieldsMap == null) {
-            fieldsMap = new HashMap<>();
-            Field[] fields = entity.getDeclaredFields();
-            for (Field field : fields) {
-                fieldsMap.put(field.getName(), field.getGenericType());
-            }
-            TYPES.put(entity, fieldsMap);
-        }
-        return fieldsMap.get(fieldName);
+        BundleHandle.get().toBundle(bundle, key, data, converter);
     }
 }

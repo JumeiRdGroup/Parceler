@@ -13,10 +13,6 @@ import butterknife.ButterKnife;
 // 将注入器配置到基类中。一次配置,所有子类共同使用
 public abstract class BaseActivity<R> extends Activity {
 
-    R response;
-    @Arg
-    Uri uri;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
