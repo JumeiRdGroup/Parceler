@@ -1,31 +1,17 @@
 package com.lzh.compiler.parcelerdemo;
 
-import android.os.Binder;
 import android.os.Bundle;
+import android.widget.Toast;
 
-import com.lzh.compiler.parceler.annotation.Arg;
+import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
-import com.lzh.compiler.parcelerdemo.bean.SerialViewModel;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.lzh.compiler.parcelerdemo.bean.UserInfo;
 
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity {
-    @Arg
-    String password = "112113114";
-    /**
-     * 用户名
-     */
-    @Arg
-    String username = "147258369";
 
-    @Arg
-    SerialViewModel<Binder> model;
-
-    @Arg
-    Map<String, Map<String, String>> map = new HashMap<>();
+    Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,16 +19,20 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
     }
 
-    @OnClick(R.id.toLogin)
-    void onLoginClick () {
-//        Parceler.buildBundle(new Bundle())
-//                .ignoreException(false)
-//                .put("", "", new GenericType<String, FastJsonConverter>() {});
-
-//        UserInfo bean = new UserInfo();
-//        Bundle bundle = Parceler.toBundle(bean, new Bundle());
-//        Parceler.toEntity(bean, bundle);
+    @OnClick(R.id.toBundle)
+    void toBundleClick() {
+        bundle = Parceler.buildBundle(new Bundle())
+                .put("base_int", 0)
+                .getBundle();
     }
 
+    @OnClick(R.id.toEntity)
+    void toEntityClick() {
+        if (bundle == null) {
+            Toast.makeText(this, "请先将数据注入到bundle中", Toast.LENGTH_SHORT).show();
+        } else {
+            Parceler.toEntity(new UserInfo(), bundle);
+        }
+    }
 }
 

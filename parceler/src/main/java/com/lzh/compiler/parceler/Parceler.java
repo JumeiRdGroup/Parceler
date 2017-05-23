@@ -14,7 +14,7 @@ import java.util.Map;
  *     <li>to inject data from bundle to a entity, use {@link Parceler#toEntity(Object, Bundle)} or {@link Parceler#toEntity(Object, Intent)}</li><br>
  *     <li>to inject data from entity to a bundle, use {@link Parceler#toBundle(Object, Bundle)} instead</li>
  * </ul>
- * @author lzh
+ * @author haoge
  */
 public final class Parceler {
     /**
@@ -125,7 +125,7 @@ public final class Parceler {
 
     private Parceler () {}
 
-    // define a empty injector to filter some system library class
+    // provided an EMPTY_INJECTOR if not found by class
     private static class NoneInjector implements ParcelInjector<Object> {
         @Override
         public void toEntity(Object target, Bundle bundle) {}

@@ -31,7 +31,7 @@ public class GsonConverter implements BundleConverter<String, Object>{
         try {
             Class.forName(Gson.class.getCanonicalName());
         } catch (Throwable t) {
-            throw new RuntimeException(String.format("Load fastjson failed: %s", t.getMessage()), t);
+            throw new RuntimeException("You should add Gson to your dependencies list first", t);
         }
     }
 

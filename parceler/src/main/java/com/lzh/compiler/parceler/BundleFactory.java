@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.lzh.compiler.parceler.annotation.BundleConverter;
 
 /**
- * A Factory to add any type of data into the bundle.
+ * A utility class to put any type of data into the bundle.
  */
 public final class BundleFactory {
 

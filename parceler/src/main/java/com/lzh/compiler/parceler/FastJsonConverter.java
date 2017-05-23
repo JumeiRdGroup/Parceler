@@ -30,7 +30,7 @@ public final class FastJsonConverter implements BundleConverter<String, Object> 
         try {
             Class.forName(JSON.class.getCanonicalName());
         } catch (Throwable t) {
-            throw new RuntimeException(String.format("Load fastjson failed: %s", t.getMessage()), t);
+            throw new RuntimeException("You should add fastjson to your dependencies list first", t);
         }
     }
 }
