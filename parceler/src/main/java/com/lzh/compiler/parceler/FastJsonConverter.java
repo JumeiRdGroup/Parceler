@@ -5,6 +5,10 @@ import com.lzh.compiler.parceler.annotation.BundleConverter;
 
 import java.lang.reflect.Type;
 
+/**
+ * Provided a converter for fastjson to be used
+ * @author haoge
+ */
 public final class FastJsonConverter implements BundleConverter<String, Object> {
 
     @Override

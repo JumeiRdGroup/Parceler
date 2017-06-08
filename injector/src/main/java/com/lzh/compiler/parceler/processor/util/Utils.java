@@ -1,7 +1,6 @@
 package com.lzh.compiler.parceler.processor.util;
 
 import com.lzh.compiler.parceler.processor.ParcelException;
-import com.lzh.compiler.parceler.processor.model.Constants;
 import com.squareup.javapoet.TypeName;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import javax.lang.model.element.Element;
 import javax.lang.model.element.ElementKind;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.Modifier;
-import javax.lang.model.element.Name;
 import javax.lang.model.element.PackageElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.element.VariableElement;

@@ -20,6 +20,8 @@ public class Constants {
 
     public static ClassName CLASS_INJECTOR = ClassName.bestGuess("com.lzh.compiler.parceler.ParcelInjector");
     public static ClassName CLASS_PARCELER = ClassName.bestGuess("com.lzh.compiler.parceler.Parceler");
+    public static ClassName CLASS_FACTORY = ClassName.bestGuess("com.lzh.compiler.parceler.BundleFactory");
+    public static ClassName CLASS_MANAGER = ClassName.bestGuess("com.lzh.compiler.parceler.ParcelerManager");
     public static ClassName CLASS_UTILS = ClassName.bestGuess("com.lzh.compiler.parceler.Utils");
 
     public static final String METHOD_TO_ENTITY = "toEntity";

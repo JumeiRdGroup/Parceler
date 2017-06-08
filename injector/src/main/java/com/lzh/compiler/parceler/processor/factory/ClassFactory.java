@@ -13,6 +13,7 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.lang.model.element.Modifier;
@@ -63,7 +64,11 @@ public class ClassFactory {
 
 
         toEntity.addStatement("$T.getParentInjectorByClass($T.class).toEntity(entity, bundle)", Constants.CLASS_PARCELER, ClassName.get(type));
+        toEntity.addStatement("$T factory = $T.createFactory(bundle).ignoreException(true)", Constants.CLASS_FACTORY, Constants.CLASS_PARCELER);
+        toEntity.addStatement("$T type", Type.class);
+
         toBundle.addStatement("$T.getParentInjectorByClass($T.class).toBundle(entity, bundle)", Constants.CLASS_PARCELER, ClassName.get(type));
+        toBundle.addStatement("$T factory = $T.createFactory(bundle).ignoreException(true)", Constants.CLASS_FACTORY, Constants.CLASS_PARCELER);
 
         for (FieldData fieldData : list) {
             completeInjectToTarget(toEntity,fieldData);
@@ -81,26 +86,28 @@ public class ClassFactory {
     }
 
     private void completeInjectToBundle(MethodSpec.Builder injectToBundle, FieldData fieldData) {
-        String fieldName = fieldData.getVar().getSimpleName().toString();
         if (fieldData.getConverter() != null) {
-            injectToBundle.addStatement("$T.toBundle(bundle, $S, entity.$N, $S, $T.class, $T.class)",
-                    Constants.CLASS_UTILS, fieldData.getKey(), fieldName, fieldData.getVar().getSimpleName(), ClassName.get(type), fieldData.getConverter());
+            injectToBundle.addStatement("factory.put($S, entity.$N, $T.class)", fieldData.getKey(), fieldData.getVar().getSimpleName(), fieldData.getConverter());
         } else {
-            injectToBundle.addStatement("$T.toBundle(bundle, $S, entity.$N, $S, $T.class)",
-                    Constants.CLASS_UTILS, fieldData.getKey(), fieldName, fieldData.getVar().getSimpleName(), ClassName.get(type));
+            injectToBundle.addStatement("factory.put($S, entity.$N)", fieldData.getKey(), fieldData.getVar().getSimpleName());
         }
     }
 
     private void completeInjectToTarget(MethodSpec.Builder injectToData, FieldData fieldData) {
-        injectToData.beginControlFlow("if ((obj = bundle.get($S)) != null)", fieldData.getKey());
+        injectToData.addStatement("type = $T.findType($S, $T.class)",
+                Constants.CLASS_MANAGER, fieldData.getVar().getSimpleName(), ClassName.get(type));
         if (fieldData.getConverter() != null) {
-            injectToData.addStatement("entity.$N = $T.wrapCast(obj, $S, $T.class, $T.class)",
-                    fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS, fieldData.getVar().getSimpleName(), ClassName.get(type), fieldData.getConverter());
+            injectToData.beginControlFlow("if((obj = factory.get($S, type, $T.class)) != null)", fieldData.getKey(), fieldData.getConverter());
         } else {
-            injectToData.addStatement("entity.$N = $T.wrapCast(obj, $S, $T.class)",
-                    fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS, fieldData.getVar().getSimpleName(), ClassName.get(type));
+            injectToData.beginControlFlow("if((obj = factory.get($S, type)) != null)", fieldData.getKey());
         }
-        injectToData.endControlFlow();
+        injectToData.addStatement("entity.$N = $T.wrapCast(obj)", fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS)
+                .endControlFlow();
+        if (fieldData.isNonNull()) {
+            injectToData.beginControlFlow("else")
+                    .addStatement("throw new $T($S)", RuntimeException.class, "Could not be null")
+                    .endControlFlow();
+        }
     }
 
 }

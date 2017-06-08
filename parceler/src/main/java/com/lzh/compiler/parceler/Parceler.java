@@ -119,7 +119,7 @@ public final class Parceler {
         }
     }
 
-    public static BundleFactory buildBundle(Bundle src) {
+    public static BundleFactory createFactory(Bundle src) {
         return new BundleFactory(src);
     }
 

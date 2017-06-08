@@ -5,6 +5,10 @@ import com.lzh.compiler.parceler.annotation.BundleConverter;
 
 import java.lang.reflect.Type;
 
+/**
+ * Provided a converter for google gson to be used
+ * @author haoge
+ */
 public class GsonConverter implements BundleConverter<String, Object>{
     Gson gson = new Gson();
 

@@ -4,6 +4,8 @@ import android.os.Bundle;
 
 import com.lzh.compiler.parceler.annotation.BundleConverter;
 
+import java.lang.reflect.Type;
+
 /**
  * A utility class to put any type of data into the bundle.
  */
@@ -58,6 +60,26 @@ public final class BundleFactory {
             }
         }
         return this;
+    }
+
+    public <T> T get(String key, Type type) {
+        return get(key, type, null);
+    }
+
+    public <T> T get(String key, Type type, Class<? extends BundleConverter> converterClass) {
+        Object data = bundle.get(key);
+        if (data == null) {
+            return null;
+        }
+
+        try {
+            return (T) BundleHandle.get().cast(data, type, converterClass);
+        } catch (Throwable t) {
+            if (!ignoreException) {
+                throw t;
+            }
+            return null;
+        }
     }
 
     public Bundle getBundle() {
