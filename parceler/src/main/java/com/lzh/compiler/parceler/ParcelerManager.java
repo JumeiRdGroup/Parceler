@@ -29,6 +29,12 @@ public final class ParcelerManager {
         return converter;
     }
 
+    /**
+     * find real type for the field.
+     * @param fieldName field name
+     * @param entity the class
+     * @return the type that be found.
+     */
     public static Type findType(String fieldName, Class entity) {
         Map<String, Type> fieldsMap = TYPES.get(entity);
         if (fieldsMap == null) {
@@ -40,11 +46,5 @@ public final class ParcelerManager {
             TYPES.put(entity, fieldsMap);
         }
         return fieldsMap.get(fieldName);
-    }
-
-    private static ParcelerManager manager = new ParcelerManager();
-    private ParcelerManager() {}
-    static ParcelerManager get() {
-        return manager;
     }
 }

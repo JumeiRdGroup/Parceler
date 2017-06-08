@@ -1,5 +1,6 @@
 package com.lzh.compiler.parcelerdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -19,6 +20,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Parceler.setDefaultConverter(FastJsonConverter.class);
     }
 
     @SuppressWarnings("UnnecessaryBoxing")
@@ -51,6 +53,15 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.toBundleActivity)
     void toBundleActivity() {
+        Bundle bundle = Parceler.createFactory(new Bundle())
+                .put("builder", new StringBuilder("StringBuilder"))
+                .put("buffer", new StringBuffer("StringBuffer"))
+                .put("books", new Book[]{new Book(), new Book()})
+                .put("bytes", new Byte[]{1,2,3,4})
+                .getBundle();
+        Intent intent = new Intent(this, BundleActivity.class);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 
     void printBundle(Bundle bundle) {

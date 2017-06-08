@@ -3,6 +3,8 @@ package com.lzh.compiler.parceler;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.lzh.compiler.parceler.annotation.BundleConverter;
+
 import java.lang.ref.WeakReference;
 import java.util.HashMap;
 import java.util.Map;
@@ -119,8 +121,17 @@ public final class Parceler {
         }
     }
 
+    /**
+     * Create a factory of {@link BundleFactory} to handle bundle.
+     * @param src The original bundle.
+     * @return instance of {@link BundleFactory}
+     */
     public static BundleFactory createFactory(Bundle src) {
         return new BundleFactory(src);
+    }
+
+    public static void setDefaultConverter(Class<? extends BundleConverter> converter) {
+        BundleFactory.DEFAULT_CONVERTER = converter;
     }
 
     private Parceler () {}

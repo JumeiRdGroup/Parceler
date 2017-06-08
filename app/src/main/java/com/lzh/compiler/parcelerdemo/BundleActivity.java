@@ -4,7 +4,7 @@ import android.os.Bundle;
 
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
-import com.lzh.compiler.parcelerdemo.bean.Book;
+import com.lzh.compiler.parcelerdemo.bean.Info;
 
 /**
  * Created by haoge on 2017/6/8.
@@ -17,7 +17,9 @@ public class BundleActivity extends BaseActivity{
     @Arg
     StringBuffer buffer;
     @Arg
-    Book[] books;
+    Info[] books;
+    @Arg
+    Byte[] bytes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

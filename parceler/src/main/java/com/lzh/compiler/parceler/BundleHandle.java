@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public final class BundleHandle {
     private static BundleHandle handle = new BundleHandle();
@@ -89,7 +90,8 @@ public final class BundleHandle {
             bundle.putParcelable(key, (Parcelable) data);
         } else if (data instanceof Parcelable[]) {
             bundle.putParcelableArray(key, (Parcelable[]) data);
-        } else if (data instanceof Serializable) {
+        } else if (data instanceof Serializable
+                && !data.getClass().isArray()) {
             bundle.putSerializable(key, (Serializable) data);
         } else if (Build.VERSION.SDK_INT > 21
                 && data instanceof Size) {

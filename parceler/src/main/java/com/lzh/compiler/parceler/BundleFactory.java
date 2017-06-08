@@ -11,8 +11,10 @@ import java.lang.reflect.Type;
  */
 public final class BundleFactory {
 
+    static Class<? extends BundleConverter> DEFAULT_CONVERTER = null;
     private Bundle bundle;
     private boolean ignoreException = false;
+
 
     BundleFactory(Bundle bundle) {
         if (bundle == null) {
@@ -43,7 +45,7 @@ public final class BundleFactory {
      * @see BundleFactory#put(String, Object, Class)
      */
     public BundleFactory put(String key, Object data) {
-        return put(key, data, null);
+        return put(key, data, DEFAULT_CONVERTER);
     }
 
     public BundleFactory put(String key, Object data, Class<? extends BundleConverter> converterClass) {
@@ -63,16 +65,17 @@ public final class BundleFactory {
     }
 
     public <T> T get(String key, Type type) {
-        return get(key, type, null);
+        return get(key, type, DEFAULT_CONVERTER);
     }
 
     public <T> T get(String key, Type type, Class<? extends BundleConverter> converterClass) {
         Object data = bundle.get(key);
-        if (data == null) {
+        if (data == null || type == null) {
             return null;
         }
 
         try {
+            //noinspection unchecked
             return (T) BundleHandle.get().cast(data, type, converterClass);
         } catch (Throwable t) {
             if (!ignoreException) {
