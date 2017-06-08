@@ -13,7 +13,7 @@ import java.util.Map;
  * Entry class of <i>Parceler</i>
  *
  * <ul>
- *     <li>to inject data from bundle to a entity, use {@link Parceler#toEntity(Object, Bundle)} or {@link Parceler#toEntity(Object, Intent)}</li><br>
+ *     <li>to inject data from bundle to a entity, use {@link Parceler#toEntity(Object, Bundle)} or {@link Parceler#toEntity(Object, Intent)}</li>
  *     <li>to inject data from entity to a bundle, use {@link Parceler#toBundle(Object, Bundle)} instead</li>
  * </ul>
  * @author haoge
