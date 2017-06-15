@@ -26,7 +26,7 @@ public final class Parceler {
     /**
      * An empty injector
      */
-    private static final NoneInjector NO_INJECTOR = new Parceler.NoneInjector();
+    private static final ParcelInjector NO_INJECTOR = RuntimeInjector.get();
 
     /**
      * Inject data from bundle in intent to entity class
