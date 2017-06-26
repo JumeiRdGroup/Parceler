@@ -1,6 +1,7 @@
 package com.lzh.compiler.parcelerdemo;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -58,6 +59,7 @@ public class MainActivity extends BaseActivity {
                 .put("buffer", new StringBuffer("StringBuffer"))
                 .put("books", new Book[]{new Book(), new Book()})
                 .put("bytes", new Byte[]{1,2,3,4})
+                .put("uri", Uri.parse("http://www.baidu.com"))
                 .getBundle();
         Intent intent = new Intent(this, BundleActivity.class);
         intent.putExtras(bundle);

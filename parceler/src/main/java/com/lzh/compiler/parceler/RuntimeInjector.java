@@ -7,13 +7,17 @@ import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.BundleConverter;
 import com.lzh.compiler.parceler.annotation.Converter;
 
-import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Provided a <b>Runtime Injector</b> to be used.
+ *
+ * <p>This injector will be invoked when you disabled APT task.
+ */
 final class RuntimeInjector implements ParcelInjector{
 
     /**
@@ -62,7 +66,7 @@ final class RuntimeInjector implements ParcelInjector{
             field.setAccessible(true);
             field.set(entity, result);
         } catch (Throwable t) {
-            t.printStackTrace();
+            // ignore
         }
     }
 
@@ -82,6 +86,8 @@ final class RuntimeInjector implements ParcelInjector{
         List<Args> list = CONTAINER.get(entity);
         if (list == null) {
             list = new ArrayList<>();
+            List<Args> subList = findByEntity(entity.getSuperclass());
+            list.addAll(subList);
             Field[] fields = entity.getDeclaredFields();
             for (Field field : fields) {
                 if (field.isAnnotationPresent(Arg.class)) {
@@ -94,7 +100,6 @@ final class RuntimeInjector implements ParcelInjector{
                     list.add(args);
                 }
             }
-            findByEntity(entity.getSuperclass());
             CONTAINER.put(entity, list);
         }
         return list;
