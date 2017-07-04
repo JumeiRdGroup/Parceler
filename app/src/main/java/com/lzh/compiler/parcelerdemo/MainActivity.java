@@ -43,12 +43,14 @@ public class MainActivity extends BaseActivity {
     @OnClick(R.id.toEntityConverter)
     void toEntityConverterClick() {
         Book book = new Book("颈椎病康复指南", 2.50f);
+        int age = 3;
         Bundle bundle = Parceler.createFactory(new Bundle())
                 .put("book", book, FastJsonConverter.class)
+                .put("age", age)
                 .getBundle();
 
-        book = Parceler.createFactory(bundle)
-                .get("book", Book.class, FastJsonConverter.class);
+        age = Parceler.createFactory(bundle)
+                .get("book", int.class);
         System.out.println("book = " + book);
     }
 
@@ -60,6 +62,7 @@ public class MainActivity extends BaseActivity {
                 .put("books", new Book[]{new Book(), new Book()})
                 .put("bytes", new Byte[]{1,2,3,4})
                 .put("uri", Uri.parse("http://www.baidu.com"))
+                .put("age",1)
                 .getBundle();
         Intent intent = new Intent(this, BundleActivity.class);
         intent.putExtras(bundle);

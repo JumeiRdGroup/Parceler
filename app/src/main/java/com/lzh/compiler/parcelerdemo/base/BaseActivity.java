@@ -12,7 +12,7 @@ import butterknife.ButterKnife;
 public abstract class BaseActivity extends Activity {
 
     @Arg
-    private Uri uri;
+    Uri uri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

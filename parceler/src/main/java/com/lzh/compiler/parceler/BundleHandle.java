@@ -1,5 +1,6 @@
 package com.lzh.compiler.parceler;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -165,6 +166,7 @@ public final class BundleHandle {
 
     private Object castInternal(Object data, Type type) {
         try {
+            type = box(type);
             if (type instanceof Class && !((Class)type).isInstance(data)) {
                 return wrapCast(data, (Class) type);
             }
@@ -172,6 +174,27 @@ public final class BundleHandle {
         } catch (ClassCastException cast) {
             throw new IllegalArgumentException(String.format("Cast data from %s to %s failed.", data.getClass(), type));
         }
+    }
+
+    private Type box(Type type) {
+        if (type == byte.class) {
+            type = Byte.class;
+        } else if (type == short.class) {
+            type = Short.class;
+        } else if (type == int.class) {
+            type = Integer.class;
+        } else if (type == long.class) {
+            type = Long.class;
+        } else if (type == float.class) {
+            type = Float.class;
+        } else if (type == double.class) {
+            type = Double.class;
+        } else if (type == boolean.class) {
+            type = Boolean.class;
+        } else if (type == char.class) {
+            type = Character.class;
+        }
+        return type;
     }
 
     @SuppressWarnings("unchecked")
@@ -191,7 +214,7 @@ public final class BundleHandle {
         } catch (Throwable t) {
             throw t;
         }
-        throw new RuntimeException("Cast Failed.");
+        throw new RuntimeException(String.format("Cast %s to %s failed", src.getClass(), clz));
     }
 
     @SuppressWarnings("unchecked")

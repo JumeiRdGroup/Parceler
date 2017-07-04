@@ -21,6 +21,9 @@ public class BundleActivity extends BaseActivity{
     @Arg
     Byte[] bytes;
 
+    @Arg
+    int age;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

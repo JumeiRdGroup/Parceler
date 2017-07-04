@@ -64,10 +64,32 @@ public final class BundleFactory {
         return this;
     }
 
+    public <T> T get(String key, Class<T> type) {
+        return get(key, ((Type) type));
+    }
+
+    public <T> T get(String key, Class<T> type, Class<? extends BundleConverter> converterClass) {
+        return get(key, ((Type) type), converterClass);
+    }
+
+    /**
+     * @see BundleFactory#get(String, Type, Class)
+     */
     public <T> T get(String key, Type type) {
         return get(key, type, DEFAULT_CONVERTER);
     }
 
+    /**
+     * <p>Obtains a data from bundle with a special key.
+     *
+     * <p>If the data is not matched with type. it should be cast by {@link BundleConverter} and retry.
+     *
+     * @param key bundle key
+     * @param type the special type
+     * @param converterClass the converter class to be used
+     * @param <T> Generic type
+     * @return The data that obtains from bundle
+     */
     public <T> T get(String key, Type type, Class<? extends BundleConverter> converterClass) {
         Object data = bundle.get(key);
         if (data == null || type == null) {
