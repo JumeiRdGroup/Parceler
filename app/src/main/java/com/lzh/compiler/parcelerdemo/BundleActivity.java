@@ -2,8 +2,11 @@ package com.lzh.compiler.parcelerdemo;
 
 import android.os.Bundle;
 
+import com.lzh.compiler.parceler.FastJsonConverter;
 import com.lzh.compiler.parceler.annotation.Arg;
+import com.lzh.compiler.parceler.annotation.Converter;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
+import com.lzh.compiler.parcelerdemo.bean.Book;
 import com.lzh.compiler.parcelerdemo.bean.Info;
 
 /**
@@ -20,6 +23,10 @@ public class BundleActivity extends BaseActivity{
     Info[] books;
     @Arg
     Byte[] bytes;
+
+    @Converter(FastJsonConverter.class)
+    @Arg
+    Book book;
 
     @Arg
     int age;

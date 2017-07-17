@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provided a <b>Runtime Injector</b> to be used.
+ * Provided a <b>Runtime Injector</b> to used.
  *
  * <p>This injector will be invoked when you disabled APT task.
  */
@@ -43,7 +43,7 @@ final class RuntimeInjector implements ParcelInjector{
                 result = factory.get(item.key, item.field.getGenericType());
             }
             if (result != null) {
-                setField(entity, result, item.field);
+                setFieldValue(entity, result, item.field);
             }
         }
     }
@@ -54,14 +54,14 @@ final class RuntimeInjector implements ParcelInjector{
         List<Args> list = findByEntity(entity.getClass());
         for (Args arg : list) {
             if (arg.converter != null) {
-                factory.put(arg.key, getField(entity, arg.field), arg.converter);
+                factory.put(arg.key, getFieldValue(entity, arg.field), arg.converter);
             } else {
-                factory.put(arg.key, getField(entity, arg.field));
+                factory.put(arg.key, getFieldValue(entity, arg.field));
             }
         }
     }
 
-    private void setField(Object entity, Object result, Field field) {
+    private void setFieldValue(Object entity, Object result, Field field) {
         try {
             field.setAccessible(true);
             field.set(entity, result);
@@ -70,7 +70,7 @@ final class RuntimeInjector implements ParcelInjector{
         }
     }
 
-    private Object getField(Object entity, Field field) {
+    private Object getFieldValue(Object entity, Field field) {
         try {
             field.setAccessible(true);
             return field.get(entity);
@@ -79,6 +79,11 @@ final class RuntimeInjector implements ParcelInjector{
         }
     }
 
+    /**
+     * <p>Find all of fields that annotated by {@link Arg} on this class include its superClass.
+     * @param entity The class who should be scan.
+     * @return All of fields be annotated by {@link Arg} or an empty list.
+     */
     private List<Args> findByEntity(Class entity) {
         if (isSystemClass(entity)) {
             return new ArrayList<>();

@@ -49,8 +49,8 @@ public class MainActivity extends BaseActivity {
                 .put("age", age)
                 .getBundle();
 
-        age = Parceler.createFactory(bundle)
-                .get("book", int.class);
+        book = Parceler.createFactory(bundle)
+                .get("book", Book.class);
         System.out.println("book = " + book);
     }
 

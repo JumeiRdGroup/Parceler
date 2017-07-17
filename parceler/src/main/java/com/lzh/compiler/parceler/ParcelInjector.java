@@ -24,4 +24,22 @@ public interface ParcelInjector<T> {
      * @param bundle The bundle instance.
      */
     void toBundle(T entity, Bundle bundle);
+
+    /**
+     * <p>Provided an EMPTY_INJECTOR to be used.
+     *
+     * <p>
+     */
+    ParcelInjector NONE_INJECTOR = new ParcelInjector() {
+        @Override
+        public void toEntity(Object entity, Bundle bundle) {}
+
+        @Override
+        public void toBundle(Object entity, Bundle bundle) {}
+    };
+
+    /**
+     * Provided a RUNTIME_INJECTOR to be used.
+     */
+    ParcelInjector RUNTIME_INJECTOR = RuntimeInjector.get();
 }

@@ -23,10 +23,6 @@ public final class Parceler {
      * A map to cache injectors
      */
     private static Map<Class,WeakReference<ParcelInjector>> INJECTORS = new HashMap<>();
-    /**
-     * An empty injector
-     */
-    private static final ParcelInjector NO_INJECTOR = RuntimeInjector.get();
 
     /**
      * Inject data from bundle in intent to entity class
@@ -80,19 +76,31 @@ public final class Parceler {
         return data;
     }
 
+    /**
+     * <p>Find an <b>apt-generated</b> injector instance associate with it's superClass exclude {@link RuntimeInjector}.
+     *
+     * @param clz the class itself.
+     * @return The apt-generated injector instance or {@link ParcelInjector#NONE_INJECTOR}
+     */
     public static ParcelInjector getParentInjectorByClass (Class clz) {
         try {
-            return getInjectorByClass(clz.getSuperclass());
+            ParcelInjector injector = getInjectorByClass(clz.getSuperclass());
+            // filters runtime injector.
+            if (injector instanceof RuntimeInjector) {
+                injector = ParcelInjector.NONE_INJECTOR;
+            }
+            return injector;
         } catch (Throwable e) {
-            return NO_INJECTOR;
+            return ParcelInjector.NONE_INJECTOR;
         }
     }
 
     /**
-     * Get injector instance associated with class
+     * <p>Find an injector instance associated with this class.
+     *
      * @param clz class type to find injector instance
      * @return The injector instance create by reflect with class name : <code>clz.getName() + Constants.SUFFIX</code>,
-     * will not be null.if there are no suitable injector,should returns {@link NoneInjector}
+     * will not be null.if there are no suitable injector,should returns {@link ParcelInjector#RUNTIME_INJECTOR}
      *
      */
     private static ParcelInjector getInjectorByClass(Class clz) throws IllegalAccessException, InstantiationException {
@@ -104,8 +112,8 @@ public final class Parceler {
 
         for (String prefix : Constants.FILTER_PREFIX) {
             if (clzName.startsWith(prefix)) {
-                INJECTORS.put(clz,new WeakReference<ParcelInjector>(NO_INJECTOR));
-                return NO_INJECTOR;
+                INJECTORS.put(clz,new WeakReference<>(ParcelInjector.RUNTIME_INJECTOR));
+                return ParcelInjector.RUNTIME_INJECTOR;
             }
         }
 
@@ -122,7 +130,7 @@ public final class Parceler {
     }
 
     /**
-     * Create a factory of {@link BundleFactory} to handle bundle.
+     * Create a bundle factory of {@link BundleFactory} to handle bundle.
      * @param src The original bundle.
      * @return instance of {@link BundleFactory}
      */
@@ -135,13 +143,4 @@ public final class Parceler {
     }
 
     private Parceler () {}
-
-    // provided an EMPTY_INJECTOR if not found by class
-    private static class NoneInjector implements ParcelInjector<Object> {
-        @Override
-        public void toEntity(Object target, Bundle bundle) {}
-        @Override
-        public void toBundle(Object target, Bundle bundle) {}
-    }
-
 }
