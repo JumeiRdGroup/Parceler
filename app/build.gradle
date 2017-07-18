@@ -25,7 +25,7 @@ android {
     }
 }
 
-def PARCELER_VERSION='1.1.1'
+def PARCELER_VERSION='1.1.2'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -34,9 +34,9 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
     compile 'com.alibaba:fastjson:1.1.57.android'
 
-    annotationProcessor project(':injector')
-    compile project(':parceler')
+//    annotationProcessor project(':injector')
+//    compile project(':parceler')
 
-//    annotationProcessor "org.lzh.compiler.parceler:parceler-compiler:$PARCELER_VERSION"
-//    compile "org.lzh.compiler.parceler:parceler-api:$PARCELER_VERSION"
+    annotationProcessor "org.lzh.compiler.parceler:parceler-compiler:$PARCELER_VERSION"
+    compile "org.lzh.compiler.parceler:parceler-api:$PARCELER_VERSION"
 }
