@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Entry class of <i>Parceler</i>
+ * Entry class of <i><b>Parceler</b></i>
  *
  * <ul>
  *     <li>to inject data from bundle to a entity, use {@link Parceler#toEntity(Object, Bundle)} or {@link Parceler#toEntity(Object, Intent)}</li>
@@ -19,6 +19,7 @@ import java.util.Map;
  * @author haoge
  */
 public final class Parceler {
+
     /**
      * A map to cache injectors
      */

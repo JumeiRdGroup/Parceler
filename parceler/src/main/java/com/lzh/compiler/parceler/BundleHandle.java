@@ -1,6 +1,5 @@
 package com.lzh.compiler.parceler;
 
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -15,8 +14,12 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 
+/**
+ * <p>The core class.
+ *
+ * @author haoge
+ */
 public final class BundleHandle {
     private static BundleHandle handle = new BundleHandle();
     private BundleHandle () {}
@@ -24,6 +27,19 @@ public final class BundleHandle {
         return handle;
     }
 
+    /**
+     * Put the data with key into bundle.
+     *
+     * <ul>
+     *     <li>If the data is suitable for bundle. put it directly</li>
+     *     <li>If the data is not suitable for bundle. transform it with converter and try again </li>
+     * </ul>
+     *
+     * @param bundle The bundle container
+     * @param key The key to be used.
+     * @param data The data to put into bundle
+     * @param converter The converter class to be used if the data type is not suitable for bundle.
+     */
     void toBundle(Bundle bundle, String key, Object data, BundleConverter converter) {
         try {
             toBundleInternal(bundle, key, data);
@@ -147,10 +163,14 @@ public final class BundleHandle {
         throw new RuntimeException("Could not put data to bundle");
     }
 
-    public Object cast(Object data, Type type) {
-        return cast(data, type, null);
-    }
-
+    /**
+     * <p>To cast the data to the required type. commonly it should be same with
+     *
+     * @param data The original data.
+     * @param type The required type.
+     * @param convertersClass The converter class.
+     * @return The transformed data.
+     */
     public Object cast(Object data, Type type, Class<? extends BundleConverter> convertersClass) {
         try {
             return castInternal(data, type);
