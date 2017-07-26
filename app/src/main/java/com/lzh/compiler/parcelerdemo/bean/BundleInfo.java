@@ -15,8 +15,7 @@ import java.util.ArrayList;
 
 public class BundleInfo {
 
-    // ====所有bundle支持的数据类型。============
-    @Converter(FastJsonConverter.class)
+    // ====所有bundle直接支持的数据类型。============
     @Arg
     public Bundle bundle = new Bundle();
     @Arg

@@ -29,6 +29,7 @@ import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * <p>The core class.
@@ -123,6 +124,7 @@ public final class BundleHandle {
         } else if (data instanceof Parcelable[]) {
             bundle.putParcelableArray(key, (Parcelable[]) data);
         } else if (data instanceof Serializable
+                && !(data instanceof Collection)
                 && !data.getClass().isArray()) {
             bundle.putSerializable(key, (Serializable) data);
         } else if (Build.VERSION.SDK_INT > 21
@@ -137,44 +139,57 @@ public final class BundleHandle {
 
     }
 
+    @SuppressWarnings("unchecked")
+    private boolean toBundleFromArrayList(Bundle bundle, String key, ArrayList list) {
+        if (list.isEmpty()) {
+            bundle.putIntegerArrayList(key, list);
+            return true;
+        }
+
+        boolean handle = false;
+        Object item = list.get(0);
+        if (item instanceof Integer) {
+            bundle.putIntegerArrayList(key, list);
+            handle = true;
+        } else if (item instanceof Parcelable) {
+            bundle.putParcelableArrayList(key, list);
+            handle = true;
+        } else if (item instanceof String) {
+            bundle.putStringArrayList(key, list);
+            handle = true;
+        } else if (item instanceof CharSequence) {
+            bundle.putCharSequenceArrayList(key, list);
+            handle = true;
+        }
+
+        return handle;
+    }
+
+    @SuppressWarnings("unchecked")
+    private boolean toBundleFromSparseArray(Bundle bundle, String key, SparseArray list) {
+        if (list.size() == 0) {
+            bundle.putSparseParcelableArray(key, list);
+            return true;
+        }
+
+        // extract item from first index and to check it if is supported.
+        Object item = list.get(list.keyAt(0));
+        if (item instanceof Parcelable) {
+            bundle.putSparseParcelableArray(key, list);
+            return true;
+        }
+
+        return false;
+    }
+
     @SuppressWarnings({"unchecked", "ConstantConditions"})
-    private void toBundleFromGenericType(Bundle data, String key, Object obj) {
-
-        try {
-            data.putIntegerArrayList(key, (ArrayList<Integer>) obj);
+    private void toBundleFromGenericType(Bundle bundle, String key, Object data) {
+        if ((data instanceof ArrayList) && toBundleFromArrayList(bundle, key, (ArrayList) data)) {
             return;
-        } catch (ClassCastException cast) {
-            // ignore
         }
-
-        try {
-            data.putStringArrayList(key, (ArrayList<String>) obj);
+        if (data instanceof SparseArray && toBundleFromSparseArray(bundle, key, (SparseArray) data)) {
             return;
-        } catch (ClassCastException cast) {
-            // ignore
         }
-
-        try {
-            data.putCharSequenceArrayList(key, (ArrayList<CharSequence>) obj);
-            return;
-        } catch (ClassCastException cast) {
-            // ignore
-        }
-
-        try {
-            data.putParcelableArrayList(key, (ArrayList<? extends Parcelable>) obj);
-            return;
-        } catch (ClassCastException cast) {
-            // ignore
-        }
-
-        try {
-            data.putSparseParcelableArray(key, (SparseArray<? extends Parcelable>) obj);
-            return;
-        } catch (ClassCastException cast) {
-            // ignore
-        }
-
         throw new RuntimeException("Could not put data to bundle");
     }
 
@@ -186,7 +201,7 @@ public final class BundleHandle {
      * @param convertersClass The converter class.
      * @return The transformed data.
      */
-    public Object cast(Object data, Type type, Class<? extends BundleConverter> convertersClass) {
+    Object cast(Object data, Type type, Class<? extends BundleConverter> convertersClass) {
         try {
             return castInternal(data, type);
         } catch (Throwable t) {
@@ -234,20 +249,16 @@ public final class BundleHandle {
 
     @SuppressWarnings("unchecked")
     private <E> E wrapCast (Object src, Class<E> clz) {
-        try {
-            if (src.getClass().isAssignableFrom(Parcelable[].class)) {
-                return (E) castParcelableArr(clz.getComponentType(), (Parcelable[]) src);
-            } else if (src.getClass().isAssignableFrom(CharSequence[].class)) {
-                return (E) castCharSequenceArr(clz.getComponentType(), (CharSequence[]) src);
-            } else if (src instanceof String) {
-                if (clz.equals(StringBuilder.class)) {
-                    return (E) new StringBuilder((CharSequence) src);
-                } else if (clz.equals(StringBuffer.class)) {
-                    return (E) new StringBuffer((CharSequence) src);
-                }
+        if (src.getClass().isAssignableFrom(Parcelable[].class)) {
+            return (E) castParcelableArr(clz.getComponentType(), (Parcelable[]) src);
+        } else if (src.getClass().isAssignableFrom(CharSequence[].class)) {
+            return (E) castCharSequenceArr(clz.getComponentType(), (CharSequence[]) src);
+        } else if (src instanceof String) {
+            if (clz.equals(StringBuilder.class)) {
+                return (E) new StringBuilder((CharSequence) src);
+            } else if (clz.equals(StringBuffer.class)) {
+                return (E) new StringBuffer((CharSequence) src);
             }
-        } catch (Throwable t) {
-            throw t;
         }
         throw new RuntimeException(String.format("Cast %s to %s failed", src.getClass(), clz));
     }

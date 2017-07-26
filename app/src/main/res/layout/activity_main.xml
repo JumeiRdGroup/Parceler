@@ -32,4 +32,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/toBundleWithArrayList"
+        android:text="注入各种类型的ArrayList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/toBundleWithSpareArray"
+        android:text="注入SpareArray"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>
