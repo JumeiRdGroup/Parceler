@@ -27,6 +27,7 @@ import com.lzh.compiler.parceler.annotation.BundleConverter;
 
 import java.io.Serializable;
 import java.lang.reflect.Array;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -216,17 +217,25 @@ public final class BundleHandle {
 
     private Object castInternal(Object data, Type type) {
         try {
-            type = box(type);
-            if (type instanceof Class && !((Class)type).isInstance(data)) {
-                return wrapCast(data, (Class) type);
+            Class real;
+            if (type instanceof ParameterizedType) {
+                real = (Class) ((ParameterizedType) type).getRawType();
+            } else {
+                real = (Class) type;
             }
-            return data;
+
+            real = box(real);
+            if (!real.isInstance(data)) {
+                return wrapCast(data, real);
+            } else {
+                return real.cast(data);
+            }
         } catch (ClassCastException cast) {
             throw new IllegalArgumentException(String.format("Cast data from %s to %s failed.", data.getClass(), type));
         }
     }
 
-    private Type box(Type type) {
+    private Class box(Class type) {
         if (type == byte.class) {
             type = Byte.class;
         } else if (type == short.class) {
@@ -260,7 +269,7 @@ public final class BundleHandle {
                 return (E) new StringBuffer((CharSequence) src);
             }
         }
-        throw new RuntimeException(String.format("Cast %s to %s failed", src.getClass(), clz));
+        throw new ClassCastException(String.format("Cast %s to %s failed", src.getClass(), clz));
     }
 
     @SuppressWarnings("unchecked")

@@ -7,7 +7,9 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.util.SparseArray;
 
+import com.alibaba.fastjson.TypeReference;
 import com.google.gson.Gson;
+import com.lzh.compiler.parceler.BundleFactory;
 import com.lzh.compiler.parceler.FastJsonConverter;
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
@@ -59,8 +61,8 @@ public class MainActivity extends BaseActivity {
                 .getBundle();
 
 
-        book = Parceler.createFactory(bundle)
-                .get("book", Book.class);
+        BundleFactory factory = Parceler.createFactory(bundle);
+        book = factory.get("book", Book.class);
         System.out.println("book = " + book);
     }
 
