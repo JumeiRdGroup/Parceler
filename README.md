@@ -10,13 +10,14 @@ Parceler是一款简单、轻量级的、用于在实体类与bundle之间进行
 
 ### 添加依赖
 
-LastestVersion=[ ![Download](https://api.bintray.com/packages/yjfnypeu/maven/Parceler/images/download.svg) ](https://bintray.com/yjfnypeu/maven/Parceler/_latestVersion)
+LastestVersion=[![](https://jitpack.io/v/yjfnypeu/Parceler.svg)](https://jitpack.io/#yjfnypeu/Parceler)
+
 
 ```Groovy
 //1.add it to build.gradle in Android module
 dependencies {
-    annotationProcessor "org.lzh.compiler.parceler:parceler-compiler:LastestVersion"
-    compile "org.lzh.compiler.parceler:parceler-api:LastestVersion"
+    annotationProcessor "com.github.yjfnypeu.Parceler:compiler:$LastestVersion"
+    compile "com.github.yjfnypeu.Parceler:api:$LastestVersion"
 }
 ```
 
