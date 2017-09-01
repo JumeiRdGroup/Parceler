@@ -36,8 +36,8 @@ dependencies {
     compile 'com.alibaba:fastjson:1.1.57.android'
     compile 'com.google.code.gson:gson:2.8.0'
 
-    annotationProcessor project(':injector')
-    compile project(':parceler')
+    annotationProcessor project(':compiler')
+    compile project(':api')
 
 //    annotationProcessor "org.lzh.compiler.parceler:parceler-compiler:$PARCELER_VERSION"
 //    compile "org.lzh.compiler.parceler:parceler-api:$PARCELER_VERSION"

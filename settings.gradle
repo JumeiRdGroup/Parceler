@@ -1,1 +1,1 @@
-include ':app', ':annotation', ':parceler', ':injector'
+include ':app', ':annotation', ':api', ':compiler'
