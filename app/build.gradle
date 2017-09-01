@@ -25,7 +25,7 @@ android {
     }
 }
 
-def PARCELER_VERSION='1.1.4'
+def PARCELER_VERSION='230d298813'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
@@ -39,16 +39,6 @@ dependencies {
     annotationProcessor project(':compiler')
     compile project(':api')
 
-//    annotationProcessor "org.lzh.compiler.parceler:parceler-compiler:$PARCELER_VERSION"
-//    compile "org.lzh.compiler.parceler:parceler-api:$PARCELER_VERSION"
-}
-
-tasks.withType(Javadoc) {
-    options{
-        encoding "UTF-8"
-        charSet 'UTF-8'
-        links "http://docs.oracle.com/javase/7/docs/api"
-    }
-    options.addStringOption('Xdoclint:none', '-quiet')
-
+//    annotationProcessor "com.github.yjfnypeu.Parceler:compiler:$PARCELER_VERSION"
+//    compile "com.github.yjfnypeu.Parceler:api:$PARCELER_VERSION"
 }
