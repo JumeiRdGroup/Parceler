@@ -1,4 +1,5 @@
-# Parceler  <a href="http://www.methodscount.com/?lib=org.lzh.compiler.parceler%3Aparceler-api%3A0.6"><img src="https://img.shields.io/badge/Methods count-core: 44 | deps: 1-e91e63.svg"/></a>
+# Parceler  
+<a href="http://www.methodscount.com/?lib=com.github.yjfnypeu.Parceler%3Aapi%3A1.2"><img src="https://img.shields.io/badge/Methods and size-core: 158 | deps: 24 | 17 KB-e91e63.svg"/></a>
 
 Parceler是一款简单、轻量级的、用于在实体类与bundle之间进行双向数据注入的框架。可支持任意数据类型注入。
 
