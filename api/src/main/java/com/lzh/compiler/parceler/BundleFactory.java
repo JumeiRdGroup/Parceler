@@ -78,7 +78,7 @@ public final class BundleFactory {
      * <p>请注意：此标记位起作用的前提条件包括：
      *     <ol>
      *         <li>含有有效的可用的数据转换器。</li>
-     *         <li>需要存储的数据源类型为非基本数据类型或者{@link String}</li>
+     *         <li>需要存储的数据源类型为非基本数据类型</li>
      *     </ol>
      *
      * @param forceConvert 是否强制进行转换。
@@ -129,6 +129,7 @@ public final class BundleFactory {
      *      是否强制要求进行转换。若设置为true, 且转换器不为null时。将强制先对数据源使用转换器进行转换后再放入Bundle中。
      * @return itself
      * @see BundleConverter
+     * @see #setForceConvert(boolean)
      */
     private BundleFactory putInternal(String key, Object data, Class<? extends BundleConverter> converterClass, boolean forceConvert) {
         if (key == null || data == null) {
@@ -137,7 +138,7 @@ public final class BundleFactory {
 
         try {
             BundleConverter converter = CacheManager.transformConverter(converterClass);
-            if (forceConvert && converter != null) {
+            if (forceConvert && converter != null && !Utils.isBaseType(data.getClass())) {
                 data = converter.convertToBundle(data);
                 converter = null;
             }
