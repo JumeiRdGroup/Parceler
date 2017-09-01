@@ -5,22 +5,18 @@ import com.lzh.compiler.parceler.annotation.BundleConverter;
 
 import java.lang.reflect.Type;
 
-/**
- * Created by haoge on 2017/7/25.
- */
-
-public class AutoJsonConverter implements BundleConverter<String, Object> {
+public class AutoJsonConverter implements BundleConverter {
 
     @Override
     public Object convertToEntity(Object data, Type type) {
         String json;
         if (data instanceof String) {
-            json = (String)data;
+            json = (String) data;
         } else if (data instanceof StringBuilder || data instanceof StringBuffer) {
             json = data.toString();
         } else {
             // convert it to string and go on.
-            json = convertToBundle(data);
+            json = (String) convertToBundle(data);
         }
 
         try {

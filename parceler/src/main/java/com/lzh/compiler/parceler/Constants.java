@@ -16,17 +16,17 @@
 package com.lzh.compiler.parceler;
 
 /**
- * A constants set
- * Created by lzh on 16/10/13.
+ *
+ * @author haoge
  */
 class Constants {
 
     /**
-     * Injector suffix
+     * 生成的注入器的类名后缀。
      */
     static final String SUFFIX = "$$Injector";
     /**
-     * should be filtered prefix.such as android/java library
+     * 需要被过滤包名前缀。
      */
     static final String[] FILTER_PREFIX = new String[]{
             "com.android",

@@ -7,10 +7,8 @@ import android.os.Parcelable;
 import android.util.Log;
 import android.util.SparseArray;
 
-import com.alibaba.fastjson.TypeReference;
-import com.google.gson.Gson;
 import com.lzh.compiler.parceler.BundleFactory;
-import com.lzh.compiler.parceler.FastJsonConverter;
+import com.lzh.compiler.parceler.annotation.FastJsonConverter;
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
 import com.lzh.compiler.parcelerdemo.bean.Book;
@@ -43,7 +41,8 @@ public class MainActivity extends BaseActivity {
     void toBundleConverterClick() {
         Book book = new Book("颈椎病康复指南", 2.50f);
         Bundle bundle = Parceler.createFactory(new Bundle())
-                .put("book", book, FastJsonConverter.class)
+                .setConverter(FastJsonConverter.class)
+                .put("book", book)
                 .getBundle();
         printBundle(bundle);
     }

@@ -2,7 +2,7 @@ package com.lzh.compiler.parcelerdemo;
 
 import android.os.Bundle;
 
-import com.lzh.compiler.parceler.FastJsonConverter;
+import com.lzh.compiler.parceler.annotation.FastJsonConverter;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.Converter;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;

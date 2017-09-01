@@ -87,20 +87,22 @@ public class ClassFactory {
 
     private void completeInjectToBundle(MethodSpec.Builder injectToBundle, FieldData fieldData) {
         if (fieldData.getConverter() != null) {
-            injectToBundle.addStatement("factory.put($S, entity.$N, $T.class)", fieldData.getKey(), fieldData.getVar().getSimpleName(), fieldData.getConverter());
+            injectToBundle.addStatement("factory.setConverter($T.class)", fieldData.getConverter());
         } else {
-            injectToBundle.addStatement("factory.put($S, entity.$N)", fieldData.getKey(), fieldData.getVar().getSimpleName());
+            injectToBundle.addStatement("factory.setConverter(null)");
         }
+        injectToBundle.addStatement("factory.put($S, entity.$N)", fieldData.getKey(), fieldData.getVar().getSimpleName());
     }
 
     private void completeInjectToTarget(MethodSpec.Builder injectToData, FieldData fieldData) {
         injectToData.addStatement("type = $T.findType($S, $T.class)",
                 Constants.CLASS_MANAGER, fieldData.getVar().getSimpleName(), ClassName.get(type));
         if (fieldData.getConverter() != null) {
-            injectToData.beginControlFlow("if((obj = factory.get($S, type, $T.class)) != null)", fieldData.getKey(), fieldData.getConverter());
+            injectToData.addStatement("factory.setConverter($T.class)", fieldData.getConverter());
         } else {
-            injectToData.beginControlFlow("if((obj = factory.get($S, type)) != null)", fieldData.getKey());
+            injectToData.addStatement("factory.setConverter(null)");
         }
+        injectToData.beginControlFlow("if((obj = factory.get($S, type)) != null)", fieldData.getKey());
         injectToData.addStatement("entity.$N = $T.wrapCast(obj)", fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS)
                 .endControlFlow();
         if (fieldData.isNonNull()) {

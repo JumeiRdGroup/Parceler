@@ -2,6 +2,9 @@ apply plugin: 'java'
 apply plugin: 'com.novoda.bintray-release'//添加
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly 'com.alibaba:fastjson:1.2.31'
+    compileOnly 'com.google.code.gson:gson:2.8.0'
 }
 targetCompatibility = '1.7'
 sourceCompatibility = '1.7'

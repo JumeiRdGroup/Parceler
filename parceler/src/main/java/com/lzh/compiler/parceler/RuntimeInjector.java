@@ -29,15 +29,11 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Provided a <b>Runtime Injector</b> to used.
- *
- * <p>This injector will be invoked when you disabled APT task.
+ * 提供一个完全基于反射使用的注入器。兼容非apt环境使用。
  */
 final class RuntimeInjector implements ParcelInjector{
 
-    /**
-     * An container to hold all of it fields that annotated by @Arg
-     */
+    /* 缓存任意实体类与其内部所配置的Arg参数数据的映射表*/
     private final static Map<Class, List<Args>> CONTAINER = new HashMap<>();
 
     private final static RuntimeInjector injector = new RuntimeInjector();
@@ -52,11 +48,8 @@ final class RuntimeInjector implements ParcelInjector{
         BundleFactory factory = Parceler.createFactory(bundle);
         for (Args item:list) {
             Object result;
-            if (item.converter != null) {
-                result = factory.get(item.key, item.field.getGenericType(), item.converter);
-            } else {
-                result = factory.get(item.key, item.field.getGenericType());
-            }
+            factory.setConverter(item.converter);
+            result = factory.get(item.key, item.field.getGenericType());
             if (result != null) {
                 setFieldValue(entity, result, item.field);
             }
@@ -68,11 +61,8 @@ final class RuntimeInjector implements ParcelInjector{
         BundleFactory factory = Parceler.createFactory(bundle);
         List<Args> list = findByEntity(entity.getClass());
         for (Args arg : list) {
-            if (arg.converter != null) {
-                factory.put(arg.key, getFieldValue(entity, arg.field), arg.converter);
-            } else {
-                factory.put(arg.key, getFieldValue(entity, arg.field));
-            }
+            factory.setConverter(arg.converter);
+            factory.put(arg.key, getFieldValue(entity, arg.field));
         }
     }
 
@@ -95,9 +85,9 @@ final class RuntimeInjector implements ParcelInjector{
     }
 
     /**
-     * <p>Find all of fields that annotated by {@link Arg} on this class include its superClass.
-     * @param entity The class who should be scan.
-     * @return All of fields be annotated by {@link Arg} or an empty list.
+     * 解析出实体类entity中(包括父类)。所有的被{@link Arg}所注解的字段数据。
+     * @param entity 被解析的实体类class
+     * @return 获取的数据
      */
     private List<Args> findByEntity(Class entity) {
         if (isSystemClass(entity)) {
@@ -125,6 +115,7 @@ final class RuntimeInjector implements ParcelInjector{
         return list;
     }
 
+    /* 过滤系统类。由于系统类不参与注入。过滤以加速运行*/
     private boolean isSystemClass(Class clz) {
         String clzName = clz.getCanonicalName();
         for (String prefix : Constants.FILTER_PREFIX) {

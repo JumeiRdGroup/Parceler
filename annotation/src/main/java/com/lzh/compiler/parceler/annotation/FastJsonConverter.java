@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lzh.compiler.parceler;
+package com.lzh.compiler.parceler.annotation;
 
 import com.alibaba.fastjson.JSON;
 import com.lzh.compiler.parceler.annotation.BundleConverter;
@@ -21,16 +21,17 @@ import com.lzh.compiler.parceler.annotation.BundleConverter;
 import java.lang.reflect.Type;
 
 /**
- * Provided a converter for fastjson to be used
+ * 默认提供的FastJson数据转换器。使用此转换器前。请确定你的项目依赖了fastjson。
+ *
  * @author haoge
  */
-public final class FastJsonConverter implements BundleConverter<String, Object> {
+public final class FastJsonConverter implements BundleConverter {
 
     @Override
     public Object convertToEntity(Object data, Type type) {
         String json;
         if (data instanceof String) {
-            json = (String)data;
+            json = (String) data;
         } else if (data instanceof StringBuilder || data instanceof StringBuffer) {
             json = data.toString();
         } else {
@@ -41,13 +42,14 @@ public final class FastJsonConverter implements BundleConverter<String, Object> 
     }
 
     @Override
-    public String convertToBundle(Object data) {
+    public Object convertToBundle(Object data) {
         return JSON.toJSONString(data);
     }
 
     static {
         try {
-            Class.forName(JSON.class.getCanonicalName());
+            //noinspection unused
+            String ignore = JSON.class.getCanonicalName();
         } catch (Throwable t) {
             throw new RuntimeException("You should add fastjson to your dependencies list first", t);
         }

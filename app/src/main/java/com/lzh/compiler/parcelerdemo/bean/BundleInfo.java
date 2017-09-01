@@ -6,9 +6,7 @@ import android.os.IBinder;
 import android.os.Parcelable;
 import android.util.SparseArray;
 
-import com.lzh.compiler.parceler.FastJsonConverter;
 import com.lzh.compiler.parceler.annotation.Arg;
-import com.lzh.compiler.parceler.annotation.Converter;
 
 import java.io.Serializable;
 import java.util.ArrayList;

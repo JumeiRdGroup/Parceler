@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.lzh.compiler.parceler;
+package com.lzh.compiler.parceler.annotation;
 
 import com.google.gson.Gson;
 import com.lzh.compiler.parceler.annotation.BundleConverter;
@@ -21,17 +21,17 @@ import com.lzh.compiler.parceler.annotation.BundleConverter;
 import java.lang.reflect.Type;
 
 /**
- * Provided a converter for google gson to be used
+ * 默认提供的使用Gson的数据转换器，使用此转换器前。请确定你的项目依赖了gson。
  * @author haoge
  */
-public class GsonConverter implements BundleConverter<String, Object>{
+public class GsonConverter implements BundleConverter{
     Gson gson = new Gson();
 
     @Override
     public Object convertToEntity(Object data, Type type) {
         String json;
         if (data instanceof String) {
-            json = (String)data;
+            json = (String) data;
         } else if (data instanceof StringBuilder || data instanceof StringBuffer) {
             json = data.toString();
         } else {
@@ -42,13 +42,14 @@ public class GsonConverter implements BundleConverter<String, Object>{
     }
 
     @Override
-    public String convertToBundle(Object data) {
+    public Object convertToBundle(Object data) {
         return gson.toJson(data);
     }
 
     static {
         try {
-            Class.forName(Gson.class.getCanonicalName());
+            //noinspection unused
+            String ignore = Gson.class.getCanonicalName();
         } catch (Throwable t) {
             throw new RuntimeException("You should add Gson to your dependencies list first", t);
         }

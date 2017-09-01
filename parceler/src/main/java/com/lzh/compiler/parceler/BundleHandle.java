@@ -33,11 +33,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * <p>The core class.
+ * <p>此类只应被{@link BundleFactory}使用。用于真正从{@link Bundle}数据源中读取或者存储数据。
  *
  * @author haoge
  */
-public final class BundleHandle {
+final class BundleHandle {
     private static BundleHandle handle = new BundleHandle();
     private BundleHandle () {}
     static BundleHandle get() {
@@ -45,17 +45,17 @@ public final class BundleHandle {
     }
 
     /**
-     * Put the data with key into bundle.
+     * 将任意类型数据data使用key放入Bundle中。
      *
      * <ul>
-     *     <li>If the data is suitable for bundle. put it directly</li>
-     *     <li>If the data is not suitable for bundle. transform it with converter and try again </li>
+     *     <li>如果data的数据类型能直接被放入{@link Bundle}, 则直接放入</li>
+     *     <li>如果data的数据类型不能直接被放入{@link Bundle}, 则使用转换器进行数据转换再放入</li>
      * </ul>
      *
-     * @param bundle The bundle container
-     * @param key The key to be used.
-     * @param data The data to put into bundle
-     * @param converter The converter class to be used if the data type is not suitable for bundle.
+     * @param bundle 用于存储数据的容器.
+     * @param key 用于存储数据的key值
+     * @param data 需要被放置的数据data
+     * @param converter 数据转换器实例
      */
     void toBundle(Bundle bundle, String key, Object data, BundleConverter converter) {
         try {
@@ -195,19 +195,24 @@ public final class BundleHandle {
     }
 
     /**
-     * <p>To cast the data to the required type. commonly it should be same with
+     * <p>将指定数据data转换为指定类型type数据并返回。
      *
-     * @param data The original data.
-     * @param type The required type.
-     * @param convertersClass The converter class.
-     * @return The transformed data.
+     * <ul>
+     *     <li>当data能直接与数据类型type匹配时，直接返回原始数据data</li>
+     *     <li>当data不能与type匹配时，使用数据转换器对原始数据data进行转换后再返回。</li>
+     * </ul>
+     *
+     * @param data 指定的数据data
+     * @param type 指定数据类型type
+     * @param convertersClass 数据转换器
+     * @return 转换后的指定type类型的数据。
      */
     Object cast(Object data, Type type, Class<? extends BundleConverter> convertersClass) {
         try {
             return castInternal(data, type);
         } catch (Throwable t) {
             if (convertersClass != null) {
-                data = ParcelerManager.transformConverter(convertersClass).convertToEntity(data, type);
+                data = CacheManager.transformConverter(convertersClass).convertToEntity(data, type);
                 return cast(data, type, null);
             } else {
                 throw new RuntimeException("cast failed:", t);
