@@ -2,6 +2,7 @@ package com.lzh.compiler.parcelerdemo;
 
 import android.os.Bundle;
 
+import com.lzh.compiler.parceler.annotation.BundleBuilder;
 import com.lzh.compiler.parceler.annotation.FastJsonConverter;
 import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.Converter;
@@ -12,7 +13,7 @@ import com.lzh.compiler.parcelerdemo.bean.Info;
 /**
  * Created by haoge on 2017/6/8.
  */
-
+@BundleBuilder
 public class BundleActivity extends BaseActivity{
 
     @Arg
