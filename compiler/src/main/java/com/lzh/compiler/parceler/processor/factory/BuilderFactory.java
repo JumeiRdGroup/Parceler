@@ -41,6 +41,8 @@ public class BuilderFactory {
         clzName = Utils.isEmpty(packName) ? clzName + Constants.BUILDER_SUFFIX
                 : clzName.substring(packName.length() + 1).replace(".","$") + Constants.BUILDER_SUFFIX;
 
+        TypeName builderClassName = ClassName.bestGuess(clzName);
+
         // create BuilderClass builder.
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(clzName)
                 .addModifiers(Modifier.PUBLIC);
@@ -48,8 +50,14 @@ public class BuilderFactory {
         // create BundleFactory field
         classBuilder.addField(Constants.CLASS_FACTORY, "factory", Modifier.PRIVATE);
 
+        // create getTarget static method
+        classBuilder.addMethod(MethodSpec.methodBuilder("getTarget")
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(Class.class)
+                .addStatement("return $T.class", type)
+                .build());
+
         // create create method
-        TypeName builderClassName = ClassName.bestGuess(clzName);
         classBuilder.addMethod(MethodSpec.methodBuilder("create")
                 .addParameter(Constants.CLASS_BUNDLE, "bundle")
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
