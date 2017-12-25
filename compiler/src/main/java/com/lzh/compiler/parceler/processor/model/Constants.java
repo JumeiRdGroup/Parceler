@@ -24,6 +24,7 @@ public class Constants {
     public static ClassName CLASS_FACTORY = ClassName.bestGuess("com.lzh.compiler.parceler.BundleFactory");
     public static ClassName CLASS_MANAGER = ClassName.bestGuess("com.lzh.compiler.parceler.CacheManager");
     public static ClassName CLASS_UTILS = ClassName.bestGuess("com.lzh.compiler.parceler.Utils");
+    public static ClassName CLASS_IBUNDLEBUILDER = ClassName.bestGuess("com.lzh.compiler.parceler.IBundleBuilder");
 
     public static final String METHOD_TO_ENTITY = "toEntity";
     public static final String METHOD_TO_BUNDLE = "toBundle";

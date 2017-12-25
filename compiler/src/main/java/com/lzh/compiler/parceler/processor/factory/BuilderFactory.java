@@ -45,17 +45,11 @@ public class BuilderFactory {
 
         // create BuilderClass builder.
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(clzName)
+                .addSuperinterface(Constants.CLASS_IBUNDLEBUILDER)
                 .addModifiers(Modifier.PUBLIC);
 
         // create BundleFactory field
         classBuilder.addField(Constants.CLASS_FACTORY, "factory", Modifier.PRIVATE);
-
-        // create getTarget static method
-        classBuilder.addMethod(MethodSpec.methodBuilder("getTarget")
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(Class.class)
-                .addStatement("return $T.class", type)
-                .build());
 
         // create create method
         classBuilder.addMethod(MethodSpec.methodBuilder("create")
@@ -67,16 +61,26 @@ public class BuilderFactory {
                 .addStatement("return builder")
                 .build());
 
+        // create getTarget static method
+        classBuilder.addMethod(MethodSpec.methodBuilder("getTarget")
+                .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
+                .returns(Class.class)
+                .addStatement("return $T.class", type)
+                .build());
+
         // create getFactory method
         classBuilder.addMethod(MethodSpec.methodBuilder("getFactory")
                 .returns(Constants.CLASS_FACTORY)
                 .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
                 .addStatement("return factory")
                 .build());
 
         // create getBundle method
         classBuilder.addMethod(MethodSpec.methodBuilder("getBundle")
                 .addModifiers(Modifier.PUBLIC)
+                .addAnnotation(Override.class)
                 .returns(Constants.CLASS_BUNDLE)
                 .addStatement("return factory.getBundle()")
                 .build());
