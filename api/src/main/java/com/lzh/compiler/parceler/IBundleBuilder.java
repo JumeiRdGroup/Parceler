@@ -6,7 +6,7 @@ public interface IBundleBuilder {
 
     Class getTarget();
 
-    Bundle getBundle();
+    Bundle build();
 
     BundleFactory getFactory();
 }

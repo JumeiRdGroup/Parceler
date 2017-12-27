@@ -24,7 +24,7 @@ class Constants {
     /**
      * 生成的注入器的类名后缀。
      */
-    static final String SUFFIX = "$$Injector";
+    static final String SUFFIX = "BundleInjector";
     /**
      * 需要被过滤包名前缀。
      */

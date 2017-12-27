@@ -7,8 +7,8 @@ import com.squareup.javapoet.ClassName;
  */
 
 public class Constants {
-    public static final String INJECTOR_SUFFIX = "$$Injector";
-    public static final String BUILDER_SUFFIX = "Builder";
+    public static final String INJECTOR_SUFFIX = "BundleInjector";
+    public static final String BUILDER_SUFFIX = "BundleBuilder";
 
     // some class name that not include in java library
 //    public static final String CLASS_NAME_BUNDLE = "android.os.Bundle";

@@ -87,7 +87,7 @@ public class IntentLauncher {
         } else {
             intent = new Intent(context, target);
         }
-        intent.putExtras(builder.getBundle());
+        intent.putExtras(builder.build());
         return intent;
     }
 

@@ -25,7 +25,7 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toIntentActivity(View view) {
-        IntentLauncher.create(LoginActivityBuilder.create(null)
+        IntentLauncher.create(LoginActivityBundleBuilder.create(null)
             .setUsername("IntentLauncher")
             .setPassword("123456"))
                 .setRequestCode(1001)

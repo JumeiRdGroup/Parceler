@@ -78,7 +78,7 @@ public class BuilderFactory {
                 .build());
 
         // create getBundle method
-        classBuilder.addMethod(MethodSpec.methodBuilder("getBundle")
+        classBuilder.addMethod(MethodSpec.methodBuilder("build")
                 .addModifiers(Modifier.PUBLIC)
                 .addAnnotation(Override.class)
                 .returns(Constants.CLASS_BUNDLE)
