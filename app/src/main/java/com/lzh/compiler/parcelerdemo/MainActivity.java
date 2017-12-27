@@ -1,5 +1,6 @@
 package com.lzh.compiler.parcelerdemo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -7,7 +8,9 @@ import com.lzh.compiler.parceler.IntentLauncher;
 import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.FastJsonConverter;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
-import com.lzh.compiler.parcelerdemo.coverter.AutoJsonConverter;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class MainActivity extends BaseActivity {
 
@@ -20,16 +23,30 @@ public class MainActivity extends BaseActivity {
     }
 
     public void toInjectorActivity(View view) {
-        Parceler.createFactory(null)
-                .getBundle();
     }
 
     public void toIntentActivity(View view) {
+        HashMap<String, String> map = new LinkedHashMap<>();
+        map.put("Hello", "world");
+        Intent intent = new Intent();
+        intent.putExtra("hashmap", map);
         IntentLauncher.create(LoginActivityBundleBuilder.create(null)
             .setUsername("IntentLauncher")
             .setPassword("123456"))
+                .setExtra(intent)
                 .setRequestCode(1001)
                 .start(this);
+    }
+
+    public void toTestCastActivity(View view) {
+        Intent intent = new Intent(this, TestCastActivity.class);
+        HashMap<String, String> map = new LinkedHashMap<>();
+        map.put("Hello", "World");
+        Bundle bundle = Parceler.createFactory(null)
+                .put("hashMap", map)
+                .getBundle();
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }
 

@@ -23,4 +23,11 @@
         android:text="使用IntentLauncher结合生成Builder进行启动"
         />
 
+    <Button
+        android:id="@+id/toTestCastActivity"
+        android:onClick="toTestCastActivity"
+        android:text="启动测试页面"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 </LinearLayout>

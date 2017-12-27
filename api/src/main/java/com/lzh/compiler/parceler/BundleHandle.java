@@ -31,6 +31,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 
 /**
  * <p>此类只应被{@link BundleFactory}使用。用于真正从{@link Bundle}数据源中读取或者存储数据。
@@ -263,9 +264,10 @@ final class BundleHandle {
 
     @SuppressWarnings("unchecked")
     private <E> E wrapCast (Object src, Class<E> clz) {
-        if (src.getClass().isAssignableFrom(Parcelable[].class)) {
+        Class<?> srcClass = src.getClass();
+        if (srcClass.equals(Parcelable[].class)) {
             return (E) castParcelableArr(clz.getComponentType(), (Parcelable[]) src);
-        } else if (src.getClass().isAssignableFrom(CharSequence[].class)) {
+        } else if (srcClass.equals(CharSequence[].class)) {
             return (E) castCharSequenceArr(clz.getComponentType(), (CharSequence[]) src);
         } else if (src instanceof String) {
             if (clz.equals(StringBuilder.class)) {
@@ -273,8 +275,20 @@ final class BundleHandle {
             } else if (clz.equals(StringBuffer.class)) {
                 return (E) new StringBuffer((CharSequence) src);
             }
+        } else if (srcClass.equals(HashMap.class) && HashMap.class.isAssignableFrom(clz)) {
+            return (E) castHashMap((HashMap)src, (Class<? extends HashMap>) clz);
         }
         throw new ClassCastException(String.format("Cast %s to %s failed", src.getClass(), clz));
+    }
+
+    private <E extends HashMap> E castHashMap(HashMap src, Class<E> type) {
+        try {
+            E hashMap = type.newInstance();
+            hashMap.putAll(src);
+            return hashMap;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @SuppressWarnings("unchecked")
