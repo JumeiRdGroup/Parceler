@@ -73,9 +73,9 @@ public class IntentLauncher {
         }
 
         Class<?> target = builder.getTarget();
-        if (!target.isAssignableFrom(Activity.class)
-                && !target.isAssignableFrom(Service.class)
-                && !target.isAssignableFrom(BroadcastReceiver.class)) {
+        if (!Activity.class.isAssignableFrom(target)
+                && !Service.class.isAssignableFrom(target)
+                && !BroadcastReceiver.class.isAssignableFrom(target)) {
             return null;
         }
 
@@ -112,11 +112,11 @@ public class IntentLauncher {
         Intent intent = getIntent(context);
         Class<?> target = builder.getTarget();
 
-        if (target.isAssignableFrom(Activity.class)) {
+        if (Activity.class.isAssignableFrom(target)) {
             startActivity(context, intent);
-        } else if (target.isAssignableFrom(Service.class)) {
+        } else if (Service.class.isAssignableFrom(target)) {
             context.startService(intent);
-        } else if (target.isAssignableFrom(BroadcastReceiver.class)) {
+        } else if (BroadcastReceiver.class.isAssignableFrom(target)) {
             context.sendBroadcast(intent);
         }
     }

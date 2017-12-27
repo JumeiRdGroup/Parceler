@@ -8,40 +8,19 @@
     tools:context="com.lzh.compiler.parcelerdemo.MainActivity">
 
     <Button
-        android:id="@+id/toBundleCommon"
+        android:id="@+id/toInjectorActivity"
+        android:onClick="toInjectorActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="普通数据注入到bundle"
+        android:text="Bundle与Entity间双向数据注入"
         />
 
     <Button
-        android:id="@+id/toBundleConverter"
-        android:text="使用转换器注入到bundle"
+        android:id="@+id/toIntentActivity"
+        android:onClick="toIntentActivity"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/toEntityConverter"
-        android:text="使用转换器注入到实体类"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/toBundleActivity"
-        android:text="跳转到BundleActivity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/toBundleWithArrayList"
-        android:text="注入各种类型的ArrayList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/toBundleWithSpareArray"
-        android:text="注入SpareArray"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:text="使用IntentLauncher结合生成Builder进行启动"
+        />
 
 </LinearLayout>
