@@ -25,7 +25,7 @@ android {
     }
 }
 
-def PARCELER_VERSION = 'f412bbe06c'
+def PARCELER_VERSION = '0091590ff5'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')

@@ -12,21 +12,28 @@
         android:onClick="toInjectorActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bundle与Entity间双向数据注入"
+        android:text="到数据注入功能展示页"
         />
+
+    <Button
+        android:id="@+id/toBundleActivity"
+        android:onClick="toBundleActivity"
+        android:text="到基本Bundle存取功能展示页"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/toIntentActivity"
         android:onClick="toIntentActivity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="使用IntentLauncher结合生成Builder进行启动"
+        android:text="使用IntentLauncher结合生成的Builder进行启动"
         />
 
     <Button
         android:id="@+id/toTestCastActivity"
         android:onClick="toTestCastActivity"
-        android:text="启动测试页面"
+        android:text="启动类型转换问题兼容测试页面"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

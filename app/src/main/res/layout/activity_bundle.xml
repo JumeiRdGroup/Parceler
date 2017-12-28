@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.lzh.compiler.parcelerdemo.BundleActivity">
+
+    <Button
+        android:id="@+id/put_normal_data"
+        android:onClick="putNormalData"
+        android:text="存入直接被Bundle所支持的数据实例"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/put_special_data"
+        android:onClick="putSpecialData"
+        android:text="存入需进行转换后才能进行存储的数据实例"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/get_data_without_parceler"
+        android:onClick="getDataWithoutParceler"
+        android:text="不使用Parceler从bundle中读取所有数据进行展示"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/get_data_with_parceler"
+        android:onClick="getDataWithParceler"
+        android:text="使用Parceler从Bundle中读取所有数据进行展示"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/result"
+        android:hint="结果展示"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

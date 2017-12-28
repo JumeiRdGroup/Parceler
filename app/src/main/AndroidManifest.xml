@@ -16,7 +16,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" />
-        <activity android:name=".TestCastActivity"></activity>
+        <activity android:name=".TestCastActivity" />
+        <activity android:name=".InjectorActivity" />
+        <activity android:name=".BundleActivity"></activity>
     </application>
 
 </manifest>
