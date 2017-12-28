@@ -91,4 +91,8 @@ public class ElementParser {
         ClassFactory clzFactory = new ClassFactory(list,type);
         clzFactory.generateCode();
     }
+
+    public List<FieldData> getFieldsList() {
+        return list;
+    }
 }

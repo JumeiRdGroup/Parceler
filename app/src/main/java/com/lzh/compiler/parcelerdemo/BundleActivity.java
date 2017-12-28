@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.lzh.compiler.parceler.BundleFactory;
 import com.lzh.compiler.parceler.Parceler;
+import com.lzh.compiler.parceler.annotation.BundleBuilder;
 import com.lzh.compiler.parcelerdemo.bean.Book;
 import com.lzh.compiler.parcelerdemo.bean.Info;
 
@@ -16,6 +17,7 @@ import java.util.Set;
 /**
  * 此页面用于展示如何使用Parceler进行Bundle的数据存取操作。
  */
+@BundleBuilder
 public class BundleActivity extends Activity {
 
     BundleFactory factory;

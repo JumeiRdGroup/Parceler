@@ -2,6 +2,7 @@ package com.lzh.compiler.parceler.processor.factory;
 
 import com.lzh.compiler.parceler.annotation.BundleBuilder;
 import com.lzh.compiler.parceler.processor.model.Constants;
+import com.lzh.compiler.parceler.processor.model.ElementParser;
 import com.lzh.compiler.parceler.processor.model.FieldData;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
@@ -12,6 +13,7 @@ import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.element.Modifier;
@@ -24,9 +26,9 @@ public class BuilderFactory {
     private TypeElement type;
     private List<FieldData> list;
 
-    BuilderFactory(TypeElement type, List<FieldData> list) {
+    public BuilderFactory(TypeElement type, ElementParser parser) {
         this.type = type;
-        this.list = list;
+        this.list = parser == null ? new ArrayList<FieldData>() : parser.getFieldsList();
     }
 
     public void generate() throws IOException {

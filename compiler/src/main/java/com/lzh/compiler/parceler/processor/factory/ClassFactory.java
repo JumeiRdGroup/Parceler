@@ -83,9 +83,6 @@ public class ClassFactory {
         JavaFile build = builder.build();
 
         build.writeTo(UtilMgr.getMgr().getFiler());
-
-        // create builder class.
-        new BuilderFactory(type, list).generate();
     }
 
     private void completeInjectToBundle(MethodSpec.Builder injectToBundle, FieldData fieldData) {

@@ -1,6 +1,8 @@
 package com.lzh.compiler.parceler.processor;
 
 import com.lzh.compiler.parceler.annotation.Arg;
+import com.lzh.compiler.parceler.annotation.BundleBuilder;
+import com.lzh.compiler.parceler.processor.factory.BuilderFactory;
 import com.lzh.compiler.parceler.processor.model.ElementParser;
 import com.lzh.compiler.parceler.processor.util.UtilMgr;
 import com.lzh.compiler.parceler.processor.util.Utils;
@@ -23,13 +25,30 @@ public class ParcelerCompiler extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
         try {
-            parseArgElement(roundEnv);
+            Map<TypeElement, ElementParser> map = parseArgElement(roundEnv);
+            parseBuilderElement(roundEnv, map);
         } catch (ParcelException e) {
             e.printStackTrace();
             error(e.getEle(),e.getMessage());
             return true;
         }
         return false;
+    }
+
+    private void parseBuilderElement(RoundEnvironment roundEnv, Map<TypeElement, ElementParser> map) throws ParcelException {
+        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(BundleBuilder.class);
+        TypeElement type;
+        try {
+            for (Element element : elements) {
+                type = (TypeElement) element;
+                ElementParser parser = map.get(type);
+                new BuilderFactory(type, parser).generate();
+            }
+        } catch (ParcelException e) {
+            throw e;
+        } catch (Throwable e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -86,6 +105,7 @@ public class ParcelerCompiler extends AbstractProcessor {
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> set = new HashSet<>();
         set.add(Arg.class.getCanonicalName());
+        set.add(BundleBuilder.class.getCanonicalName());
         return set;
     }
 
