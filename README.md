@@ -5,20 +5,30 @@ Parceler是一款简单、轻量级的、用于在实体类与bundle之间进行
 
 ### 特性
 
+- 超级精简：总共方法数不到100
 - 可以存取任意数据类型
 - 存取api统一
 - 自动修复类型不匹配问题
 - 支持数据转换器，以适配更多使用场景
 - 自动在Bundle与实体类间注入数据
 - 提供缓存机制提供性能优化
+- 使用BundleBuilder, 避免key值硬编码
+- 使用IntentLauncher，方便的进行跨页面跳转传值
 
 ### 添加依赖
+
+添加使用JitPack仓库
+
+```Groovy
+// 加入jitpack仓库依赖
+maven { url 'https://jitpack.io' }
+```
 
 LastestVersion=[![](https://jitpack.io/v/yjfnypeu/Parceler.svg)](https://jitpack.io/#yjfnypeu/Parceler)
 
 
 ```Groovy
-//1.add it to build.gradle in Android module
+// 添加依赖
 dependencies {
     annotationProcessor "com.github.yjfnypeu.Parceler:compiler:$LastestVersion"
     compile "com.github.yjfnypeu.Parceler:api:$LastestVersion"
@@ -28,6 +38,10 @@ dependencies {
 ### 用法
 
 [请参考wiki文档](https://github.com/yjfnypeu/Parceler/wiki)
+
+Wiki文档比较零散，也可以参考下方的博客：
+
+[Android开源: 快用Parceler来优雅的进行Bundle数据存取！](https://juejin.im/post/5a30c2056fb9a045055e1e2d)
 
 ### Proguard
 ```Proguard
