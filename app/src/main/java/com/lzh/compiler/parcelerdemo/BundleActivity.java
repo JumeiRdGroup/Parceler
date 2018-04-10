@@ -10,6 +10,8 @@ import com.lzh.compiler.parceler.Parceler;
 import com.lzh.compiler.parceler.annotation.BundleBuilder;
 import com.lzh.compiler.parcelerdemo.bean.Book;
 import com.lzh.compiler.parcelerdemo.bean.Info;
+import com.lzh.compiler.parcelerdemo.bean.NormalUser;
+import com.lzh.compiler.parcelerdemo.bean.SerialUser;
 
 import java.lang.reflect.Type;
 import java.util.Set;
@@ -68,5 +70,21 @@ public class BundleActivity extends Activity {
     private void resolveKeyValue(StringBuilder builder, String key, Type type) {
         builder.append("\r\n");
         builder.append(key + " = " + factory.get(key, type));
+    }
+
+    public void testSerialAndNormalStore(View view) {
+        NormalUser normalUser = new NormalUser();
+        SerialUser serialUser = new SerialUser();
+        normalUser.username = "this is normal user bean";
+        serialUser.username = "this is serial user bean";
+
+        BundleFactory factory = Parceler.createFactory(new Bundle());
+        factory.put("normal", normalUser);
+        factory.put("serial", serialUser);
+
+        Bundle result = factory.getBundle();
+
+        NormalUser newNormalUser = factory.get("normal", NormalUser.class);
+        SerialUser newSerialUser = factory.get("serial", SerialUser.class);
     }
 }

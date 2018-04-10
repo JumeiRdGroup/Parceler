@@ -7,15 +7,13 @@ import android.view.View;
 import com.lzh.compiler.parceler.IBundleBuilder;
 import com.lzh.compiler.parceler.IntentLauncher;
 import com.lzh.compiler.parceler.Parceler;
-import com.lzh.compiler.parceler.annotation.BundleBuilder;
 import com.lzh.compiler.parceler.annotation.FastJsonConverter;
 import com.lzh.compiler.parcelerdemo.base.BaseActivity;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +42,9 @@ public class MainActivity extends BaseActivity {
         IBundleBuilder builder = LoginActivityBundleBuilder.create(null)
                 .setUsername("IntentLauncher tester")
                 .setPassword("123456");
+
+        Parceler.createFactory(new Bundle())
+                .getBundle();
 
         // 使用IntentLauncher结合Builder进行组件启动
         IntentLauncher.create(builder)
