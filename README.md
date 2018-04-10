@@ -104,6 +104,7 @@ Bundle result = factory.getBundle();
 ```
 
 最终result数据：
+
 ![](https://user-gold-cdn.xitu.io/2018/3/30/162766469fe51c10?w=653&h=175&f=png&s=42165)
 
 可以看到：NormalUser的实例被自动转换成了JSON进行存储了。
