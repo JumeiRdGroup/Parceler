@@ -16,11 +16,13 @@ public class IntentLauncher {
 
     private int requestCode = -1;
     private Bundle options;
-    private IBundleBuilder builder;
+    private Bundle bundle;
+    private Class<?> target;
     private Intent extra;
 
-    private IntentLauncher(IBundleBuilder builder) {
-        this.builder = builder;
+    private IntentLauncher(Bundle bundle, Class<?> target) {
+        this.bundle = bundle;
+        this.target = target;
     }
 
     /**
@@ -33,7 +35,11 @@ public class IntentLauncher {
      * @param builder 提供数据的Builder
      */
     public static IntentLauncher create(IBundleBuilder builder) {
-        return new IntentLauncher(builder);
+        return new IntentLauncher(builder.build(), builder.getTarget());
+    }
+
+    public static IntentLauncher create(Bundle bundle, Class<?> target) {
+        return new IntentLauncher(bundle, target);
     }
 
     /**
@@ -72,7 +78,7 @@ public class IntentLauncher {
             return null;
         }
 
-        Class<?> target = builder.getTarget();
+        Class<?> target = this.target;
         if (!Activity.class.isAssignableFrom(target)
                 && !Service.class.isAssignableFrom(target)
                 && !BroadcastReceiver.class.isAssignableFrom(target)) {
@@ -87,7 +93,7 @@ public class IntentLauncher {
         } else {
             intent = new Intent(context, target);
         }
-        intent.putExtras(builder.build());
+        intent.putExtras(this.bundle);
         return intent;
     }
 
@@ -110,7 +116,7 @@ public class IntentLauncher {
             return;
         }
         Intent intent = getIntent(context);
-        Class<?> target = builder.getTarget();
+        Class<?> target = this.target;
 
         if (Activity.class.isAssignableFrom(target)) {
             startActivity(context, intent);
