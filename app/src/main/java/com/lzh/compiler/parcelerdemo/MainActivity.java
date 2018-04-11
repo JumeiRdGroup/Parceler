@@ -43,9 +43,6 @@ public class MainActivity extends BaseActivity{
                 .setUsername("IntentLauncher tester")
                 .setPassword("123456");
 
-        Parceler.createFactory(new Bundle())
-                .getBundle();
-
         // 使用IntentLauncher结合Builder进行组件启动
         IntentLauncher.create(builder)
                 .setRequestCode(1001)
@@ -75,6 +72,12 @@ public class MainActivity extends BaseActivity{
         startActivity(intent);
     }
 
+    public void toKotlinLoginActivity(View view) {
+        IBundleBuilder builder = KotlinLoginActivityBundleBuilder.create(null)
+                .setUsername("Kotlin")
+                .setPassword("123455");
 
+        IntentLauncher.create(builder).start(this);
+    }
 }
 

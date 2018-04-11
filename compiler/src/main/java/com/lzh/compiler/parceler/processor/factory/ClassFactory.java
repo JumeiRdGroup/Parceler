@@ -91,7 +91,11 @@ public class ClassFactory {
         } else {
             injectToBundle.addStatement("factory.setConverter(null)");
         }
-        injectToBundle.addStatement("factory.put($S, entity.$N)", fieldData.getKey(), fieldData.getVar().getSimpleName());
+        if (Utils.isPrivate(fieldData.getVar())) {
+            injectToBundle.addStatement("factory.put($S, entity.$N())", fieldData.getKey(), Utils.combineGetMethodName(fieldData.getVar()));
+        } else {
+            injectToBundle.addStatement("factory.put($S, entity.$N)", fieldData.getKey(), fieldData.getVar().getSimpleName());
+        }
     }
 
     private void completeInjectToTarget(MethodSpec.Builder injectToData, FieldData fieldData) {
@@ -103,8 +107,14 @@ public class ClassFactory {
             injectToData.addStatement("factory.setConverter(null)");
         }
         injectToData.beginControlFlow("if((obj = factory.get($S, type)) != null)", fieldData.getKey());
-        injectToData.addStatement("entity.$N = $T.wrapCast(obj)", fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS)
-                .endControlFlow();
+
+        if (Utils.isPrivate(fieldData.getVar())) {
+            String setter = Utils.combineSetMethodName(fieldData.getVar());
+            injectToData.addStatement("entity.$N(($T)$T.wrapCast(obj))", setter, TypeName.get(fieldData.getVar().asType()), Constants.CLASS_UTILS);
+        } else {
+            injectToData.addStatement("entity.$N = $T.wrapCast(obj)", fieldData.getVar().getSimpleName(), Constants.CLASS_UTILS);
+        }
+        injectToData.endControlFlow();
         if (fieldData.isNonNull()) {
             injectToData.beginControlFlow("else")
                     .addStatement("throw new $T($S)", RuntimeException.class, "Could not be null")

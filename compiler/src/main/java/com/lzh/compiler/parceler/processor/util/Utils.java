@@ -36,63 +36,31 @@ public class Utils {
     }
 
     /**
-     * Check out whether the field is an effective field or not<br>
-     *     to scan and find get/set method with field <code>var</code><br>
-     *     both of methods should available
-     * @param var a element of field
-     * @return true if it is a effective field
-     */
-    public static boolean checkHasGetSetMethod(VariableElement var) {
-        List<? extends Element> elements = var.getEnclosingElement().getEnclosedElements();
-        ExecutableElement getMethod = null;
-        ExecutableElement setMethod = null;
-        String getMethodName = Utils.combineGetMethodName(var.getSimpleName().toString());
-        String setMethodName = Utils.combineSetMethodName(var.getSimpleName().toString());
-        for (Element ele : elements) {
-            if (ele.getKind() != ElementKind.METHOD) continue;
-            if (ele.getModifiers().contains(Modifier.PRIVATE)) continue;
-            String methodName = ele.getSimpleName().toString();
-            if (getMethodName.equals(methodName)) {
-                getMethod = (ExecutableElement) ele;
-            } else if (setMethodName.equals(methodName)) {
-                setMethod = (ExecutableElement) ele;
-            }
-        }
-
-        if (getMethod == null || setMethod == null) {
-            throw new ParcelException(String.format("The field %s should has get/set method while it is modified by private",var.getSimpleName()),var);
-        }
-
-        String fieldType = var.asType().toString();
-        if (getMethod.getParameters().size() != 0 || !getMethod.getReturnType().toString().equals(fieldType)) {
-            throw new ParcelException(String.format("The get-method %s can not matched with field %s",getMethod.getSimpleName(),var.getSimpleName()),getMethod);
-        }
-        if (!(setMethod.getParameters().size() == 1 && setMethod.getParameters().get(0).asType().toString().equals(fieldType))) {
-            throw new ParcelException(String.format("The set-method %s can not matched with field %s",setMethod.getSimpleName(),var.getSimpleName()),setMethod);
-        }
-
-
-
-        return true;
-    }
-
-    /**
      * combine a set-method name from field name
-     * @param fieldName field name,should non-null
+     * @param field field
      * @return set-method name
      */
-    public static String combineSetMethodName(String fieldName) {
-        return "set" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
+    public static String combineSetMethodName(VariableElement field) {
+        return combineMethodName(field.getSimpleName().toString(), "set");
     }
-
 
     /**
      * combine a get-method name form field name
-     * @param fieldName field name, non-null
+     * @param field field
      * @return get-method name
      */
-    public static String combineGetMethodName(String fieldName) {
-        return "get" + fieldName.substring(0,1).toUpperCase() + fieldName.substring(1);
+    public static String combineGetMethodName(VariableElement field) {
+        String prefix;
+        if (TypeName.BOOLEAN.equals(TypeName.get(field.asType()))) {
+            prefix = "is";
+        } else {
+            prefix = "get";
+        }
+        return combineMethodName(field.getSimpleName().toString(), prefix);
+    }
+
+    private static String combineMethodName(String fieldName, String prefix) {
+        return String.format("%s%s%s", prefix, fieldName.substring(0, 1).toUpperCase(), fieldName.substring(1));
     }
 
     /**
@@ -102,42 +70,6 @@ public class Utils {
      */
     public static boolean isEmpty(CharSequence data) {
         return data == null || data.length() == 0;
-    }
-
-    /**
-     * Check out if the class <b>{@code type}</b> is a subclass of interface {@code superInterface}
-     * @param type the class to check
-     * @param superInterface the interface name
-     * @return true if is subclass
-     */
-    public static boolean isSuperInterface (TypeElement type,String superInterface) {
-        if (type == null || "java.lang.Object".equals(type.getQualifiedName().toString())) return false;
-
-        if (superInterface.equals(type.getQualifiedName().toString())) return true;
-
-        List<? extends TypeMirror> interfaces = type.getInterfaces();
-        for (TypeMirror mirror : interfaces) {
-            String interName = mirror.toString();
-            if (superInterface.equals(interName)) {
-                return true;
-            }
-        }
-        TypeMirror superclass = type.getSuperclass();
-        type = (TypeElement) UtilMgr.getMgr().getTypeUtils().asElement(superclass);
-        return isSuperInterface(type,superInterface);
-    }
-
-    /**
-     * Check out if the class {@code type} is a subclass of {@code superClass}
-     * @param type the class to check
-     * @param superClass the super class name
-     * @return true if is subclass
-     */
-    public static boolean isSuperClass (TypeElement type,String superClass) {
-        return !(type == null || "java.lang.Object".equals(type.getQualifiedName().toString()))
-                && (type.getQualifiedName().toString().equals(superClass)
-                        || isSuperClass((TypeElement) UtilMgr.getMgr().getTypeUtils().asElement(type.getSuperclass()), superClass));
-
     }
 
     /**
@@ -172,31 +104,7 @@ public class Utils {
         return false;
     }
 
-    private static TypeElement getClassByName(String clzName) {
-        return UtilMgr.getMgr().getElementUtils().getTypeElement(clzName);
-    }
-
-    public static TypeName getTypeNameByName (String clzName) {
-        return TypeName.get(getClassByName(clzName).asType());
-    }
-
-    /**
-     * Check out if is base type.such as int,boolean but not Integer,Boolean
-     * @param tn type
-     * @return true if it is a unBox type
-     */
-    public static boolean isUnboxType(TypeName tn) {
-        switch (tn.toString()) {
-            case "boolean":
-            case "byte":
-            case "char":
-            case "short":
-            case "int":
-            case "long":
-            case "float":
-            case "double":
-                return true;
-        }
-        return false;
+    public static boolean isPrivate(VariableElement field) {
+        return field.getModifiers().contains(Modifier.PRIVATE);
     }
 }

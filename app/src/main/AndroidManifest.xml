@@ -18,7 +18,8 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".TestCastActivity" />
         <activity android:name=".InjectorActivity" />
-        <activity android:name=".BundleActivity"></activity>
+        <activity android:name=".BundleActivity"/>
+        <activity android:name=".KotlinLoginActivity"/>
     </application>
 
 </manifest>
