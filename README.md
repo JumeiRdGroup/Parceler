@@ -9,6 +9,7 @@ Parceler是一款简单、轻量级的Bundle数据存取扩展框架。
 3. 将数据从Bundle容易中注入到指定的成员变量中去
 4. 将数据从指定成员变量中注入到Bundle中去
 5. 更方便的进行页面启动传值(避免key值硬编码)
+6. 支持在kotlin环境下使用
 
 更重要的：框架的**总方法数不到100，且无任何额外依赖**！
 
@@ -212,6 +213,36 @@ IntentLauncher.create(builder)
 	
 // 或者需要直接使用装载的数据
 Bundle result = builder.build();
+```
+
+### 5. 在kotlin环境下进行使用
+
+请注意：在kotlin环境下，需要将annotationProcessor替换为kapt进行使用：
+
+> kapt "com.github.yjfnypeu.Parceler:compiler:$LastestVersion"
+
+#### 存取数据示例：
+
+```
+
+val factory = Parceler.createFactory(null)
+// 存入数据
+factory.put("name", name)
+// 读取数据
+user = factory.get("name", String::class.java)
+```
+
+#### 数据注入示例:
+
+```
+class KotlinLoginActivity : BaseActivity() {
+	
+	@Arg
+	var username: String? = null
+	@Arg
+	var password: String? = null
+	...
+}
 ```
 
 ## 混淆配置
