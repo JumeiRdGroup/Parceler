@@ -28,7 +28,7 @@ android {
     }
 }
 
-def PARCELER_VERSION = '1.3.5'
+def PARCELER_VERSION = 'ea4b3bd74e'
 
 dependencies {
     kapt project(':compiler')
