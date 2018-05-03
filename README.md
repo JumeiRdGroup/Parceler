@@ -10,6 +10,7 @@ Parceler是一款简单、轻量级的Bundle数据存取扩展框架。
 4. 将数据从指定成员变量中注入到Bundle中去
 5. 更方便的进行页面启动传值(避免key值硬编码)
 6. 支持在kotlin环境下使用
+7. 实现onActivityResult回调派发。避免到onActivityResult中做一堆判断。
 
 更重要的：框架的**总方法数不到100，且无任何额外依赖**！
 
@@ -161,7 +162,8 @@ public class UserActivity extends BaseActivity {
 	// 直接使用。
 	@Arg
 	User user;
-	@Arg
+	// 使用指定key值
+	@Arg("rename_address")
 	Address address;
 	@Arg
 	int age;
@@ -170,6 +172,8 @@ public class UserActivity extends BaseActivity {
 
 }
 ```
+
+然后当此UserActivity页面启动后，即可自动将getIntent中的bundle数据，注入到这些被Arg所注解的成员变量中去。
 
 ### 4. 使用BundleBuilder, 避免key值硬编码
 
@@ -244,36 +248,6 @@ Parceler.createLauncher(TargetActivity.class, bundle)
 ```
 
 友情提醒：当配置了有效的回调之后。可以选择不再设置requestCode。不用再每次都抓耳挠腮的去为requestCode取值了。
-
-### 5. 在kotlin环境下进行使用
-
-请注意：在kotlin环境下，需要将annotationProcessor替换为kapt进行使用：
-
-> kapt "com.github.yjfnypeu.Parceler:compiler:$LastestVersion"
-
-#### 存取数据示例：
-
-```
-
-val factory = Parceler.createFactory(null)
-// 存入数据
-factory.put("name", name)
-// 读取数据
-user = factory.get("name", String::class.java)
-```
-
-#### 数据注入示例:
-
-```
-class KotlinLoginActivity : BaseActivity() {
-	
-	@Arg
-	var username: String? = null
-	@Arg
-	var password: String? = null
-	...
-}
-```
 
 ## 混淆配置
 ```Proguard
