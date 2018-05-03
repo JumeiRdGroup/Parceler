@@ -89,7 +89,7 @@ public class BuilderFactory {
 
         // create setter methods
         for (FieldData field : list) {
-            MethodSpec.Builder builder = MethodSpec.methodBuilder(Utils.combineSetMethodName(field.getVar()))
+            MethodSpec.Builder builder = MethodSpec.methodBuilder(Utils.combineMethodName(field.getKey(), "set"))
                     .addModifiers(Modifier.PUBLIC)
                     .returns(builderClassName)
                     .addParameter(TypeName.get(field.getVar().asType()), field.getKey());

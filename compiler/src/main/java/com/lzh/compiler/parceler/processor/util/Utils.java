@@ -59,7 +59,7 @@ public class Utils {
         return combineMethodName(field.getSimpleName().toString(), prefix);
     }
 
-    private static String combineMethodName(String fieldName, String prefix) {
+    public static String combineMethodName(String fieldName, String prefix) {
         return String.format("%s%s%s", prefix, fieldName.substring(0, 1).toUpperCase(), fieldName.substring(1));
     }
 

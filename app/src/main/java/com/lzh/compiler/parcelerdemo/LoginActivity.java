@@ -10,9 +10,9 @@ import com.lzh.compiler.parcelerdemo.base.BaseActivity;
 @BundleBuilder
 public class LoginActivity extends BaseActivity{
 
-    @Arg
+    @Arg("username")
     private String username;
-    @Arg
+    @Arg("password")
     String password;
 
     @Override
