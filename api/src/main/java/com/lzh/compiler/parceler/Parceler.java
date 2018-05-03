@@ -15,10 +15,10 @@
  */
 package com.lzh.compiler.parceler;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.lzh.compiler.parceler.annotation.Arg;
 import com.lzh.compiler.parceler.annotation.BundleConverter;
 
 import java.lang.ref.WeakReference;
@@ -187,12 +187,24 @@ public final class Parceler {
         return new BundleFactory(src);
     }
 
+    public static IntentLauncher createLauncher(IBundleBuilder builder) {
+        return IntentLauncher.create(builder);
+    }
+
+    public static IntentLauncher createLauncher(Class<?> target, Bundle bundle) {
+        return IntentLauncher.create(bundle, target);
+    }
+
     /**
      * 针对{@link BundleFactory}指定默认使用的数据转换器。
      * @param converter 默认使用的转换器class. 此class应含有一个默认的无参构造。便于框架需要使用的来构造使用。
      */
     public static void setDefaultConverter(Class<? extends BundleConverter> converter) {
         BundleFactory.DEFAULT_CONVERTER = converter;
+    }
+
+    public static boolean dispatchActivityResult(Activity activity, int requestCode, int resultCode, Intent data) {
+        return ActivityResultDispatcher.get().dispatchActivityResult(activity, requestCode, resultCode, data);
     }
 
     private Parceler () {}

@@ -30,4 +30,10 @@ public class LoginActivity extends BaseActivity{
     public void setUsername(String username) {
         this.username = username;
     }
+
+    @Override
+    public void onBackPressed() {
+        setResult(1);
+        finish();
+    }
 }

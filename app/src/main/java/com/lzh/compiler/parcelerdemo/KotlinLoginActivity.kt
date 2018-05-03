@@ -25,4 +25,9 @@ class KotlinLoginActivity : BaseActivity() {
         findViewById<EditText>(R.id.username).setText(username)
         findViewById<EditText>(R.id.password).setText(password)
     }
+
+    override fun onBackPressed() {
+        setResult(2)
+        finish()
+    }
 }

@@ -8,17 +8,22 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
+import java.util.Random;
+
 /**
  * 用于配合BundleBuilder生成类进行使用的启动器。可用于进行Activity/Service/BroadcastReceiver启动。
  * @author haoge on 2017/12/26.
  */
 public class IntentLauncher {
 
+    private ActivityResultCallback callback;
     private int requestCode = -1;
     private Bundle options;
     private Bundle bundle;
     private Class<?> target;
     private Intent extra;
+
+    private static Random sCodeGenerator;
 
     private IntentLauncher(Bundle bundle, Class<?> target) {
         this.bundle = bundle;
@@ -34,11 +39,11 @@ public class IntentLauncher {
      *
      * @param builder 提供数据的Builder
      */
-    public static IntentLauncher create(IBundleBuilder builder) {
+    static IntentLauncher create(IBundleBuilder builder) {
         return new IntentLauncher(builder.build(), builder.getTarget());
     }
 
-    public static IntentLauncher create(Bundle bundle, Class<?> target) {
+    static IntentLauncher create(Bundle bundle, Class<?> target) {
         return new IntentLauncher(bundle, target);
     }
 
@@ -49,6 +54,15 @@ public class IntentLauncher {
      */
     public IntentLauncher setRequestCode(int requestCode) {
         this.requestCode = requestCode;
+        return this;
+    }
+
+    /**
+     * 设置在onActivityResult时使用的回调。
+     * @param callback callback
+     */
+    public IntentLauncher setResultCallback(ActivityResultCallback callback) {
+        this.callback = callback;
         return this;
     }
 
@@ -129,16 +143,24 @@ public class IntentLauncher {
 
     private void startActivity(Context context, Intent intent) {
         if (context instanceof Activity) {
+            if (callback != null && requestCode == -1) {
+                requestCode = sCodeGenerator.nextInt(Integer.MAX_VALUE);
+            }
             Activity activity = (Activity) context;
             if (options != null && Build.VERSION.SDK_INT >= 16) {
                 activity.startActivityForResult(intent, requestCode, options);
             } else {
                 activity.startActivityForResult(intent, requestCode);
             }
+            ActivityResultDispatcher.get().bindRequestArgs(activity, requestCode, callback);
         } else {
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
         }
+    }
+
+    static {
+        sCodeGenerator = new Random();
     }
 
 }

@@ -1,6 +1,7 @@
 package com.lzh.compiler.parcelerdemo.base;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.lzh.compiler.parceler.Parceler;
@@ -29,5 +30,10 @@ public abstract class BaseActivity extends Activity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         Parceler.toEntity(this,savedInstanceState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Parceler.dispatchActivityResult(this, requestCode, resultCode, data);
     }
 }
