@@ -15,21 +15,21 @@ Parceler是一款简单、轻量级的Bundle数据存取扩展框架。
 
 ## 依赖
 
-添加使用JitPack仓库
+> 添加JitPack仓库
 
 ```Groovy
-// 加入jitpack仓库依赖
 maven { url 'https://jitpack.io' }
 ```
 
+> 添加依赖
+
 LastestVersion=[![](https://jitpack.io/v/yjfnypeu/Parceler.svg)](https://jitpack.io/#yjfnypeu/Parceler)
 
-
 ```Groovy
-// 添加依赖
 dependencies {
-    annotationProcessor "com.github.yjfnypeu.Parceler:compiler:$LastestVersion"
-    implementation "com.github.yjfnypeu.Parceler:api:$LastestVersion"
+	// 若要在kotlin环境下使用，请将annotationProcessor替换为kapt。
+	annotationProcessor "com.github.yjfnypeu.Parceler:compiler:$LastestVersion"
+	implementation "com.github.yjfnypeu.Parceler:api:$LastestVersion"
 }
 ```
 
@@ -208,12 +208,42 @@ IBundleBuilder builder = UserActivityBundleBuilder.create(new Bundle())
 	.setAge(age);
 
 // 使用自带提供的IntentLauncher类，方便的进行启动
-IntentLauncher.create(builder)
+Parceler.createLauncher(builder)
 	.start(context);
 	
 // 或者需要直接使用装载的数据
 Bundle result = builder.build();
 ```
+
+### 5. 使用回调处理onActivityResult
+
+使用此回调机制。需要在BaseActivity中配置回调的派发方法：
+
+```
+public class BaseActivity extends Activity {
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		Parceler.dispatchActivityResult(this, requestCode, resultCode, data);
+	}
+}
+```
+
+然后即可直接在启动时分别配置回调监听器：
+
+```
+ActivityResultCallback callback = new ActivityResultCallback() {
+            @Override
+            public void onResult(int resultCode, Intent data) {
+                // TODO
+            }
+        };
+
+Parceler.createLauncher(TargetActivity.class, bundle)
+	.setResultCallback(callback)
+	.start(activity);
+```
+
+友情提醒：当配置了有效的回调之后。可以选择不再设置requestCode。不用再每次都抓耳挠腮的去为requestCode取值了。
 
 ### 5. 在kotlin环境下进行使用
 
