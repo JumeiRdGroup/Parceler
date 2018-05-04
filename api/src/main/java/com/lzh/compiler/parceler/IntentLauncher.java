@@ -144,7 +144,7 @@ public class IntentLauncher {
     private void startActivity(Context context, Intent intent) {
         if (context instanceof Activity) {
             if (callback != null && requestCode == -1) {
-                requestCode = sCodeGenerator.nextInt(Integer.MAX_VALUE);
+                requestCode = sCodeGenerator.nextInt(0x0000FFFF);
             }
             Activity activity = (Activity) context;
             if (options != null && Build.VERSION.SDK_INT >= 16) {
