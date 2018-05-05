@@ -6,3 +6,11 @@ dependencies {
 }
 targetCompatibility = '1.7'
 sourceCompatibility = '1.7'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            pom.artifactId = "parceler-compiler"
+        }
+    }
+}
