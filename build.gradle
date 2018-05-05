@@ -26,3 +26,4 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
+apply from: './parse-local.gradle'
