@@ -42,7 +42,7 @@ public class GsonConverter implements BundleConverter{
     }
 
     @Override
-    public Object convertToBundle(Object data) {
+    public String convertToBundle(Object data) {
         return gson.toJson(data);
     }
 

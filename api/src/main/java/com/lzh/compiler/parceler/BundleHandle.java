@@ -19,6 +19,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Size;
 import android.util.SizeF;
 import android.util.SparseArray;
@@ -26,12 +27,10 @@ import android.util.SparseArray;
 import com.lzh.compiler.parceler.annotation.BundleConverter;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 
 /**
  * <p>此类只应被{@link BundleFactory}使用。用于真正从{@link Bundle}数据源中读取或者存储数据。
@@ -205,124 +204,99 @@ final class BundleHandle {
      *
      * @param data 指定的数据data
      * @param type 指定数据类型type
-     * @param convertersClass 数据转换器
+     * @param converter 数据转换器
      * @return 转换后的指定type类型的数据。
      */
-    Object cast(Object data, Type type, Class<? extends BundleConverter> convertersClass) {
-        try {
-            return castInternal(data, type);
-        } catch (Throwable t) {
-            if (convertersClass != null) {
-                data = CacheManager.transformConverter(convertersClass).convertToEntity(data, type);
-                return cast(data, type, null);
+    Object cast(Object data, Type type, BundleConverter converter) {
+        return castInternal(data, type, converter);
+    }
+
+    private Object castInternal(Object data, Type type, BundleConverter converter) {
+        Class raw = getRawClass(type);
+        if (raw.isInstance(data)) return data;
+
+        if (!(data instanceof String)) {
+            if (converter == null) {
+                throw new RuntimeException("Should only handle with String. Please check if you had set a converter to used?");
             } else {
-                throw new RuntimeException("cast failed:", t);
+                data = converter.convertToBundle(data);
             }
         }
-    }
 
-    private Object castInternal(Object data, Type type) {
-        try {
-            Class real;
-            if (type instanceof ParameterizedType) {
-                real = (Class) ((ParameterizedType) type).getRawType();
-            } else {
-                real = (Class) type;
-            }
-
-            real = box(real);
-            if (!real.isInstance(data)) {
-                return wrapCast(data, real);
-            } else {
-                return real.cast(data);
-            }
-        } catch (ClassCastException cast) {
-            throw new IllegalArgumentException(String.format("Cast data from %s to %s failed.", data.getClass(), type));
+        String value = (String) data;
+        if (TextUtils.isEmpty(value)) {
+            return returnsValue(null, raw);
         }
-    }
 
-    private Class box(Class type) {
-        if (type == byte.class) {
-            type = Byte.class;
-        } else if (type == short.class) {
-            type = Short.class;
-        } else if (type == int.class) {
-            type = Integer.class;
-        } else if (type == long.class) {
-            type = Long.class;
-        } else if (type == float.class) {
-            type = Float.class;
-        } else if (type == double.class) {
-            type = Double.class;
-        } else if (type == boolean.class) {
-            type = Boolean.class;
-        } else if (type == char.class) {
-            type = Character.class;
-        }
-        return type;
-    }
-
-    @SuppressWarnings("unchecked")
-    private <E> E wrapCast (Object src, Class<E> clz) {
-        Class<?> srcClass = src.getClass();
-        if (srcClass.equals(Parcelable[].class)) {
-            return (E) castParcelableArr(clz.getComponentType(), (Parcelable[]) src);
-        } else if (srcClass.equals(CharSequence[].class)) {
-            return (E) castCharSequenceArr(clz.getComponentType(), (CharSequence[]) src);
-        } else if (src instanceof String) {
-            if (clz.equals(StringBuilder.class)) {
-                return (E) new StringBuilder((CharSequence) src);
-            } else if (clz.equals(StringBuffer.class)) {
-                return (E) new StringBuffer((CharSequence) src);
-            }
-        } else if (srcClass.equals(HashMap.class) && HashMap.class.isAssignableFrom(clz)) {
-            return (E) castHashMap((HashMap)src, (Class<? extends HashMap>) clz);
-        }
-        throw new ClassCastException(String.format("Cast %s to %s failed", src.getClass(), clz));
-    }
-
-    private <E extends HashMap> E castHashMap(HashMap src, Class<E> type) {
-        try {
-            E hashMap = type.newInstance();
-            hashMap.putAll(src);
-            return hashMap;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private <E> E[] castCharSequenceArr(Class<E> clz, CharSequence[] arr) {
-        try {
-            E[] dest = (E[]) Array.newInstance(clz, arr.length);
-            for (int i = 0; i < arr.length; i++) {
-                CharSequence item = arr[i];
-                if (dest.getClass().isAssignableFrom(StringBuffer[].class)) {
-                    dest[i] = (E) new StringBuffer(item);
-                } else if (dest.getClass().isAssignableFrom(StringBuilder[].class)) {
-                    dest[i] = (E) new StringBuilder(item);
+        switch (raw.getCanonicalName()) {
+            case "byte":
+            case "java.lang.Byte":
+                return Byte.valueOf(value);
+            case "short":
+            case "java.lang.Short":
+                return Short.valueOf(value);
+            case "int":
+            case "java.lang.Integer":
+                return Integer.valueOf(value);
+            case "long":
+            case "java.lang.Long":
+                return Long.valueOf(value);
+            case "float":
+            case "java.lang.Float":
+                return Float.valueOf(value);
+            case "double":
+            case "java.lang.Double":
+                return Double.valueOf(value);
+            case "char":
+            case "java.lang.Character":
+                return value.charAt(0);
+            case "boolean":
+            case "java.lang.Boolean":
+                return Boolean.valueOf(value);
+            case "java.lang.StringBuffer":
+                return new StringBuffer(value);
+            case "java.lang.StringBuilder":
+                return new StringBuilder(value);
+            default:
+                if (converter != null) {
+                    return converter.convertToEntity(value, type);
                 } else {
-                    dest[i] = (E) item;
+                    return returnsValue(null, raw);
                 }
-            }
-            return dest;
-        } catch (Throwable e) {
-            return null;
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private <E> E[] castParcelableArr(Class<E> clz, Parcelable[] arr) {
-        try {
-            E[] dest = (E[]) Array.newInstance(clz, arr.length);
-            for (int i = 0; i < arr.length; i++) {
-                Parcelable item = arr[i];
-                dest[i] = (E) item;
-            }
-            return dest;
-        } catch (Throwable e) {
-            return null;
+    // 兼容基本数据类型返回，对返回数据进行二次处理。避免对基本数据类型返回null导致crash
+    private Object returnsValue(Object value, Class type) {
+        if (value != null) return value;
+
+        switch (type.getCanonicalName()) {
+            case "byte":
+            case "short":
+            case "int":
+                return 0;
+            case "long":
+                return 0L;
+            case "float":
+                return 0f;
+            case "double":
+                return 0d;
+            case "char":
+                return '0';
+            case "boolean":
+                return false;
+            default:
+                return null;
         }
     }
 
+    private Class getRawClass(Type type) {
+        if (type instanceof Class) {
+            return (Class) type;
+        } else if (type instanceof ParameterizedType) {
+            return getRawClass(((ParameterizedType) type).getRawType());
+        } else {
+            throw new RuntimeException("Only support of Class and ParameterizedType");
+        }
+    }
 }

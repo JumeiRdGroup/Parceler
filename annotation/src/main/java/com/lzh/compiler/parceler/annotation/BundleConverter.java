@@ -43,5 +43,5 @@ public interface BundleConverter {
      *
      * @return 被转换后的数据。
      */
-    Object convertToBundle(Object data);
+    String convertToBundle(Object data);
 }

@@ -199,8 +199,9 @@ public final class BundleFactory {
         }
 
         try {
+            BundleConverter converter = CacheManager.transformConverter(converterClass);
             //noinspection unchecked
-            return BundleHandle.get().cast(data, type, converterClass);
+            return BundleHandle.get().cast(data, type, converter);
         } catch (Throwable t) {
             if (!ignoreException) {
                 throw t;

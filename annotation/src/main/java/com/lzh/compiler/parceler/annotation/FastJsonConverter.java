@@ -42,7 +42,7 @@ public final class FastJsonConverter implements BundleConverter {
     }
 
     @Override
-    public Object convertToBundle(Object data) {
+    public String convertToBundle(Object data) {
         return JSON.toJSONString(data);
     }
 

@@ -67,6 +67,7 @@ public class MainActivity extends BaseActivity{
         intent.putExtra("parcelables", new TestCastActivity.SubParcelable[]{new TestCastActivity.SubParcelable()});
         // 传递CharSequence的子类数组，目标页取出时数据类型为 CharSequence[]
         intent.putExtra("charSequences", new StringBuffer[]{new StringBuffer("arr")});
+
         startActivity(intent);
     }
 
