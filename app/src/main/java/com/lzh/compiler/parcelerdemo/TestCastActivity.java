@@ -24,8 +24,6 @@ public class TestCastActivity extends BaseActivity {
     @Arg
     SubParcelable[] parcelables;
     @Arg
-    StringBuffer[] charSequences;
-    @Arg
     LinkedHashMap hashMap;
 
     @Override
@@ -36,7 +34,6 @@ public class TestCastActivity extends BaseActivity {
             checkForNull(builder, "builder");
             checkForNull(buffer, "buffer");
             checkForNull(parcelables, "parcelables");
-            checkForNull(charSequences, "charSequences");
             checkForNull(hashMap, "hashMap");
         } catch (Exception e) {
             Toast.makeText(this, "类转换兼容测试失败。", Toast.LENGTH_SHORT).show();
