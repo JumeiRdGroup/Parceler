@@ -1,6 +1,0 @@
-Properties local = new Properties()
-local.load(rootProject.file('local.properties').newInputStream())
-def names = local.propertyNames()
-for (String key : names) {
-    ext.set(key, local.getProperty(key))
-}
